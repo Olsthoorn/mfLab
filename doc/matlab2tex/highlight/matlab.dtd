@@ -1,0 +1,9 @@
+<!ELEMENT matlab (mfile+) >
+<!ELEMENT mfile (line*) >
+	<!ATTLIST mfile name CDATA #REQUIRED >
+<!ELEMENT line (#PCDATA|comment|string|keyword)* >
+	<!ATTLIST line nb CDATA #REQUIRED >
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT string (#PCDATA) >
+<!ELEMENT keyword (#PCDATA) >
+<!ELEMENT cont (#PCDATA) >

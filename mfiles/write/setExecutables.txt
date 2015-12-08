@@ -1,0 +1,63 @@
+%SETEXECUTABLES script to set executables for mfLab
+%
+% This scipt is put in mflab\mfiles\write together with the file mf_setup.m
+% which calls this script.
+% This script, setExecutables.m, is called as a script by
+% mf_setup to set the paths to the executables (mf2k, mt3dms, seawat etc)
+% As in this example you may build in switches in case you use mfLab in
+% different environments like the PC and the MAC. As in this case the same
+% directories have different names viewed from the MAC or the Windows
+% operating system on the same computer. This is taken care of by the
+% switch cause by the if statement. The switch makes use of the function
+% ismac and ispc. These are avaialble from Matlab version 7. If not you may
+% look at the function computer. If you only work on the PC you may delete
+% the mac portion altogether.
+% It may be convenient to exclude this script from the svn version control,
+% so that it will not be updated inadvertently. In that case future updates of
+% mfLab should be guaranteed to work immediately because they don't affect
+% the specific file locations on you computer. 
+
+
+% TO 091218
+
+% Path to the executables. I put all of them into mfLab/MODELS/bin
+% for convenience, because I have several differntly compiled versions.
+% It's your choice however. Anyway, set the parameters MODFLOW MT3D etc
+% down below to their actual lcoations on your hard drive.
+%
+% If you don't like to copy your executables to another location, then copy
+% a link to them into the mflab/bin directory.
+
+% NOTICE the " " in the paths below to manage spaces in file names
+% in system command used to launch the external executable later on
+
+
+fprintf('Defining paths to your executables\n');
+
+if ismac
+    MODELS='macpathtoexecutableshere';  % location of my executables
+    MODFLOW=[MODELS,'mf2k.mac'    ];  % location of MODFLOW executable
+    MF2005 =[MODELS,'mf2005.mac'  ];  % location of MODFLOW 2005 executable
+    MF2007 =[MODELS,'mf2005cfp.mac'];  % location of MODFLOW 2007 executable (CFP)
+    MT3D   =[MODELS,'mt3dms5s.mac'];  % MT3DMS executable
+    SEAWAT =[MODELS,'swt_v4.mac'  ];  % SEAWAT Executable
+    SWI    =[MODELS,'mf2005swi.mac' ]; % mf2005 which knows SWI
+elseif ispc
+    MODELS='pcpathtoexecutableshere'; % location of my executables
+    MODFLOW=[MODELS,'mf2k.exe'    ];  % location of MODFLOW executable
+    MF2005 =[MODELS 'mf2005.exe'  ]; % location of MF2005 executable
+    MF2007 =[MODELS 'mf2005cfp.exe']; % location of MF2005 executable (CFP)
+    MF2KASP=[MODELS 'mf2kasp.exe' ];   % Doherty's mf2k with improved for dry cells
+    MT3D   =[MODELS,'mt3dms5b.exe'];  % MT3DMS executable (use binary version on windows
+          % so that it is comopatible with the stanard windows mf2k exacutable)
+    SEAWAT =[MODELS,'swt_v4.exe'  ];  % SEAWAT Executable
+    SWI    =[MODELS,'mf2kswi.exe' ];  % mf2k which knows SWI
+else
+    help computer
+    error(['You''re not running on either a Mac or PC, as yet only mac and pc are supported\n',...
+           'Nevertheless, unix is expected to run on mac without change.\n',...
+           'Try changin ismac to isunix in setup, rarray and m files readding unformatted\n',...
+           'model output (i.e. readDat, readBud, readMT3D).\n',...
+           'Type help computer for more information.']);
+end
+

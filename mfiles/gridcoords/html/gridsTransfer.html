@@ -1,0 +1,142 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>gridsTransfer</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2012-05-19"><meta name="DC.source" content="gridsTransfer.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">function gridsTransfer(xGr1,values1,xGr2,code)</a></li><li><a href="#3">Algorithm</a></li><li><a href="#4">Source grid (1) with values1 --&gt; target grid (2) with values2</a></li><li><a href="#5">Intermediate grid xGr is a merge or union of xGr1 and xGr2</a></li><li><a href="#6">Pointers from merged grid into source grid I1 and from source grid into target grid I2</a></li><li><a href="#7">Transfer data from source grid to target grid</a></li><li><a href="#8">Fill new grid</a></li><li><a href="#9">Unfold, compute respective mean</a></li><li><a href="#10">Deal with non-overlapping grid</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> [values2,I1,I2,dx] = gridsTransfer(xGr1,values1,xGr2,code)
+</pre><h2>function gridsTransfer(xGr1,values1,xGr2,code)<a name="2"></a></h2><pre>Transfers info from grid1 to grid2 where the grids overlap but may not match.</pre><pre>code = 'k'|'g' or 'c'|'h', where 'k'|g' implies geometric addition
+and 'c'|'h' implies harmonic weighting</pre><pre>TO 120518</pre><h2>Algorithm<a name="3"></a></h2><pre class="codeinput">harmonic = exist(<span class="string">'code'</span>,<span class="string">'var'</span>) &amp;&amp; (lower(code(1))==<span class="string">'c'</span> || lower(code(1))==<span class="string">'h'</span>);
+</pre><h2>Source grid (1) with values1 --&gt; target grid (2) with values2<a name="4"></a></h2><pre class="codeinput">xGr1=xGr1(:); <span class="comment">% Source grid</span>
+xGr2=xGr2(:); <span class="comment">% Target grid</span>
+</pre><pre class="codeoutput">Error using gridsTransfer (line 14)
+Not enough input arguments.
+</pre><h2>Intermediate grid xGr is a merge or union of xGr1 and xGr2<a name="5"></a></h2><pre class="codeinput">xGr = unique([xGr1(:);xGr2(:)]);
+dx  = diff(xGr);                      <span class="comment">% intermediate dx</span>
+xm  = 0.5*(xGr(1:end-1)+xGr(2:end));  <span class="comment">% intermediate cell centers</span>
+</pre><h2>Pointers from merged grid into source grid I1 and from source grid into target grid I2<a name="6"></a></h2><p>Non-overlapping source-merged or merged-target grids get NaN as pointers</p><pre class="codeinput">I1 = floor(interp1(xGr1,(1:length(xGr1))',xm)); <span class="comment">% index grid 1 in merged</span>
+I2 = floor(interp1(xGr2,(1:length(xGr2))',xm)); <span class="comment">% index grid 2 in merged</span>
+</pre><h2>Transfer data from source grid to target grid<a name="7"></a></h2><pre class="codeinput">V1 = NaN(size(dx));    <span class="comment">% source values --&gt; intermediate grid</span>
+J  = find(~isnan(V1)); <span class="comment">% cope with on-verlapping grid portions</span>
+<span class="keyword">if</span> harmonic, V1=dx(J)./values1(I1(J));  <span class="comment">% include intermediate dx as weight</span>
+<span class="keyword">else</span>         V1=dx(J).*values1(I1(J));  <span class="comment">% same, geometric</span>
+<span class="keyword">end</span>
+</pre><h2>Fill new grid<a name="8"></a></h2><p>Non-overlapping portion initially zero to allow accumulation</p><pre class="codeinput">values2=zeros(size(xGr2(1:end-1)));
+<span class="keyword">for</span> j=1:length(J)  <span class="comment">% J is overlapping part of source&lt;-&gt;intermediate</span>
+    values2(I2(J(j)))= values2(I2(J(j)))+V1(J(j));
+<span class="keyword">end</span>
+</pre><h2>Unfold, compute respective mean<a name="9"></a></h2><pre class="codeinput"><span class="keyword">if</span> harmonic, values2 = diff(xGr2)./values2;
+<span class="keyword">else</span>         values2 = values2./diff(xGr2);
+<span class="keyword">end</span>
+</pre><h2>Deal with non-overlapping grid<a name="10"></a></h2><pre class="codeinput">values2(isnan(I2) | isnan(I1))=NaN;
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+function [values2,I1,I2,dx] = gridsTransfer(xGr1,values1,xGr2,code)
+%% function gridsTransfer(xGr1,values1,xGr2,code)
+%  Transfers info from grid1 to grid2 where the grids overlap but may not match.
+%
+%  code = 'k'|'g' or 'c'|'h', where 'k'|g' implies geometric addition
+%  and 'c'|'h' implies harmonic weighting
+%
+%  TO 120518
+
+%% Algorithm
+harmonic = exist('code','var') && (lower(code(1))=='c' || lower(code(1))=='h');
+
+%% Source grid (1) with values1 REPLACE_WITH_DASH_DASH> target grid (2) with values2
+xGr1=xGr1(:); % Source grid
+xGr2=xGr2(:); % Target grid
+
+%% Intermediate grid xGr is a merge or union of xGr1 and xGr2
+xGr = unique([xGr1(:);xGr2(:)]);
+dx  = diff(xGr);                      % intermediate dx
+xm  = 0.5*(xGr(1:end-1)+xGr(2:end));  % intermediate cell centers
+
+%% Pointers from merged grid into source grid I1 and from source grid into target grid I2
+% Non-overlapping source-merged or merged-target grids get NaN as pointers
+I1 = floor(interp1(xGr1,(1:length(xGr1))',xm)); % index grid 1 in merged
+I2 = floor(interp1(xGr2,(1:length(xGr2))',xm)); % index grid 2 in merged
+
+%% Transfer data from source grid to target grid
+V1 = NaN(size(dx));    % source values REPLACE_WITH_DASH_DASH> intermediate grid
+J  = find(~isnan(V1)); % cope with on-verlapping grid portions
+if harmonic, V1=dx(J)./values1(I1(J));  % include intermediate dx as weight
+else         V1=dx(J).*values1(I1(J));  % same, geometric
+end
+
+%% Fill new grid
+% Non-overlapping portion initially zero to allow accumulation
+values2=zeros(size(xGr2(1:end-1)));
+for j=1:length(J)  % J is overlapping part of source<->intermediate
+    values2(I2(J(j)))= values2(I2(J(j)))+V1(J(j));
+end
+
+%% Unfold, compute respective mean
+if harmonic, values2 = diff(xGr2)./values2;
+else         values2 = values2./diff(xGr2);
+end
+
+%% Deal with non-overlapping grid
+values2(isnan(I2) | isnan(I1))=NaN;
+
+##### SOURCE END #####
+--></body></html>

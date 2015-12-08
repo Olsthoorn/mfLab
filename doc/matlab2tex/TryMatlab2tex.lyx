@@ -1,0 +1,639 @@
+#LyX 1.5.5 created this file. For more info see http://www.lyx.org/
+\lyxformat 276
+\begin_document
+\begin_header
+\textclass scrbook
+\begin_preamble
+\usepackage{framed}
+    \usepackage{alltt}
+    \usepackage{color}
+    \definecolor{string}{rgb}{0.7,0.0,0.0}
+    \definecolor{comment}{rgb}{0.13,0.54,0.13}
+    \definecolor{keyword}{rgb}{0.0,0.0,1.0}
+\end_preamble
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\paperfontsize default
+\spacing single
+\papersize letterpaper
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic true
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Section
+Try matlab2tex function
+\end_layout
+
+\begin_layout Standard
+This is a solution to inserting syntax colored matlab code into a tex document.
+ To do this:
+\end_layout
+
+\begin_layout Itemize
+Extract highlight.zip to a directory on your matlab path
+\end_layout
+
+\begin_layout Itemize
+In your Lyx document, paste the following into the Preamble
+\end_layout
+
+\begin_layout Standard
+
+\backslash
+usepackage{alltt}
+\end_layout
+
+\begin_layout Standard
+
+\backslash
+usepackage{color}
+\end_layout
+
+\begin_layout Standard
+
+\backslash
+definecolor{string}{rgb}{0.7,0.0,0.0}
+\end_layout
+
+\begin_layout Standard
+
+\backslash
+definecolor{comment}{rgb}{0.13,0.54,0.13}
+\end_layout
+
+\begin_layout Standard
+
+\backslash
+definecolor{keyword}{rgb}{0.0,0.0,1.0}
+\end_layout
+
+\begin_layout Itemize
+in matlab do (for example)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+noindent{}
+\end_layout
+
+\end_inset
+
+matlab2tex('C:
+\backslash
+workMatlab
+\backslash
+publish2pdf
+\backslash
+matlab2tex.m')
+\end_layout
+
+\begin_layout Itemize
+in Lyx insert a float figure
+\end_layout
+
+\begin_layout Standard
+Open an ERT box
+\end_layout
+
+\begin_layout Standard
+In the ERT box do Insert|file|plain text and browse to the tex file
+\end_layout
+
+\begin_layout Standard
+The latex for the code should be in the ERT box
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{alltt}
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{keyword}{function} status = matlab2tex(mfile,varargin)
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{% function status = publish2pdf(mfile,varargin)}
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{%  Writes a file with tex for syntax colored listing
+ of matlab code in mfile}
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{%  an example of how to include tex in Lyx: }
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{%  Paste into Document preamble (without matlab comments,
+ of course)}
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{%      
+\backslash
+(
+\backslash
+backslash
+\backslash
+)usepackage
+\backslash
+{alltt
+\backslash
+}}
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{%      
+\backslash
+(
+\backslash
+backslash
+\backslash
+)usepackage
+\backslash
+{color
+\backslash
+}}
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{%      
+\backslash
+(
+\backslash
+backslash
+\backslash
+)definecolor
+\backslash
+{string
+\backslash
+}
+\backslash
+{rgb
+\backslash
+}
+\backslash
+{0.7,0.0,0.0
+\backslash
+}}
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{%      
+\backslash
+(
+\backslash
+backslash
+\backslash
+)definecolor
+\backslash
+{comment
+\backslash
+}
+\backslash
+{rgb
+\backslash
+}
+\backslash
+{0.13,0.54,0.13
+\backslash
+}}
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{%      
+\backslash
+(
+\backslash
+backslash
+\backslash
+)definecolor
+\backslash
+{keyword
+\backslash
+}
+\backslash
+{rgb
+\backslash
+}
+\backslash
+{0.0,0.0,1.0
+\backslash
+}}
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{%  Insert a float figure}
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{%  Click in figure, start an insert ERT (ctrl-L)}
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{%  Do Insert|file|plain text and navigate to tex file}
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{%  click outside ERT}
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{%  ---}
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{%  inputs: }
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{%    mfile: the m-file path and name.
+ If no path is specified, looks in matlab working dir }
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{%    linenumbers: (optional = false) If present, includes
+ linenumbers in listing}
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{%  outputs:}
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{%    creates a file mfilename.tex in same dir as original
+ matlabfile}
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{%    status: the last 'status' from the file open/close
+ commands.
+ 0 if executed without errors}
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{comment}{%  REA 5/11/09}
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+  
+\backslash
+textcolor{comment}{% process the optional arguments}
+\end_layout
+
+\begin_layout Standard
+
+nreqargs = 1;
+\end_layout
+
+\begin_layout Standard
+
+linenumbers= false;
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{keyword}{if}(nargin>nreqargs)
+\end_layout
+
+\begin_layout Standard
+
+  i=1;
+\end_layout
+
+\begin_layout Standard
+
+  
+\backslash
+textcolor{keyword}{while}(i<=size(varargin,2))
+\end_layout
+
+\begin_layout Standard
+
+     
+\backslash
+textcolor{keyword}{switch} lower(varargin
+\backslash
+{i
+\backslash
+})
+\end_layout
+
+\begin_layout Standard
+
+     
+\backslash
+textcolor{keyword}{case} 
+\backslash
+textcolor{string}{'linenumbers'};          linenumbers=true;
+\end_layout
+
+\begin_layout Standard
+
+    
+\backslash
+textcolor{keyword}{otherwise}
+\end_layout
+
+\begin_layout Standard
+
+      error(
+\backslash
+textcolor{string}{'Unknown argument 
+\backslash
+%s given'},varargin
+\backslash
+{i
+\backslash
+});
+\end_layout
+
+\begin_layout Standard
+
+     
+\backslash
+textcolor{keyword}{end}
+\end_layout
+
+\begin_layout Standard
+
+     i=i+1;
+\end_layout
+
+\begin_layout Standard
+
+  
+\backslash
+textcolor{keyword}{end}
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{keyword}{end}
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+    
+\backslash
+textcolor{comment}{% options for highlight function}
+\end_layout
+
+\begin_layout Standard
+
+opt.type = 
+\backslash
+textcolor{string}{'tex'};
+\end_layout
+
+\begin_layout Standard
+
+opt.linenb = linenumbers; 
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+     
+\backslash
+textcolor{comment}{% get the directory and file name }
+\end_layout
+
+\begin_layout Standard
+
+[pathstr, name, ext, versn] = fileparts(mfile);
+\end_layout
+
+\begin_layout Standard
+
+pathfull = [pathstr filesep];
+\end_layout
+
+\begin_layout Standard
+
+mfile
+\backslash
+_name
+\backslash
+_with
+\backslash
+_path = [pathfull name]; 
+\backslash
+textcolor{comment}{% no extension}
+\end_layout
+
+\begin_layout Standard
+
+mfile
+\backslash
+_name = [name ext];
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+     
+\backslash
+textcolor{comment}{% create a file pointer as input to highlight}
+\end_layout
+
+\begin_layout Standard
+
+texname =  [pathfull name 
+\backslash
+textcolor{string}{'.tex'}];
+\end_layout
+
+\begin_layout Standard
+
+fid = fopen(texname,
+\backslash
+textcolor{string}{'wt'});
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{keyword}{if} fid == 0
+\end_layout
+
+\begin_layout Standard
+
+   error(
+\backslash
+textcolor{string}{'could not open tex file 
+\backslash
+%s'},texname);
+\end_layout
+
+\begin_layout Standard
+
+   status = 1;
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+textcolor{keyword}{end}   
+\end_layout
+
+\begin_layout Standard
+
+highlight(mfile,opt,fid);
+\end_layout
+
+\begin_layout Standard
+
+status = fclose(fid);
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{alltt}
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

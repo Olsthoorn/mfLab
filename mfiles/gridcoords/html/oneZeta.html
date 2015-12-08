@@ -1,0 +1,161 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>oneZeta</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2012-05-09"><meta name="DC.source" content="oneZeta.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="keyword">function</span> [ztaBot ztaTop] = oneZeta(gr,ZETA,ipln)
+<span class="comment">% [ztaTop ztaBot] = oneZeta(gr,ZETA [,ipln])</span>
+<span class="comment">%</span>
+<span class="comment">% extracts zeta planes (interfaces) from ZTAstruct, where ztaBot</span>
+<span class="comment">% corresponds wiht the highest zeta and ztaTop with the lowest.</span>
+<span class="comment">% in case the zta overlaps in more than one layer (inversions)</span>
+<span class="comment">% and ztaBot the lowest. Without inversions, both are the same</span>
+<span class="comment">%</span>
+<span class="comment">% SEE ALSO: readbud</span>
+<span class="comment">%</span>
+<span class="comment">% TO 120506</span>
+<span class="comment">%</span>
+<span class="comment">% Copyright 2009-2012 Theo Olsthoorn, TU-Delft and Waternet, without any warranty</span>
+<span class="comment">% under free software foundation GNU license version 3 or later</span>
+
+
+<span class="keyword">if</span> nargin&lt;2, error(<span class="string">'%s: Insufficient input arguments'</span>,mfilename); <span class="keyword">end</span>
+<span class="keyword">if</span> nargin&lt;3, ipln=1; <span class="keyword">end</span>
+
+Nt = length(ZETA);
+
+Lidx  = gr.const(1:gr.Nlay); <span class="comment">% index of layer whose zeta we need to grab</span>
+
+<span class="keyword">if</span> nargout&gt;1
+    ztaTop = NaN(gr.Ny,gr.Nx,Nt); <span class="comment">% 3D Ny*Nx*Nt (not Nz) to store ztaTop</span>
+<span class="keyword">end</span>
+
+ztaBot = NaN(gr.Ny,gr.Nx,Nt); <span class="comment">% 3D Ny*Nx*Nt (not Nz) to store ztaBot</span>
+
+Nxy = gr.Ny*gr.Nx;
+
+<span class="keyword">for</span> it=1:Nt
+
+    isvalid = ZETA(it).term{ipln}&gt;gr.ZBlay &amp; ZETA(it).term{ipln}&lt;gr.ZTlay;
+
+    IL   = isvalid.*Lidx;
+    ILbot = max(IL,<span class="string">''</span>,3);     Ib = find(ILbot);
+    ztaBot(Ib+Nxy*(it-1)) = ZETA(it).term{ipln}(Ib+gr.Nxy*(ILbot(Ib)-1));
+
+    <span class="keyword">if</span> nargout&gt;1
+        IL(~IL)=Inf;
+        ILtop = min(IL,<span class="string">''</span>,3);     It = find(ILtop&lt;Inf);
+        ztaTop(It+Nxy*(it-1)) = ZETA(it).term{ipln}(It+gr.Nxy*(ILtop(It)-1));
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">Error using oneZeta (line 17)
+oneZeta: Insufficient input arguments
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+function [ztaBot ztaTop] = oneZeta(gr,ZETA,ipln)
+% [ztaTop ztaBot] = oneZeta(gr,ZETA [,ipln])
+%
+% extracts zeta planes (interfaces) from ZTAstruct, where ztaBot
+% corresponds wiht the highest zeta and ztaTop with the lowest.
+% in case the zta overlaps in more than one layer (inversions)
+% and ztaBot the lowest. Without inversions, both are the same
+%
+% SEE ALSO: readbud
+%
+% TO 120506
+%
+% Copyright 2009-2012 Theo Olsthoorn, TU-Delft and Waternet, without any warranty
+% under free software foundation GNU license version 3 or later
+
+
+if nargin<2, error('%s: Insufficient input arguments',mfilename); end
+if nargin<3, ipln=1; end
+
+Nt = length(ZETA);
+
+Lidx  = gr.const(1:gr.Nlay); % index of layer whose zeta we need to grab
+
+if nargout>1
+    ztaTop = NaN(gr.Ny,gr.Nx,Nt); % 3D Ny*Nx*Nt (not Nz) to store ztaTop
+end
+
+ztaBot = NaN(gr.Ny,gr.Nx,Nt); % 3D Ny*Nx*Nt (not Nz) to store ztaBot
+
+Nxy = gr.Ny*gr.Nx;
+
+for it=1:Nt
+    
+    isvalid = ZETA(it).term{ipln}>gr.ZBlay & ZETA(it).term{ipln}<gr.ZTlay; 
+
+    IL   = isvalid.*Lidx;
+    ILbot = max(IL,'',3);     Ib = find(ILbot);
+    ztaBot(Ib+Nxy*(it-1)) = ZETA(it).term{ipln}(Ib+gr.Nxy*(ILbot(Ib)-1));
+    
+    if nargout>1    
+        IL(~IL)=Inf;    
+        ILtop = min(IL,'',3);     It = find(ILtop<Inf); 
+        ztaTop(It+Nxy*(it-1)) = ZETA(it).term{ipln}(It+gr.Nxy*(ILtop(It)-1));
+    end
+end
+##### SOURCE END #####
+--></body></html>

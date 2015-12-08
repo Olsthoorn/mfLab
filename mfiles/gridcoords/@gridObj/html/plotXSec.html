@@ -1,0 +1,385 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>plotXSec</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2012-05-24"><meta name="DC.source" content="plotXSec.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="keyword">function</span> h = plotXSec(o,j,varargin)
+<span class="comment">% gridObj/plotXSec: h=gr.plotXSec(jRow [,ILay [,varargin]])</span>
+<span class="comment">%       -- plots a cross section along the x axis and fill aquitards</span>
+<span class="comment">%       (if there are any, i.e. if Ncbd&gt;0) and fills aquifers ILay if</span>
+<span class="comment">%       ~isempty(ILay).</span>
+<span class="comment">% jRow is the row along which the section is to be plotted</span>
+<span class="comment">% ILay are the layers to be filled.</span>
+<span class="comment">% varargin can be used for any other paramete/value combinations</span>
+<span class="comment">% specific options 'lines','on'; 'hlines','on'; 'vlines' 'on';</span>
+<span class="comment">%</span>
+<span class="comment">% EXAMPLE:</span>
+<span class="comment">%  h = gr.plotXSec(1,[5 7 9],'color','w','parent',ax3','linewidth',2);</span>
+<span class="comment">%  h = gr.plotXSec(1,[5 7 9],'color','w','parent',ax3','linewidth',2,'lines','on');</span>
+<span class="comment">%  h = gr.plotXSec(1,[5 7 9],'color','w','parent',ax3','linewidth',2,hlines','r',vlines','b');</span>
+<span class="comment">%  h = gr.plotXSec(1,[]     ,'lines''g');</span>
+<span class="comment">%</span>
+<span class="comment">% By the way: the axis grid lines are switched to on in this function</span>
+<span class="comment">%</span>
+<span class="comment">% TO 120501</span>
+<span class="comment">%</span>
+<span class="comment">% Copyright 2009-2012 Theo Olsthoorn, TU-Delft and Waternet, without any warranty</span>
+<span class="comment">% under free software foundation GNU license version 3 or later</span>
+
+grey = [0.8 0.8 0.8];
+
+<span class="keyword">if</span> nargin&lt;2, j=1; <span class="keyword">end</span>
+
+<span class="keyword">if</span> isempty(get(0,<span class="string">'children'</span>)); figure; hold <span class="string">on</span>; <span class="keyword">end</span>
+
+h=NaN(o.Nlay+o.Ncbd,1); k=0;
+
+<span class="keyword">if</span> ~isscalar(<span class="string">'j'</span>)
+    error(<span class="string">'gridObj.%s: first argument must be the row index.'</span>,mfilename);
+<span class="keyword">end</span>
+
+grid <span class="string">on</span>;
+
+i1 = strmatchi( <span class="string">'lines'</span>,varargin,<span class="string">'exact'</span>); <span class="keyword">if</span> i1~=0, arg =varargin{i1+1}; <span class="keyword">end</span>
+i2 = strmatchi(<span class="string">'hlines'</span>,varargin,<span class="string">'exact'</span>); <span class="keyword">if</span> i2~=0, arg2=varargin{i2+1}; <span class="keyword">end</span>
+i3 = strmatchi(<span class="string">'vlines'</span>,varargin,<span class="string">'exact'</span>); <span class="keyword">if</span> i3~=0, arg3=varargin{i3+1}; <span class="keyword">end</span>
+
+mustPlotLines = (i1~=0);
+mustPlothLines= (i2~=0) || mustPlotLines;
+mustPlotvLines= (i3~=0) || mustPlotLines;
+
+<span class="keyword">if</span> mustPlotLines,
+    arg2=arg;
+    arg3=arg;
+    varargin=remove( <span class="string">'lines'</span>,varargin{:});
+<span class="keyword">end</span>
+<span class="keyword">if</span> mustPlothLines, varargin=remove(<span class="string">'hlines'</span>,varargin{:}); <span class="keyword">end</span>
+<span class="keyword">if</span> mustPlotvLines, varargin=remove(<span class="string">'vlines'</span>,varargin{:}); <span class="keyword">end</span>
+
+<span class="keyword">if</span> exist(<span class="string">'varargin'</span>,<span class="string">'var'</span>) &amp;&amp; ~isempty(varargin)
+    <span class="keyword">if</span> isnumeric(varargin{1}) || islogical(varargin{1})
+        <span class="keyword">if</span> isnumeric(varargin{1})
+            ILay = varargin{1};
+        <span class="keyword">else</span>
+            ILay = find(varargin{1});
+        <span class="keyword">end</span>
+        <span class="keyword">if</span> length(varargin)&gt;1
+            varargin = varargin(2:end);
+        <span class="keyword">else</span>
+            varargin = {};
+        <span class="keyword">end</span>
+        ilay=ILay(ILay&lt;=o.Nlay &amp; ILay&gt;=1);
+        <span class="keyword">for</span> ilay(:)'
+            I= find(~isnan(o.ZTlay(j,:,ilay)) &amp; ~isnan(o.ZBlay(j,:,ilay)));
+            k=k+1;
+            ic = strmatchi(<span class="string">'color'</span>,varargin);
+            <span class="keyword">if</span> ic
+                IV=[1:ic-1 ic+2:length(varargin)];
+                h(k)=fillLayer(o.xGr,o.ZBlay(j,I,ilay),o.ZTlay(j,I(end:-1:1),ilay),varargin{ic+1},varargin{IV});
+            <span class="keyword">else</span> <span class="comment">% use mf_color instead</span>
+                h(k)=fillLayer(o.xGr,o.ZBlay(j,I,ilay),o.ZTlay(j,I(end:-1:1),ilay), mf_color(k),varargin{:});
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">for</span> icbd=1:o.Ncbd
+    I= find(~isnan(o.ZTcbd(j,:,icbd)) &amp; ~isnan(o.ZBcbd(j,:,icbd)));
+    k=k+1;
+    ic = strmatchi(<span class="string">'color'</span>,varargin);
+    <span class="keyword">if</span> ic
+        IV = [1:ic-1 ic+2:length(varargin)];
+        <span class="keyword">if</span> isempty(varargin)
+            h(k)=fillLayer(o.xGr,o.ZBcbd(j,I,icbd),o.ZTcbd(j,I(end:-1:1),icbd),varargin{ic+1});
+        <span class="keyword">else</span>
+            h(k)=fillLayer(o.xGr,o.ZBcbd(j,I,icbd),o.ZTcbd(j,I(end:-1:1),icbd),varargin{ic+1},varargin{IV});
+        <span class="keyword">end</span>
+    <span class="keyword">else</span>
+        <span class="keyword">if</span> isempty(varargin)
+            h(k)=fillLayer(o.xGr,o.ZBcbd(j,I,icbd),o.ZTcbd(j,I(end:-1:1),icbd),mf_color(k));
+        <span class="keyword">else</span>
+            h(k)=fillLayer(o.xGr,o.ZBcbd(j,I,icbd),o.ZTcbd(j,I(end:-1:1),icbd),mf_color(k),varargin{:});
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> mustPlothLines
+    <span class="keyword">if</span> strcmpi(arg2,<span class="string">'on'</span>), arg2=grey; <span class="keyword">end</span>
+    plotGridhLine(o.xGr,XS(o.ZTlay(j,:,1)),<span class="string">'color'</span>,arg2);
+    plotGridhLine(o.xGr,XS(o.ZBlay(j,:,:)),<span class="string">'color'</span>,arg2);
+
+<span class="keyword">end</span>
+<span class="keyword">if</span> mustPlotvLines
+    <span class="keyword">if</span> strcmpi(arg3,<span class="string">'on'</span>), arg3=grey; <span class="keyword">end</span>
+    <span class="keyword">for</span> i=1:o.Nx
+        plot(o.xGr([i i+1 i+1 i i]), <span class="keyword">...</span>
+            [o.ZTlay(j,[i i],1) o.ZBlay(j,[i i],end) o.ZTlay(j,i,1)],<span class="string">'color'</span>,arg3);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+
+h(isnan(h))=[];
+
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> h=plotGridhLine(xGr,Z,varargin)
+     x = reshape([xGr(1:end-1);xGr(2:end)],[1,size(xGr(1:end-1),2)*2]);
+     <span class="keyword">for</span> iz=size(Z,3):-1:1
+         z = reshape(Z([iz iz],:),[1,size(Z,2)*2]);
+         h(iz)=plot(x,z,varargin{:});
+     <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> h=fillLayer(xGr,ZB,ZT,clr,varargin)
+        x = reshape([xGr(1:end-1); xGr(2:end)],[1 2*(size(xGr(1:end-1),2))]);
+        zb = reshape(ZB([1 1],:),[1 2*size(ZB,2)]);
+        zt = reshape(ZT([1 1],:),[1 2*size(ZT,2)]);
+
+        <span class="keyword">if</span> isempty(varargin)
+            h = fill([x x(end:-1:1)],[zb zt(end:-1:1)],clr);
+        <span class="keyword">else</span>
+            h = fill([x x(end:-1:1)],[zb zt(end:-1:1)],clr,varargin{:});
+        <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> varargin = remove(str,varargin)
+    j=strmatchi(str,varargin);
+    <span class="keyword">if</span> j~=0
+        <span class="keyword">if</span> j==1
+            <span class="keyword">if</span> length(varargin)==2;
+                varargin={};
+            <span class="keyword">else</span>
+                varargin=varargin(3:end);
+            <span class="keyword">end</span>
+        <span class="keyword">else</span>
+            <span class="keyword">if</span> length(varargin)&gt;j+2
+                varargin=varargin([1:j-1 j+2:end]);
+            <span class="keyword">else</span>
+                varargin=varargin(1:j-1);
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">The class gridObj has no property or method named 'plotXSec'.
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+function h = plotXSec(o,j,varargin)
+% gridObj/plotXSec: h=gr.plotXSec(jRow [,ILay [,varargin]])
+%       REPLACE_WITH_DASH_DASH plots a cross section along the x axis and fill aquitards
+%       (if there are any, i.e. if Ncbd>0) and fills aquifers ILay if
+%       ~isempty(ILay).
+% jRow is the row along which the section is to be plotted
+% ILay are the layers to be filled.
+% varargin can be used for any other paramete/value combinations
+% specific options 'lines','on'; 'hlines','on'; 'vlines' 'on';
+%
+% EXAMPLE:
+%  h = gr.plotXSec(1,[5 7 9],'color','w','parent',ax3','linewidth',2);
+%  h = gr.plotXSec(1,[5 7 9],'color','w','parent',ax3','linewidth',2,'lines','on');
+%  h = gr.plotXSec(1,[5 7 9],'color','w','parent',ax3','linewidth',2,hlines','r',vlines','b');
+%  h = gr.plotXSec(1,[]     ,'lines''g');
+%
+% By the way: the axis grid lines are switched to on in this function
+%
+% TO 120501
+%
+% Copyright 2009-2012 Theo Olsthoorn, TU-Delft and Waternet, without any warranty
+% under free software foundation GNU license version 3 or later
+
+grey = [0.8 0.8 0.8];
+
+if nargin<2, j=1; end
+
+if isempty(get(0,'children')); figure; hold on; end
+
+h=NaN(o.Nlay+o.Ncbd,1); k=0;
+
+if ~isscalar('j')
+    error('gridObj.%s: first argument must be the row index.',mfilename);
+end
+
+grid on;
+
+i1 = strmatchi( 'lines',varargin,'exact'); if i1~=0, arg =varargin{i1+1}; end
+i2 = strmatchi('hlines',varargin,'exact'); if i2~=0, arg2=varargin{i2+1}; end
+i3 = strmatchi('vlines',varargin,'exact'); if i3~=0, arg3=varargin{i3+1}; end
+
+mustPlotLines = (i1~=0);                  
+mustPlothLines= (i2~=0) || mustPlotLines;
+mustPlotvLines= (i3~=0) || mustPlotLines;
+
+if mustPlotLines,
+    arg2=arg;
+    arg3=arg;
+    varargin=remove( 'lines',varargin{:});
+end
+if mustPlothLines, varargin=remove('hlines',varargin{:}); end
+if mustPlotvLines, varargin=remove('vlines',varargin{:}); end
+
+if exist('varargin','var') && ~isempty(varargin)
+    if isnumeric(varargin{1}) || islogical(varargin{1})
+        if isnumeric(varargin{1})
+            ILay = varargin{1};
+        else
+            ILay = find(varargin{1});
+        end
+        if length(varargin)>1
+            varargin = varargin(2:end);
+        else
+            varargin = {};
+        end
+        ilay=ILay(ILay<=o.Nlay & ILay>=1);
+        for ilay(:)'
+            I= find(~isnan(o.ZTlay(j,:,ilay)) & ~isnan(o.ZBlay(j,:,ilay)));
+            k=k+1;
+            ic = strmatchi('color',varargin);
+            if ic
+                IV=[1:ic-1 ic+2:length(varargin)];
+                h(k)=fillLayer(o.xGr,o.ZBlay(j,I,ilay),o.ZTlay(j,I(end:-1:1),ilay),varargin{ic+1},varargin{IV});
+            else % use mf_color instead
+                h(k)=fillLayer(o.xGr,o.ZBlay(j,I,ilay),o.ZTlay(j,I(end:-1:1),ilay), mf_color(k),varargin{:});
+            end
+        end                
+    end
+end
+
+for icbd=1:o.Ncbd
+    I= find(~isnan(o.ZTcbd(j,:,icbd)) & ~isnan(o.ZBcbd(j,:,icbd)));
+    k=k+1;
+    ic = strmatchi('color',varargin);
+    if ic
+        IV = [1:ic-1 ic+2:length(varargin)];
+        if isempty(varargin)
+            h(k)=fillLayer(o.xGr,o.ZBcbd(j,I,icbd),o.ZTcbd(j,I(end:-1:1),icbd),varargin{ic+1});
+        else
+            h(k)=fillLayer(o.xGr,o.ZBcbd(j,I,icbd),o.ZTcbd(j,I(end:-1:1),icbd),varargin{ic+1},varargin{IV});
+        end
+    else
+        if isempty(varargin)
+            h(k)=fillLayer(o.xGr,o.ZBcbd(j,I,icbd),o.ZTcbd(j,I(end:-1:1),icbd),mf_color(k));
+        else
+            h(k)=fillLayer(o.xGr,o.ZBcbd(j,I,icbd),o.ZTcbd(j,I(end:-1:1),icbd),mf_color(k),varargin{:});
+        end
+    end
+end
+
+if mustPlothLines
+    if strcmpi(arg2,'on'), arg2=grey; end
+    plotGridhLine(o.xGr,XS(o.ZTlay(j,:,1)),'color',arg2);
+    plotGridhLine(o.xGr,XS(o.ZBlay(j,:,:)),'color',arg2);
+    
+end
+if mustPlotvLines
+    if strcmpi(arg3,'on'), arg3=grey; end
+    for i=1:o.Nx
+        plot(o.xGr([i i+1 i+1 i i]), ...
+            [o.ZTlay(j,[i i],1) o.ZBlay(j,[i i],end) o.ZTlay(j,i,1)],'color',arg3);
+    end    
+end
+
+
+h(isnan(h))=[];
+
+end
+
+function h=plotGridhLine(xGr,Z,varargin)
+     x = reshape([xGr(1:end-1);xGr(2:end)],[1,size(xGr(1:end-1),2)*2]);
+     for iz=size(Z,3):-1:1
+         z = reshape(Z([iz iz],:),[1,size(Z,2)*2]);
+         h(iz)=plot(x,z,varargin{:});
+     end
+end
+
+function h=fillLayer(xGr,ZB,ZT,clr,varargin)
+        x = reshape([xGr(1:end-1); xGr(2:end)],[1 2*(size(xGr(1:end-1),2))]);
+        zb = reshape(ZB([1 1],:),[1 2*size(ZB,2)]);
+        zt = reshape(ZT([1 1],:),[1 2*size(ZT,2)]);
+
+        if isempty(varargin)
+            h = fill([x x(end:-1:1)],[zb zt(end:-1:1)],clr);
+        else
+            h = fill([x x(end:-1:1)],[zb zt(end:-1:1)],clr,varargin{:});
+        end
+end
+
+function varargin = remove(str,varargin)
+    j=strmatchi(str,varargin);
+    if j~=0
+        if j==1
+            if length(varargin)==2;
+                varargin={};
+            else
+                varargin=varargin(3:end);
+            end
+        else
+            if length(varargin)>j+2
+                varargin=varargin([1:j-1 j+2:end]);
+            else
+                varargin=varargin(1:j-1);
+            end
+        end
+    end
+end
+
+##### SOURCE END #####
+--></body></html>

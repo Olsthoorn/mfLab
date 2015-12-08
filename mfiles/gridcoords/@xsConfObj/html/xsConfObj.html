@@ -1,0 +1,1107 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>xsConfObj</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2012-08-07"><meta name="DC.source" content="xsConfObj.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">Get material</a></li><li><a href="#4">Get zones</a></li><li><a href="#5">make sure all zone bottoms are lower than zone tops</a></li><li><a href="#6">getting the character zoneCodes separately:</a></li><li><a href="#7">replace zoneCodes by direct index into material list</a></li><li><a href="#10">Plot stream-line patterns with heads and flows</a></li></ul></div><pre class="codeinput"><span class="keyword">classdef</span> xsConfObj
+<span class="comment">% MF_CONF: Gets grid values of the parameter parnam from specified zones</span>
+<span class="comment">%   the zones are specified in the</span>
+<span class="comment">%   worksheets "config" and "material" of Excel file [basename '.xls']</span>
+<span class="comment">%   Used for convenient and efficient generation of cross sections.</span>
+<span class="comment">%   See the examples that use it, e.g.</span>
+<span class="comment">%        mflab&gt;examples&gt;swt_v4&gt;freshkeeper&gt;</span>
+<span class="comment">%</span>
+<span class="comment">% USAGE:</span>
+<span class="comment">%   xsConfObj=xsConfObj(basename,configSheetNm,materialSheetNm)</span>
+<span class="comment">%   see example VechtDredging under examples/mf2005/DutchTop/VechtDredging</span>
+<span class="comment">%   for usage and its html file in the htlm directory</span>
+<span class="comment">%   The data below originate from the VechtDredging example.</span>
+<span class="comment">%</span>
+<span class="comment">% Layout of config worksheet:</span>
+<span class="comment">%  line 1: label label followed by arbitrary zone names as off column 3</span>
+<span class="comment">%  line 2: xZone,         followed by xL of left-most zone. Ends with xR of all zones</span>
+<span class="comment">% or</span>
+<span class="comment">%  line 2: width|breedte, followed by left-most coordinate and the width of each zone</span>
+<span class="comment">%  line 3: label, blank, ztop of all zones</span>
+<span class="comment">%  line 4: label, blank, prescribed head of all zones, NaN is empty cell,</span>
+<span class="comment">%    meaning head is not prescribed and will be calculated as is the case under dikes</span>
+<span class="comment">%    adjacent to rivers and canals.</span>
+<span class="comment">%  line 5: layer#, layerBotElev, character code id for all zones (codes may have more than one letter)</span>
+<span class="comment">%  line 6: same</span>
+<span class="comment">%  line 7: same etc</span>
+<span class="comment">%  See workbook for exact alignment of columns.</span>
+<span class="comment">%  NaN stands for empty cells in the spreadheet.</span>
+<span class="comment">%</span>
+<span class="comment">%Example:</span>
+<span class="comment">% Layer   Basis(m) Polder2W DikeARKW ARK  DikeARKE PolderW Polder1W DitchW DikeW VechtW Dredged VechtE DikeE DitchE PolderE Polder2E Polder3E</span>
+<span class="comment">% Width   -4297    2500     24       100  24       1500    100      2      12    20     30      20     12    2     800   1500  2500</span>
+<span class="comment">% Head       NaN   -2.1     NaN      -0.4 NaN      -2.02   -2.02   -2.02   NaN -0.4    -0.4   -0.4     NaN  -1.86  -1.86 -1.71 -1.71</span>
+<span class="comment">% Top (m)    NaN   -1.4     1.2      -0.4 1.2      -1.2    -1.2    -2.02   0.6  -4.25  -4.25   -4.25   0.5  -1.86  -1.3  -1.3  -1.7</span>
+<span class="comment">% 1    -2      K    K    W    K    K    K    W    K    W    W    W    K    W    K    K    W</span>
+<span class="comment">% 2    -2.5    K    K    W    K    K    K    K    K    W    W    W    K    K    V    V    W</span>
+<span class="comment">% 3    -3      K    K    W    K    Z    Z    Z    K    W    W    W    K    K    V    V    W</span>
+<span class="comment">% 4    -3.5    K    K    W    K    Z    Z    Z    K    W    W    W    K    K    V    V    W</span>
+<span class="comment">% 5    -4      K    K    W    K    Z    Z    Z    K    W    W    W    K    K    V    V    W</span>
+<span class="comment">% 6    -4.25   K    K    W    K    K    K    Z    K    W    W    W    K    K    V    V    W</span>
+<span class="comment">% 7    -4.5    K    K    W    K    K    K    Z    Z    S    W    S    K    K    V    V    W</span>
+<span class="comment">% 8    -5      K    K    K    K    K    K    Z    Z    Z    S    Z    K    Z    V    V    W</span>
+<span class="comment">% 9    -6      K    K    K    K    K    K    K    K    Z    Z    Z    Z    Z    V    V    W</span>
+<span class="comment">% 10   -6.5    V    V    V    V    V    V    V    V    Z    Z    Z    Z    Z    V    V    W</span>
+<span class="comment">% 11   -10     P    P    P    P    P    P    P    P    P    P    P    P    P    P    P    B</span>
+<span class="comment">% 12   -15     P    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P</span>
+<span class="comment">% 13   -20     P    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P</span>
+<span class="comment">% 14   -50     P    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P</span>
+<span class="comment">% 15   -64     P    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P</span>
+<span class="comment">% 16   -65     P    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P</span>
+<span class="comment">% 17   -100    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P</span>
+<span class="comment">% 18   -150    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P</span>
+<span class="comment">% 19   -175    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P%</span>
+<span class="comment">%</span>
+<span class="comment">%</span>
+<span class="comment">% The layout of the material worksheet</span>
+<span class="comment">% line 1: headers of material properties</span>
+<span class="comment">% line 2: dimensions of the materials properties</span>
+<span class="comment">% line 3: values of material nr 1</span>
+<span class="comment">% line 4: same for material nr 2</span>
+<span class="comment">% line 5: etc.</span>
+<span class="comment">%</span>
+<span class="comment">% headers in line 1 are arbitrary except for 'material' and 'code'.</span>
+<span class="comment">% material is the full name of the material and code its short name which</span>
+<span class="comment">% must correspond to the mateials in the configuration layout specified</span>
+<span class="comment">% above. This short name may be more than 1 character long.</span>
+<span class="comment">%</span>
+<span class="comment">% Example:</span>
+<span class="comment">% Material                    Code    kh    kv    Red  Green  Blue  Porosity  rhoSolid  rhoDry   rhoWet</span>
+<span class="comment">% dimension                    dim    [m/d] [m/d] [-]  [-]    [-]   [-]       [kg/m3]   [kg/m3]  [kg/m3]</span>
+<span class="comment">% Pleistocene sand               P    30    10    1    1      0.5   0.35      2640      1716     2066</span>
+<span class="comment">% Holocene sand                  Z    1     1     1    0.75   0     0.35      2640      1716     2066</span>
+<span class="comment">% Sludge                         S    0.02  0.02  0.2  0.8    0     0.5       1400      700      1200</span>
+<span class="comment">% Clay                           K    0.01  0.01  0    1      1     0.6       2100      840      1440</span>
+<span class="comment">% Holland peat                   V    0.04  0.04  0.5  0.5    0     0.6       1400      560      1160</span>
+<span class="comment">% Water                          W    1e6   1e6   0    0      0.8   1         1000      0        1000</span>
+<span class="comment">% Water bottom                   B    0.01  0.01  0.75 0.5    0     0.6       2100      840      1440</span>
+<span class="comment">% Clay intersected by ditches    D    0.1   0.1   0    1      1     0.6       2000      800      1400</span>
+<span class="comment">%</span>
+<span class="comment">% To prevent missing some layers, make sure that the top and bottom</span>
+<span class="comment">% elevations of the zones match with vertical grid lines. You can do that</span>
+<span class="comment">% by merging the two sets of elevations when defining zGr. Just put the two</span>
+<span class="comment">% elevation sets in one vector and use that in gr=gridObj(xGr,yGr,zGr)</span>
+<span class="comment">% gridObj guarantees correct merging.</span>
+<span class="comment">%</span>
+<span class="comment">% SEE ALSO: mf_conf, mf_zone mf_plotConf as non-object versions of xsConfObj.</span>
+<span class="comment">%           and especially mfLab/examples/mf2005/DutchTop/VechtDredging/html</span>
+<span class="comment">%           see the methods when viewing the object to see its options.</span>
+<span class="comment">%</span>
+<span class="comment">% TO 110319</span>
+
+    <span class="keyword">properties</span>
+        matProps      <span class="comment">% material property headers</span>
+        matPropValues <span class="comment">% material property matrix (numeric)</span>
+        matNames      <span class="comment">% long names of materials</span>
+        matDims       <span class="comment">% dimension of material properties</span>
+        matCodes      <span class="comment">% short names of materials (= config codes)</span>
+
+        zoneNames  <span class="comment">% name of zones</span>
+        zoneLeft;  <span class="comment">% x-coord of left  end of zone</span>
+        zoneRight; <span class="comment">% x-coord of right end of zone</span>
+        zoneHeads, <span class="comment">% given zone head</span>
+        zoneTops,  <span class="comment">% zone top elevation</span>
+        zoneBot,   <span class="comment">% zone bottom elevation</span>
+        zoneZ      <span class="comment">% zone Z values</span>
+        kD,        <span class="comment">% total zone transmissivty</span>
+        c,         <span class="comment">% total zone resistance</span>
+        dzMin = 0.1; <span class="comment">% default minimum zone thickness (will be maintained)</span>
+        zoneCodes, <span class="comment">% charater code of zones in config list</span>
+        zoneImat,  <span class="comment">% index of each char zone in material list</span>
+        Nz         <span class="comment">% nr of layes per zone (= length zoneBot)</span>
+        NZone,     <span class="comment">% nr of zones</span>
+		UserData,
+    <span class="keyword">end</span>
+    <span class="keyword">properties</span> (Dependent = true)
+        xL, xR, xGr, xm, dx, zoneWidths,
+
+    <span class="keyword">end</span>
+    <span class="keyword">methods</span>
+        <span class="comment">% Constructor:</span>
+        <span class="keyword">function</span> o=xsConfObj(basename,configSheetnm,materialSheetnm)
+</pre><pre class="codeinput">            <span class="comment">% xsConf = xsConfObj(basename,configSheetnm,materialSheetnm) -</span>
+            <span class="comment">% genererates xsConfObj (xs Configuration Objects)</span>
+            <span class="comment">% basename = as ususal (name of workbook)</span>
+            <span class="comment">% configSheetnm = sheetName in workbook holding the configuration</span>
+            <span class="comment">% materialSheetnm = sheetName in workbook holding the Materials definitions table</span>
+            <span class="comment">% See help of xsConfObj for the layout of these tables.</span>
+            <span class="comment">% TO 1200731</span>
+
+            <span class="keyword">if</span> nargin==0,
+                <span class="keyword">return</span>;
+            <span class="keyword">end</span>
+</pre><pre class="codeoutput">
+ans = 
+
+  xsConfObj
+
+  Properties:
+         matProps: []
+    matPropValues: []
+         matNames: []
+          matDims: []
+         matCodes: []
+        zoneNames: []
+         zoneLeft: []
+        zoneRight: []
+        zoneHeads: []
+         zoneTops: []
+          zoneBot: []
+            zoneZ: []
+               kD: []
+                c: []
+            dzMin: 0.1000
+        zoneCodes: []
+         zoneImat: []
+               Nz: []
+            NZone: []
+         UserData: []
+               xL: []
+               xR: []
+               dx: []
+       zoneWidths: []
+
+
+</pre><h2>Get material<a name="3"></a></h2><pre class="codeinput">            warning(<span class="string">'off'</span>); <span class="comment">%#ok</span>
+            [~,txt] = xlsread(basename,materialSheetnm,<span class="string">''</span>,<span class="string">'basic'</span>);
+            warning(<span class="string">'on'</span>); <span class="comment">%#ok</span>
+
+            txtHdr     = txt(1,1:2);
+            o.matProps = txt(1,3:end);
+            o.matDims   = txt(2,3:end);
+
+            [~,o.matPropValues,~,txtValues]=getExcelData(basename,materialSheetnm,<span class="string">'Hor'</span>);
+
+            o.matNames = txtValues(:,strmatchi(<span class="string">'Mat'</span> ,txtHdr));
+            o.matCodes = txtValues(:,strmatchi(<span class="string">'Code'</span>,txtHdr));
+</pre><h2>Get zones<a name="4"></a></h2><pre class="codeinput">            [~,zoneValues,~,confCol1]=getExcelData(basename,configSheetnm,<span class="string">'Hor'</span>);
+
+            <span class="keyword">if</span> strcmpi(<span class="string">'xZone'</span>,confCol1{1})
+                o.zoneLeft  = zoneValues(1,2:end-1); <span class="comment">% left  zone coords</span>
+                o.zoneRight = zoneValues(1,3:end);   <span class="comment">% right zone coords</span>
+            <span class="keyword">elseif</span> strcmpi(<span class="string">'breedte'</span>,confCol1{1}) || strcmpi(<span class="string">'width'</span>,confCol1{1})
+                o.zoneLeft  = zoneValues(1,2) + [0 cumsum(zoneValues(1,3:end-1))];
+                o.zoneRight = o.zoneLeft + zoneValues(1,3:end);
+            <span class="keyword">else</span>
+                error(<span class="string">'xsConfObj:sheet:A2'</span>,<span class="keyword">...</span>
+                    <span class="string">'%s: Cell A2 in sheet %s must either be ''%s'' or ''%s'''</span>,mfilename,configSheetnm,<span class="string">'width'</span>,<span class="string">'xzone'</span>);
+            <span class="keyword">end</span>
+
+            o.zoneHeads = zoneValues(2,3:end);
+            o.zoneTops  = zoneValues(3,3:end);
+            o.zoneBot   = zoneValues(4:end,2);
+            o.zoneZ     = [o.zoneTops ; o.zoneBot * ones(size(o.zoneTops))];
+            o.NZone     = length(o.zoneTops);
+            o.Nz        = length(o.zoneBot);
+</pre><h2>make sure all zone bottoms are lower than zone tops<a name="5"></a></h2><pre class="codeinput">            <span class="keyword">for</span> iL=2:size(o.zoneZ,1)
+                o.zoneZ(iL,:)=min(o.zoneZ(iL,:),o.zoneZ(iL-1,:)-o.dzMin);
+            <span class="keyword">end</span>
+</pre><h2>getting the character zoneCodes separately:<a name="6"></a></h2><pre class="codeinput">            warning(<span class="string">'off'</span>); <span class="comment">%#ok</span>
+            [~,o.zoneCodes] = xlsread(basename,configSheetnm,<span class="string">''</span>,<span class="string">'basic'</span>);
+            warning(<span class="string">'on'</span>);  <span class="comment">%#ok</span>
+            o.zoneNames = o.zoneCodes(1,3:end);
+            o.zoneCodes = o.zoneCodes(5:end,3:end);
+</pre><h2>replace zoneCodes by direct index into material list<a name="7"></a></h2><pre class="codeinput">            o.zoneImat = NaN(size(o.zoneCodes));
+
+            <span class="keyword">for</span> j=1:size(o.zoneCodes,1)
+                <span class="keyword">for</span> i=1:size(o.zoneCodes,2)
+                    o.zoneImat(j,i) = strmatchi(o.zoneCodes(j,i),o.matCodes);
+                <span class="keyword">end</span>
+                <span class="keyword">if</span> any(o.zoneImat==0)
+                    fprintf(<span class="string">'Indices in Material list of zone codes (must be &lt;&gt;0):\n'</span>);
+                    display(o.zoneImat);
+                    error(<span class="string">'Not all zone codes in the configuration are defined in the material list;\nSee index table just printed.'</span>);
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+
+            kh_  = o.matPropValues(:,strmatchi(<span class="string">'kh'</span>,o.matProps));
+            o.kD = kh_(o.zoneImat).*abs(diff(o.zoneZ));
+
+            kv_  = o.matPropValues(:,strmatchi(<span class="string">'kv'</span>,o.matProps));
+            o.c = abs(diff(o.zoneZ)) ./ kv_(o.zoneImat);
+</pre><pre class="codeinput">        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> A = zonePropArray(o,PropName)
+            <span class="comment">% A = ConfObj.confArray(PropName) - get an array of Properties for the zones of the configuration</span>
+            <span class="comment">% PropName is the name of one of the material properties from</span>
+            <span class="comment">% the materials list (under header Code (see xsConfObj.matProps))</span>
+            iProp = strmatchi(PropName,o.matProps,<span class="string">'exact'</span>);
+            <span class="keyword">if</span> ~iProp,
+                error(<span class="string">'xsConfObj:confArray:unknownPropname'</span>,<span class="keyword">...</span>
+                    <span class="string">'can''t find propName &lt;&lt;%s&gt;&gt;, use one of &lt;&lt;%s&gt;&gt;'</span>,o.matProps);
+            <span class="keyword">end</span>
+            A = reshape(o.matPropValues(o.zoneImat,iProp),size(o.zoneImat));
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> xL  = get.xL(o)
+            <span class="comment">% xL = xsConf.xL() - gets left coordinate of zones</span>
+            xL = o.zoneLeft;
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> xR  = get.xR(o)
+            <span class="comment">% x = xConf.xR()  - gets right coordinate of zones</span>
+            xR = o.zoneRight;
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> xGr = get.xGr(o)
+            <span class="comment">% xGr = xsConf.xGr() - gets the grid lines of the zones</span>
+            xGr = [o.zoneLeft(1) o.zoneRight];
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span>  xm = get.xm(o)
+            <span class="comment">% xm = xsConf.xm() - gets the centers of the zones</span>
+            xm = 0.5*(o.xGr(1:end-1)+o.xGr(2:end));
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> zoneWidths = get.zoneWidths(o)
+            <span class="comment">% zoneWidths = xsConf.zoneWidths -- get widths of zones</span>
+            zoneWidths = o.zoneRight - o.zoneLeft;
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span>  dx = get.dx(o) <span class="comment">% abbreviation for convenience</span>
+            <span class="comment">% dx = xsConf.dx() - gets widths of zones</span>
+            dx = o.zoneWidths;
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> A = array2D(o,propName,xGr,Z,code)
+            <span class="comment">% A = xsConf.array2D(propName,xGr [Z [code]])</span>
+            <span class="comment">% - generates a full model array for property propName</span>
+            <span class="comment">% propName ==&gt;</span>
+            <span class="comment">%         'Z'     ==&gt; generates Z array implied by xsConf.zoneTop, xsConf.zoneBot and xGr</span>
+            <span class="comment">%         'head'  ==&gt; top head extended to full array</span>
+            <span class="comment">%         any propName in Conf.matNames</span>
+            <span class="comment">% xGr ==&gt; is the xGr of the model array not of the zones</span>
+            <span class="comment">% Z   ==&gt; the Z   of the model array (Nz+1,Nx), 2D because</span>
+            <span class="comment">%         xsConf is 2D for cross sections with Z vertical downward</span>
+            <span class="comment">%         (1st dimension) and X horizontal (2nd dimension)</span>
+            <span class="comment">% if Z is omitted or empty, then Z is assumed to be implied by xsConf.zoneTop and xsConf.zoneBot</span>
+            <span class="comment">%         i.e. that the layers in xsConfObj are the same as those of</span>
+            <span class="comment">%         the model.</span>
+            <span class="comment">% code ==&gt; can be 'geometric', 'harmonic', see help gridsTransfer()</span>
+            <span class="comment">%         if code is omitted 'geometric' is used.</span>
+            <span class="comment">% A has dimensions (Nz,Nx) use A=XS(A) to make it 3D.</span>
+            <span class="comment">%</span>
+            <span class="comment">% TO 120803</span>
+
+            dim = 1;
+            Nx=length(xGr)-1;
+            xm = 0.5*(xGr(1:end-1)+xGr(2:end));
+
+            <span class="keyword">if</span> ~exist(<span class="string">'code'</span>,<span class="string">'var'</span>), code=<span class="string">'geometric'</span>; <span class="keyword">end</span>
+
+            Idx = floor(interp1(o.xGr,1:o.NZone+1,xm));
+
+            <span class="keyword">for</span> iZone=o.NZone:-1:1
+                Ix{iZone}=find(xm&gt;o.xL(iZone) &amp; xm&lt;o.xR(iZone)); <span class="comment">% ix indices model in this conf zone</span>
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> ~exist(<span class="string">'Z'</span>,<span class="string">'var'</span>) || isempty(Z) <span class="comment">% used Z implied by config</span>
+                Nz_= o.Nz;
+                Z  = NaN(o.Nz+1,Nx);
+                <span class="keyword">for</span> iZone=1:o.NZone
+                    Z(:,Ix{iZone}) = o.zoneZ(:,iZone) * ones(size(Ix{iZone}));
+                <span class="keyword">end</span>
+            <span class="keyword">else</span>  <span class="comment">% Z is given in its entirety by the call</span>
+
+                Nz_ = size(Z,1)-1;
+            <span class="keyword">end</span>
+
+            <span class="keyword">for</span> iZone=o.NZone:-1:1
+                layersareuniform(iZone) = all(abs(mean(Z(:,Ix{iZone}),2)-Z(:,Ix{iZone}(1)))&lt;1e-1);
+            <span class="keyword">end</span>
+
+            lpropName = lower(propName);
+            <span class="keyword">switch</span> lpropName
+                <span class="keyword">case</span> <span class="string">'z'</span>
+                    A = Z(:,Idx);
+                <span class="keyword">case</span> <span class="string">'top'</span> <span class="comment">% full array of heads, using o.zoneHeads interpolating when isnan(zoneHeads)</span>
+                    A = blockInterp(o.zoneTops,o.xGr,xm);
+                <span class="keyword">case</span> <span class="string">'tophead'</span> <span class="comment">% full array of heads, using o.zoneHeads interpolating when isnan(zoneHeads)</span>
+                    A = NaN(1,Nx);
+                    <span class="keyword">for</span> iZone= 1:o.NZone
+                        A(xm&gt;o.xL(iZone) &amp; xm&lt;o.xR(iZone)) = o.zoneHeads(iZone);
+                    <span class="keyword">end</span>
+                <span class="keyword">case</span> <span class="string">'head'</span> <span class="comment">% full array of heads, using o.zoneHeads interpolating when isnan(zoneHeads)</span>
+                    A = ones(Nz_,1)*blockInterp(o.zoneHeads,o.xGr,xm);
+                <span class="keyword">case</span> <span class="string">'ibound'</span>
+                    A = ones(Nz_,Nx);
+                <span class="keyword">case</span> {<span class="string">'matindex'</span>,<span class="string">'mat'</span>}
+                    A = NaN(Nz_,Nx);
+                    <span class="keyword">for</span> iZone = 1:o.NZone
+                        <span class="keyword">if</span> layersareuniform(iZone)
+                            A(:,Ix{iZone})   = gridsTransfer(o.zoneZ(:,iZone),o.zoneImat(:,iZone),Z(:,Ix{iZone}(1)),code,dim)*ones(1,length(Ix{iZone}));
+                        <span class="keyword">else</span>
+                            <span class="keyword">for</span> i=1:length(Ix{iZone})
+                                A(:,Ix{iZone(i)}) = gridsTransfer(o.zoneZ(:,iZone),o.zoneImat(:,iZone),Z(:,Ix{iZone}(i)),code,dim);
+                            <span class="keyword">end</span>
+                        <span class="keyword">end</span>
+                    <span class="keyword">end</span>
+                <span class="keyword">otherwise</span>
+                    iProp = strmatchi(propName,o.matProps,<span class="string">'exact'</span>);
+                    <span class="keyword">if</span> ~iProp,
+                        error(<span class="string">'xsConfObj:confArray:unknownPropname'</span>,<span class="keyword">...</span>
+                            [<span class="string">'can''t find propName &lt;&lt;%s&gt;&gt;, use one of &lt;&lt;'</span>, <span class="keyword">...</span>
+                            repmat(<span class="string">' %s'</span>,[1, length(o.matProps)]), <span class="string">'&gt;&gt;'</span>],propName,o.matProps{:});
+                    <span class="keyword">end</span>
+                    A = NaN(Nz_,Nx);
+                    <span class="keyword">for</span> iZone=1:o.NZone
+                        <span class="keyword">if</span> layersareuniform
+                            A(:,Ix{iZone})   = gridsTransfer(o.zoneZ(:,iZone),o.matPropValues(o.zoneImat(:,iZone),iProp),Z(:,Ix{iZone}(1)),code,dim)*ones(size(Ix{iZone}));
+                        <span class="keyword">else</span>
+                            <span class="keyword">for</span> i=1:length(Ix)
+                                A(:,Ix{iZone}(i))   = gridsTransfer(o.zoneZ(:,iZone),o.matPropValues(o.zoneImat(:,iZone),iProp),Z(:,Ix{iZone}(i)),code,dim);
+                            <span class="keyword">end</span>
+                        <span class="keyword">end</span>
+                    <span class="keyword">end</span>
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> A = array3D(o,gr,propName,code)
+            <span class="comment">% xsConfOjb.model3D(gr,propName,code)</span>
+            <span class="comment">% gr is grid object</span>
+            <span class="comment">% propName is the name of one of the material properties (under</span>
+            <span class="comment">%    heading "Code" in the materials worksheet</span>
+            <span class="comment">% Spcial property names are 'head'  'top' and 'bottom' to get</span>
+            <span class="comment">%    the full 3D array of the heads, top and bottom of the model</span>
+            <span class="comment">%    cells as derived from the zones. Note that only the top head</span>
+            <span class="comment">%    of the zones is defined in the configuration. Hence all</span>
+            <span class="comment">%    layers will have this head.</span>
+            <span class="comment">% code is a code determining the way of averaging when the the</span>
+            <span class="comment">%    zone and the model grid are intersected:</span>
+            <span class="comment">% The codes:</span>
+            <span class="comment">%   'k' or 'geometric' meaning geometric mean is used</span>
+            <span class="comment">%   'c' or 'harmonic'  meaning harmonic  mean is used</span>
+            <span class="comment">% Example:</span>
+            <span class="comment">%   xsConfObj.getMdlArray(gr,'kh','k');</span>
+            <span class="comment">%   xsConfObj.getMdlArray(gr,'kv','c');</span>
+            <span class="comment">% where 'kv' and 'kh' are material properties and 'k' and 'c'</span>
+            <span class="comment">% Note: any value outside the Conf layout will be a NaN</span>
+            <span class="comment">% The output model is of size (1,Nx,Nz) i.e. 3D vertical sheet</span>
+            <span class="comment">% TO 120731</span>
+
+            <span class="keyword">if</span> ~exist(<span class="string">'code'</span>,<span class="string">'var'</span>) || isempty(code), code=<span class="string">'geometric'</span>; <span class="keyword">end</span>
+
+            A = XS( o.array2D(propName,gr.xGr,XS(gr.Z),code) );
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> ax =plotOverview(o,xGr,Phi,Q,Qx,ttl,leg,varargin)
+
+            <span class="keyword">if</span> isempty(varargin), varargin = {<span class="string">'visible'</span>,<span class="string">'on'</span>}; <span class="keyword">end</span>
+
+            args =[{<span class="string">'nextplot'</span>,<span class="string">'add'</span>,<span class="string">'xgrid'</span>,<span class="string">'on'</span>,<span class="string">'ygrid'</span>,<span class="string">'on'</span>}, varargin];
+            xlbl = <span class="string">'x [m]'</span>;
+            ylbl = {<span class="string">'head [m]'</span>;<span class="string">'discharge [m2/d]'</span>;<span class="string">'seepage mm/d'</span>};
+
+            xm = 0.5*(xGr(1:end-1)+xGr(2:end));
+            Dx = diff(xGr,1,2);
+
+            figure;
+
+            <span class="keyword">for</span> i=3:-1:1
+                ax(i) = subplot(3,1,i,args{:});
+                xlabel(xlbl); ylabel(ylbl{i}); title(ttl{i});
+                <span class="keyword">switch</span> i
+                    <span class="keyword">case</span> 1
+                        plot(xm,o.array2D(<span class="string">'top'</span>,xGr),<span class="string">'k'</span>,<span class="string">'linewidth'</span>,0.5);
+                        plot(xm,Phi);
+                    <span class="keyword">case</span> 2
+                        Qx(isnan(Qx))=0;
+                        plot(xGr(2:end-1),sum(Qx,1));
+                    <span class="keyword">case</span> 3
+                        plot(xm,-sum(Q,1)*1000./Dx);
+                <span class="keyword">end</span>
+                <span class="keyword">if</span> numel(leg)&gt;=i
+                    legend(leg{i});
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+            <span class="comment">% make sure axes stay the same (especially for interactive zooming)</span>
+            linkaxes(ax,<span class="string">'x'</span>);
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> ax = plotContours(o,xGr,Z,Phi,Psi)
+</pre><h2>Plot stream-line patterns with heads and flows<a name="10"></a></h2><pre class="codeinput">            args = {<span class="string">'nextplot'</span>,<span class="string">'add'</span>,<span class="string">'xgrid'</span>,<span class="string">'on'</span>,<span class="string">'ygrid'</span>,<span class="string">'on'</span>};
+
+            xm = 0.5*(xGr(1:end-1)+xGr(2:end));
+
+            ZM = 0.5*(Z(1:end-1,:)+Z(2:end,:)); ZM([1 end],:)=Z([1 end],:);
+
+
+            ax(1) = o.paint(args{:}); <span class="comment">% plot background</span>
+
+            ax(2)= axes(<span class="string">'position'</span>,get(ax(1),<span class="string">'position'</span>),<span class="string">'color'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+                        <span class="string">'xlim'</span>,get(ax(1),<span class="string">'xlim'</span>),<span class="string">'ylim'</span>,get(ax(1),<span class="string">'ylim'</span>),args{:});
+
+            xlabel(<span class="string">'x [m]'</span>);  ylabel(<span class="string">'z [m NAP]'</span>);
+
+            linkaxes(ax);
+
+            hrange =ContourRange(Phi,50); dPhi = diff(hrange(1:2));
+            prange =ContourRange(Psi,50); dPsi = diff(hrange(1:2));
+
+            title(sprintf(<span class="string">'Head and stream lines, dPhi=%.2f m, dPsi=%.2f m2/d'</span>,dPhi,dPsi));
+
+            contour(ax(2),ones(size(ZM(:,1)))*xm,               ZM,                      Phi,hrange,<span class="string">'g'</span>);
+            contour(ax(2),ones(size(Z (:,1)))*xGr(2:end-1),0.5*(Z(:,1:end-1)+Z(:,2:end)),Psi,prange,<span class="string">'b'</span>);
+
+            plot(ax(2),xm,o.array2D(<span class="string">'top'</span>,xGr),<span class="string">'k'</span>); <span class="comment">% top of model</span>
+            plot(ax(2),xm,Phi(1,:),<span class="string">'b'</span>);             <span class="comment">% water table</span>
+
+            legend(<span class="string">'head lines'</span>,<span class="string">'stream lines'</span>,<span class="string">'ground surface'</span>,<span class="string">'prescribed head'</span>)
+</pre><pre class="codeinput">        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> ax = paint(o,varargin)
+            <span class="comment">% xsConfObj.paint() - paints the zones each iwth unique color</span>
+            <span class="comment">% if materialsTable contains columns 'Red', 'Green' and 'Blue'</span>
+            <span class="comment">% these will be used, else mf_color is used with its default</span>
+            <span class="comment">% sequential standard colors (try mf_color(1:10));</span>
+            <span class="comment">%</span>
+            <span class="comment">% TO 120731</span>
+
+            figure;
+            args = [{<span class="string">'nextplot'</span>,<span class="string">'add'</span>,<span class="string">'xgrid'</span>,<span class="string">'on'</span>,<span class="string">'ygrid'</span>,<span class="string">'on'</span>},varargin];
+
+            ax = axes(args{:});
+
+            iR = strmatchi(<span class="string">'Red'</span>  ,o.matProps);
+            iG = strmatchi(<span class="string">'Green'</span>,o.matProps);
+            iB = strmatchi(<span class="string">'Blue'</span> ,o.matProps);
+            <span class="keyword">if</span> all([iR iG iB]&gt;0)
+                propColor = [o.matPropValues(:,strmatchi(<span class="string">'Red'</span>  ,o.matProps)), <span class="keyword">...</span>
+                             o.matPropValues(:,strmatchi(<span class="string">'Green'</span>,o.matProps)), <span class="keyword">...</span>
+                             o.matPropValues(:,strmatchi(<span class="string">'Blue'</span> ,o.matProps))];
+            <span class="keyword">else</span>
+                propColor = mf_color(1:max(o.zoneImat(:)));
+            <span class="keyword">end</span>
+            <span class="keyword">for</span> i=1:size(o.zoneImat,2)
+                zGr = [max(o.zoneTops(i),o.zoneHeads(i)); o.zoneBot];
+                <span class="keyword">for</span> j=1:size(o.zoneImat,1)
+                    fill(o.xGr([i i+1 i+1 i  ]),<span class="keyword">...</span>
+                           zGr([j j   j+1 j+1]),<span class="keyword">...</span>
+                           propColor(o.zoneImat(j,i),:),<span class="string">'edgecolor'</span>,<span class="string">'none'</span>,<span class="string">'parent'</span>,ax);
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> show(o,what)
+            <span class="keyword">if</span> ~exist(<span class="string">'what'</span>,<span class="string">'var'</span>) || isempty(what), what=<span class="string">'c'</span>; <span class="keyword">end</span>
+
+            w=lower(what(1));
+            <span class="keyword">switch</span> w
+                <span class="keyword">case</span> {<span class="string">'m'</span>,<span class="string">'materials'</span>}
+                    fprintf(<span class="string">'Overview materials in this model:\n'</span>);
+                    fprintf(<span class="string">'Material properties:      '</span>);
+                    <span class="keyword">for</span> im=1:length(o.matProps), fprintf(<span class="string">'%12s'</span>,o.matProps{im}); <span class="keyword">end</span>; fprintf(<span class="string">'\n'</span>);
+                    fprintf(<span class="string">'Property dimensions:      '</span>);
+                    <span class="keyword">for</span> im=1:length(o.matDims) , fprintf(<span class="string">'%12s'</span>,o.matDims{im});  <span class="keyword">end</span>; fprintf(<span class="string">'\n'</span>);
+                    <span class="keyword">for</span> i=1:length(o.matNames)
+                        fprintf(<span class="string">'%20s%6s'</span>,o.matNames{i},o.matCodes{i});
+                        <span class="keyword">for</span> j=1:size(o.matPropValues,2)
+                            fprintf(<span class="string">'%12g'</span>,o.matPropValues(i,j));
+                        <span class="keyword">end</span>
+                        fprintf(<span class="string">'\n'</span>);
+                    <span class="keyword">end</span>
+                    fprintf(<span class="string">'\n'</span>);
+                <span class="keyword">case</span> {<span class="string">'c'</span>,<span class="string">'config'</span>}
+                    fprintf(<span class="string">'\nConfiguration:\n'</span>);
+                    fprintf(<span class="string">'zone xL [m]:                          '</span>);  fprintf(<span class="string">' %10.1f'</span>,o.xL); fprintf(<span class="string">'\n'</span>);
+                    fprintf(<span class="string">'zone xR [m]:                          '</span>);  fprintf(<span class="string">' %10.1f'</span>,o.xR); fprintf(<span class="string">'\n'</span>);
+                    fprintf(<span class="string">'zone width [m]:                       '</span>);  fprintf(<span class="string">' %10.1f'</span>,o.zoneWidths); fprintf(<span class="string">'\n'</span>);
+                    fprintf(<span class="string">'top (ground surface [m NAP])          '</span>);  fprintf(<span class="string">' %10.2f'</span>,o.zoneTops);   fprintf(<span class="string">'\n'</span>);
+                    fprintf(<span class="string">'prescribed head peil: [m NAP]:        '</span>);  fprintf(<span class="string">' %10.2f'</span>,o.zoneHeads);  fprintf(<span class="string">'\n'</span>);
+                    fprintf(<span class="string">'Totaal transmissivity: [m2/d]:        '</span>);  fprintf(<span class="string">' %10.4g'</span>,sum(o.kD,1));  fprintf(<span class="string">'\n'</span>);
+                    fprintf(<span class="string">'Totale vert. hydraul. resistance [d]: '</span>);  fprintf(<span class="string">' %10.4g'</span>,sum(o.c ,1));  fprintf(<span class="string">'\n'</span>);
+
+                    <span class="keyword">for</span> iL=1:o.Nz
+                       fprintf(<span class="string">'Ground layer %2d [m NAP]: %10.0f:'</span>,iL,o.zoneBot(iL));
+                       fprintf(<span class="string">' %3s'</span>,o.zoneCodes{iL,:}); fprintf(<span class="string">'\n'</span>);
+                    <span class="keyword">end</span>
+                    fprintf(<span class="string">'\n'</span>);
+
+                <span class="keyword">otherwise</span>
+                    error(<span class="string">'xsConfObj:display:unknownOption'</span>,<span class="keyword">...</span>
+                        <span class="string">'%s: unknown option &lt;&lt;%s&gt;&gt;'</span>,mfilename,what)
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">end</span>
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+classdef xsConfObj
+% MF_CONF: Gets grid values of the parameter parnam from specified zones
+%   the zones are specified in the
+%   worksheets "config" and "material" of Excel file [basename '.xls']
+%   Used for convenient and efficient generation of cross sections.
+%   See the examples that use it, e.g.
+%        mflab>examples>swt_v4>freshkeeper>
+%
+% USAGE:
+%   xsConfObj=xsConfObj(basename,configSheetNm,materialSheetNm)
+%   see example VechtDredging under examples/mf2005/DutchTop/VechtDredging
+%   for usage and its html file in the htlm directory
+%   The data below originate from the VechtDredging example.
+%
+% Layout of config worksheet:
+%  line 1: label label followed by arbitrary zone names as off column 3
+%  line 2: xZone,         followed by xL of left-most zone. Ends with xR of all zones
+% or
+%  line 2: width|breedte, followed by left-most coordinate and the width of each zone
+%  line 3: label, blank, ztop of all zones
+%  line 4: label, blank, prescribed head of all zones, NaN is empty cell,
+%    meaning head is not prescribed and will be calculated as is the case under dikes
+%    adjacent to rivers and canals.
+%  line 5: layer#, layerBotElev, character code id for all zones (codes may have more than one letter)
+%  line 6: same
+%  line 7: same etc
+%  See workbook for exact alignment of columns.
+%  NaN stands for empty cells in the spreadheet.
+%
+%Example:
+% Layer   Basis(m) Polder2W DikeARKW ARK  DikeARKE PolderW Polder1W DitchW DikeW VechtW Dredged VechtE DikeE DitchE PolderE Polder2E Polder3E
+% Width   -4297    2500     24       100  24       1500    100      2      12    20     30      20     12    2     800   1500  2500
+% Head       NaN   -2.1     NaN      -0.4 NaN      -2.02   -2.02   -2.02   NaN -0.4    -0.4   -0.4     NaN  -1.86  -1.86 -1.71 -1.71
+% Top (m)    NaN   -1.4     1.2      -0.4 1.2      -1.2    -1.2    -2.02   0.6  -4.25  -4.25   -4.25   0.5  -1.86  -1.3  -1.3  -1.7
+% 1    -2      K    K    W    K    K    K    W    K    W    W    W    K    W    K    K    W
+% 2    -2.5    K    K    W    K    K    K    K    K    W    W    W    K    K    V    V    W
+% 3    -3      K    K    W    K    Z    Z    Z    K    W    W    W    K    K    V    V    W
+% 4    -3.5    K    K    W    K    Z    Z    Z    K    W    W    W    K    K    V    V    W
+% 5    -4      K    K    W    K    Z    Z    Z    K    W    W    W    K    K    V    V    W
+% 6    -4.25   K    K    W    K    K    K    Z    K    W    W    W    K    K    V    V    W
+% 7    -4.5    K    K    W    K    K    K    Z    Z    S    W    S    K    K    V    V    W
+% 8    -5      K    K    K    K    K    K    Z    Z    Z    S    Z    K    Z    V    V    W
+% 9    -6      K    K    K    K    K    K    K    K    Z    Z    Z    Z    Z    V    V    W
+% 10   -6.5    V    V    V    V    V    V    V    V    Z    Z    Z    Z    Z    V    V    W
+% 11   -10     P    P    P    P    P    P    P    P    P    P    P    P    P    P    P    B
+% 12   -15     P    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P
+% 13   -20     P    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P
+% 14   -50     P    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P
+% 15   -64     P    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P
+% 16   -65     P    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P
+% 17   -100    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P
+% 18   -150    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P
+% 19   -175    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P    P%
+%
+%
+% The layout of the material worksheet
+% line 1: headers of material properties
+% line 2: dimensions of the materials properties
+% line 3: values of material nr 1
+% line 4: same for material nr 2
+% line 5: etc.
+%
+% headers in line 1 are arbitrary except for 'material' and 'code'.
+% material is the full name of the material and code its short name which
+% must correspond to the mateials in the configuration layout specified
+% above. This short name may be more than 1 character long.
+%
+% Example:
+% Material                    Code    kh    kv    Red  Green  Blue  Porosity  rhoSolid  rhoDry   rhoWet
+% dimension                    dim    [m/d] [m/d] [-]  [-]    [-]   [-]       [kg/m3]   [kg/m3]  [kg/m3]
+% Pleistocene sand               P    30    10    1    1      0.5   0.35      2640      1716     2066
+% Holocene sand                  Z    1     1     1    0.75   0     0.35      2640      1716     2066
+% Sludge                         S    0.02  0.02  0.2  0.8    0     0.5       1400      700      1200
+% Clay                           K    0.01  0.01  0    1      1     0.6       2100      840      1440
+% Holland peat                   V    0.04  0.04  0.5  0.5    0     0.6       1400      560      1160
+% Water                          W    1e6   1e6   0    0      0.8   1         1000      0        1000
+% Water bottom                   B    0.01  0.01  0.75 0.5    0     0.6       2100      840      1440
+% Clay intersected by ditches    D    0.1   0.1   0    1      1     0.6       2000      800      1400
+%
+% To prevent missing some layers, make sure that the top and bottom
+% elevations of the zones match with vertical grid lines. You can do that
+% by merging the two sets of elevations when defining zGr. Just put the two
+% elevation sets in one vector and use that in gr=gridObj(xGr,yGr,zGr)
+% gridObj guarantees correct merging.
+%
+% SEE ALSO: mf_conf, mf_zone mf_plotConf as non-object versions of xsConfObj.
+%           and especially mfLab/examples/mf2005/DutchTop/VechtDredging/html
+%           see the methods when viewing the object to see its options.
+%
+% TO 110319
+
+    properties
+        matProps      % material property headers
+        matPropValues % material property matrix (numeric)
+        matNames      % long names of materials
+        matDims       % dimension of material properties
+        matCodes      % short names of materials (= config codes)
+        
+        zoneNames  % name of zones
+        zoneLeft;  % x-coord of left  end of zone
+        zoneRight; % x-coord of right end of zone
+        zoneHeads, % given zone head
+        zoneTops,  % zone top elevation
+        zoneBot,   % zone bottom elevation
+        zoneZ      % zone Z values
+        kD,        % total zone transmissivty
+        c,         % total zone resistance
+        dzMin = 0.1; % default minimum zone thickness (will be maintained)
+        zoneCodes, % charater code of zones in config list
+        zoneImat,  % index of each char zone in material list        
+        Nz         % nr of layes per zone (= length zoneBot)
+        NZone,     % nr of zones
+		UserData,
+    end
+    properties (Dependent = true)
+        xL, xR, xGr, xm, dx, zoneWidths,
+
+    end
+    methods
+        % Constructor:
+        function o=xsConfObj(basename,configSheetnm,materialSheetnm)
+            % xsConf = xsConfObj(basename,configSheetnm,materialSheetnm) -
+            % genererates xsConfObj (xs Configuration Objects)
+            % basename = as ususal (name of workbook)
+            % configSheetnm = sheetName in workbook holding the configuration
+            % materialSheetnm = sheetName in workbook holding the Materials definitions table
+            % See help of xsConfObj for the layout of these tables.
+            % TO 1200731
+            
+            if nargin==0,
+                return;
+            end
+
+            %% Get material
+            warning('off'); %#ok
+            [~,txt] = xlsread(basename,materialSheetnm,'','basic');
+            warning('on'); %#ok
+            
+            txtHdr     = txt(1,1:2);
+            o.matProps = txt(1,3:end);
+            o.matDims   = txt(2,3:end);
+
+            [~,o.matPropValues,~,txtValues]=getExcelData(basename,materialSheetnm,'Hor');
+
+            o.matNames = txtValues(:,strmatchi('Mat' ,txtHdr));
+            o.matCodes = txtValues(:,strmatchi('Code',txtHdr));
+
+            %% Get zones
+            [~,zoneValues,~,confCol1]=getExcelData(basename,configSheetnm,'Hor');
+            
+            if strcmpi('xZone',confCol1{1})
+                o.zoneLeft  = zoneValues(1,2:end-1); % left  zone coords
+                o.zoneRight = zoneValues(1,3:end);   % right zone coords
+            elseif strcmpi('breedte',confCol1{1}) || strcmpi('width',confCol1{1})
+                o.zoneLeft  = zoneValues(1,2) + [0 cumsum(zoneValues(1,3:end-1))];
+                o.zoneRight = o.zoneLeft + zoneValues(1,3:end);
+            else
+                error('xsConfObj:sheet:A2',...
+                    '%s: Cell A2 in sheet %s must either be ''%s'' or ''%s''',mfilename,configSheetnm,'width','xzone');
+            end
+            
+            o.zoneHeads = zoneValues(2,3:end);
+            o.zoneTops  = zoneValues(3,3:end);            
+            o.zoneBot   = zoneValues(4:end,2);
+            o.zoneZ     = [o.zoneTops ; o.zoneBot * ones(size(o.zoneTops))];
+            o.NZone     = length(o.zoneTops);
+            o.Nz        = length(o.zoneBot);
+            
+            %% make sure all zone bottoms are lower than zone tops
+            for iL=2:size(o.zoneZ,1)
+                o.zoneZ(iL,:)=min(o.zoneZ(iL,:),o.zoneZ(iL-1,:)-o.dzMin);
+            end
+
+            %% getting the character zoneCodes separately:
+            warning('off'); %#ok
+            [~,o.zoneCodes] = xlsread(basename,configSheetnm,'','basic');
+            warning('on');  %#ok
+            o.zoneNames = o.zoneCodes(1,3:end);
+            o.zoneCodes = o.zoneCodes(5:end,3:end);
+
+            %% replace zoneCodes by direct index into material list
+            o.zoneImat = NaN(size(o.zoneCodes));
+
+            for j=1:size(o.zoneCodes,1)
+                for i=1:size(o.zoneCodes,2)
+                    o.zoneImat(j,i) = strmatchi(o.zoneCodes(j,i),o.matCodes);
+                end
+                if any(o.zoneImat==0)
+                    fprintf('Indices in Material list of zone codes (must be <>0):\n');
+                    display(o.zoneImat);
+                    error('Not all zone codes in the configuration are defined in the material list;\nSee index table just printed.');
+                end
+            end
+            
+            kh_  = o.matPropValues(:,strmatchi('kh',o.matProps));
+            o.kD = kh_(o.zoneImat).*abs(diff(o.zoneZ));
+            
+            kv_  = o.matPropValues(:,strmatchi('kv',o.matProps));
+            o.c = abs(diff(o.zoneZ)) ./ kv_(o.zoneImat);
+
+        end
+        
+        function A = zonePropArray(o,PropName)
+            % A = ConfObj.confArray(PropName) - get an array of Properties for the zones of the configuration
+            % PropName is the name of one of the material properties from
+            % the materials list (under header Code (see xsConfObj.matProps))            
+            iProp = strmatchi(PropName,o.matProps,'exact');
+            if ~iProp,
+                error('xsConfObj:confArray:unknownPropname',...
+                    'can''t find propName <<%s>>, use one of <<%s>>',o.matProps);
+            end
+            A = reshape(o.matPropValues(o.zoneImat,iProp),size(o.zoneImat));
+        end
+        
+        function xL  = get.xL(o)
+            % xL = xsConf.xL() - gets left coordinate of zones
+            xL = o.zoneLeft;
+        end
+        
+        function xR  = get.xR(o)
+            % x = xConf.xR()  - gets right coordinate of zones
+            xR = o.zoneRight;
+        end
+        
+        function xGr = get.xGr(o)
+            % xGr = xsConf.xGr() - gets the grid lines of the zones
+            xGr = [o.zoneLeft(1) o.zoneRight];
+        end
+        
+        function  xm = get.xm(o)
+            % xm = xsConf.xm() - gets the centers of the zones
+            xm = 0.5*(o.xGr(1:end-1)+o.xGr(2:end));
+        end
+        
+        function zoneWidths = get.zoneWidths(o)
+            % zoneWidths = xsConf.zoneWidths REPLACE_WITH_DASH_DASH get widths of zones
+            zoneWidths = o.zoneRight - o.zoneLeft;
+        end
+
+        function  dx = get.dx(o) % abbreviation for convenience
+            % dx = xsConf.dx() - gets widths of zones
+            dx = o.zoneWidths;
+        end
+        
+        function A = array2D(o,propName,xGr,Z,code)
+            % A = xsConf.array2D(propName,xGr [Z [code]])
+            % - generates a full model array for property propName
+            % propName ==>
+            %         'Z'     ==> generates Z array implied by xsConf.zoneTop, xsConf.zoneBot and xGr
+            %         'head'  ==> top head extended to full array
+            %         any propName in Conf.matNames
+            % xGr ==> is the xGr of the model array not of the zones
+            % Z   ==> the Z   of the model array (Nz+1,Nx), 2D because
+            %         xsConf is 2D for cross sections with Z vertical downward
+            %         (1st dimension) and X horizontal (2nd dimension)
+            % if Z is omitted or empty, then Z is assumed to be implied by xsConf.zoneTop and xsConf.zoneBot
+            %         i.e. that the layers in xsConfObj are the same as those of
+            %         the model.
+            % code ==> can be 'geometric', 'harmonic', see help gridsTransfer()
+            %         if code is omitted 'geometric' is used.
+            % A has dimensions (Nz,Nx) use A=XS(A) to make it 3D.
+            %
+            % TO 120803
+            
+            dim = 1;
+            Nx=length(xGr)-1;
+            xm = 0.5*(xGr(1:end-1)+xGr(2:end));
+            
+            if ~exist('code','var'), code='geometric'; end
+
+            Idx = floor(interp1(o.xGr,1:o.NZone+1,xm));
+            
+            for iZone=o.NZone:-1:1
+                Ix{iZone}=find(xm>o.xL(iZone) & xm<o.xR(iZone)); % ix indices model in this conf zone
+            end
+
+            if ~exist('Z','var') || isempty(Z) % used Z implied by config
+                Nz_= o.Nz;
+                Z  = NaN(o.Nz+1,Nx);
+                for iZone=1:o.NZone
+                    Z(:,Ix{iZone}) = o.zoneZ(:,iZone) * ones(size(Ix{iZone}));
+                end
+            else  % Z is given in its entirety by the call
+
+                Nz_ = size(Z,1)-1;
+            end
+            
+            for iZone=o.NZone:-1:1
+                layersareuniform(iZone) = all(abs(mean(Z(:,Ix{iZone}),2)-Z(:,Ix{iZone}(1)))<1e-1);
+            end
+
+            lpropName = lower(propName);
+            switch lpropName
+                case 'z'
+                    A = Z(:,Idx);
+                case 'top' % full array of heads, using o.zoneHeads interpolating when isnan(zoneHeads)
+                    A = blockInterp(o.zoneTops,o.xGr,xm);
+                case 'tophead' % full array of heads, using o.zoneHeads interpolating when isnan(zoneHeads)
+                    A = NaN(1,Nx);
+                    for iZone= 1:o.NZone
+                        A(xm>o.xL(iZone) & xm<o.xR(iZone)) = o.zoneHeads(iZone);
+                    end
+                case 'head' % full array of heads, using o.zoneHeads interpolating when isnan(zoneHeads)
+                    A = ones(Nz_,1)*blockInterp(o.zoneHeads,o.xGr,xm);
+                case 'ibound'
+                    A = ones(Nz_,Nx);
+                case {'matindex','mat'}
+                    A = NaN(Nz_,Nx);
+                    for iZone = 1:o.NZone
+                        if layersareuniform(iZone)
+                            A(:,Ix{iZone})   = gridsTransfer(o.zoneZ(:,iZone),o.zoneImat(:,iZone),Z(:,Ix{iZone}(1)),code,dim)*ones(1,length(Ix{iZone}));
+                        else
+                            for i=1:length(Ix{iZone})
+                                A(:,Ix{iZone(i)}) = gridsTransfer(o.zoneZ(:,iZone),o.zoneImat(:,iZone),Z(:,Ix{iZone}(i)),code,dim);
+                            end
+                        end
+                    end
+                otherwise
+                    iProp = strmatchi(propName,o.matProps,'exact');
+                    if ~iProp,
+                        error('xsConfObj:confArray:unknownPropname',...
+                            ['can''t find propName <<%s>>, use one of <<', ...
+                            repmat(' %s',[1, length(o.matProps)]), '>>'],propName,o.matProps{:});
+                    end
+                    A = NaN(Nz_,Nx);
+                    for iZone=1:o.NZone
+                        if layersareuniform
+                            A(:,Ix{iZone})   = gridsTransfer(o.zoneZ(:,iZone),o.matPropValues(o.zoneImat(:,iZone),iProp),Z(:,Ix{iZone}(1)),code,dim)*ones(size(Ix{iZone}));
+                        else
+                            for i=1:length(Ix)
+                                A(:,Ix{iZone}(i))   = gridsTransfer(o.zoneZ(:,iZone),o.matPropValues(o.zoneImat(:,iZone),iProp),Z(:,Ix{iZone}(i)),code,dim);
+                            end
+                        end
+                    end
+            end
+        end
+        
+        function A = array3D(o,gr,propName,code)
+            % xsConfOjb.model3D(gr,propName,code)
+            % gr is grid object
+            % propName is the name of one of the material properties (under
+            %    heading "Code" in the materials worksheet
+            % Spcial property names are 'head'  'top' and 'bottom' to get
+            %    the full 3D array of the heads, top and bottom of the model
+            %    cells as derived from the zones. Note that only the top head
+            %    of the zones is defined in the configuration. Hence all
+            %    layers will have this head.
+            % code is a code determining the way of averaging when the the
+            %    zone and the model grid are intersected:
+            % The codes:
+            %   'k' or 'geometric' meaning geometric mean is used
+            %   'c' or 'harmonic'  meaning harmonic  mean is used
+            % Example:
+            %   xsConfObj.getMdlArray(gr,'kh','k');
+            %   xsConfObj.getMdlArray(gr,'kv','c');
+            % where 'kv' and 'kh' are material properties and 'k' and 'c'
+            % Note: any value outside the Conf layout will be a NaN
+            % The output model is of size (1,Nx,Nz) i.e. 3D vertical sheet
+            % TO 120731
+            
+            if ~exist('code','var') || isempty(code), code='geometric'; end
+            
+            A = XS( o.array2D(propName,gr.xGr,XS(gr.Z),code) );
+        end
+        
+        function ax =plotOverview(o,xGr,Phi,Q,Qx,ttl,leg,varargin)
+        
+            if isempty(varargin), varargin = {'visible','on'}; end
+                
+            args =[{'nextplot','add','xgrid','on','ygrid','on'}, varargin];
+            xlbl = 'x [m]';
+            ylbl = {'head [m]';'discharge [m2/d]';'seepage mm/d'};
+
+            xm = 0.5*(xGr(1:end-1)+xGr(2:end));
+            Dx = diff(xGr,1,2);
+
+            figure;
+
+            for i=3:-1:1
+                ax(i) = subplot(3,1,i,args{:});
+                xlabel(xlbl); ylabel(ylbl{i}); title(ttl{i});
+                switch i
+                    case 1
+                        plot(xm,o.array2D('top',xGr),'k','linewidth',0.5);
+                        plot(xm,Phi);                        
+                    case 2
+                        Qx(isnan(Qx))=0;
+                        plot(xGr(2:end-1),sum(Qx,1));
+                    case 3
+                        plot(xm,-sum(Q,1)*1000./Dx);
+                end
+                if numel(leg)>=i
+                    legend(leg{i});
+                end
+            end
+            % make sure axes stay the same (especially for interactive zooming)
+            linkaxes(ax,'x');
+        end
+        
+        function ax = plotContours(o,xGr,Z,Phi,Psi)
+            
+            %% Plot stream-line patterns with heads and flows
+
+            args = {'nextplot','add','xgrid','on','ygrid','on'};
+
+            xm = 0.5*(xGr(1:end-1)+xGr(2:end));
+
+            ZM = 0.5*(Z(1:end-1,:)+Z(2:end,:)); ZM([1 end],:)=Z([1 end],:);
+
+
+            ax(1) = o.paint(args{:}); % plot background
+
+            ax(2)= axes('position',get(ax(1),'position'),'color','none',...
+                        'xlim',get(ax(1),'xlim'),'ylim',get(ax(1),'ylim'),args{:});
+
+            xlabel('x [m]');  ylabel('z [m NAP]');
+
+            linkaxes(ax);
+
+            hrange =ContourRange(Phi,50); dPhi = diff(hrange(1:2));
+            prange =ContourRange(Psi,50); dPsi = diff(hrange(1:2));
+
+            title(sprintf('Head and stream lines, dPhi=%.2f m, dPsi=%.2f m2/d',dPhi,dPsi));
+
+            contour(ax(2),ones(size(ZM(:,1)))*xm,               ZM,                      Phi,hrange,'g');
+            contour(ax(2),ones(size(Z (:,1)))*xGr(2:end-1),0.5*(Z(:,1:end-1)+Z(:,2:end)),Psi,prange,'b');
+
+            plot(ax(2),xm,o.array2D('top',xGr),'k'); % top of model
+            plot(ax(2),xm,Phi(1,:),'b');             % water table
+
+            legend('head lines','stream lines','ground surface','prescribed head')
+        end
+         
+        function ax = paint(o,varargin)
+            % xsConfObj.paint() - paints the zones each iwth unique color
+            % if materialsTable contains columns 'Red', 'Green' and 'Blue'
+            % these will be used, else mf_color is used with its default
+            % sequential standard colors (try mf_color(1:10));
+            %
+            % TO 120731
+
+            figure;
+            args = [{'nextplot','add','xgrid','on','ygrid','on'},varargin];
+            
+            ax = axes(args{:});
+            
+            iR = strmatchi('Red'  ,o.matProps);
+            iG = strmatchi('Green',o.matProps);
+            iB = strmatchi('Blue' ,o.matProps);
+            if all([iR iG iB]>0)
+                propColor = [o.matPropValues(:,strmatchi('Red'  ,o.matProps)), ...
+                             o.matPropValues(:,strmatchi('Green',o.matProps)), ...
+                             o.matPropValues(:,strmatchi('Blue' ,o.matProps))];
+            else
+                propColor = mf_color(1:max(o.zoneImat(:)));
+            end
+            for i=1:size(o.zoneImat,2)
+                zGr = [max(o.zoneTops(i),o.zoneHeads(i)); o.zoneBot];
+                for j=1:size(o.zoneImat,1)
+                    fill(o.xGr([i i+1 i+1 i  ]),...
+                           zGr([j j   j+1 j+1]),...
+                           propColor(o.zoneImat(j,i),:),'edgecolor','none','parent',ax);
+                end
+            end
+        end
+        
+        function show(o,what)
+            if ~exist('what','var') || isempty(what), what='c'; end
+            
+            w=lower(what(1));
+            switch w
+                case {'m','materials'}
+                    fprintf('Overview materials in this model:\n');
+                    fprintf('Material properties:      ');
+                    for im=1:length(o.matProps), fprintf('%12s',o.matProps{im}); end; fprintf('\n');
+                    fprintf('Property dimensions:      ');
+                    for im=1:length(o.matDims) , fprintf('%12s',o.matDims{im});  end; fprintf('\n');
+                    for i=1:length(o.matNames)
+                        fprintf('%20s%6s',o.matNames{i},o.matCodes{i});
+                        for j=1:size(o.matPropValues,2)
+                            fprintf('%12g',o.matPropValues(i,j));
+                        end
+                        fprintf('\n');
+                    end
+                    fprintf('\n');
+                case {'c','config'}
+                    fprintf('\nConfiguration:\n');
+                    fprintf('zone xL [m]:                          ');  fprintf(' %10.1f',o.xL); fprintf('\n');
+                    fprintf('zone xR [m]:                          ');  fprintf(' %10.1f',o.xR); fprintf('\n');
+                    fprintf('zone width [m]:                       ');  fprintf(' %10.1f',o.zoneWidths); fprintf('\n');
+                    fprintf('top (ground surface [m NAP])          ');  fprintf(' %10.2f',o.zoneTops);   fprintf('\n');
+                    fprintf('prescribed head peil: [m NAP]:        ');  fprintf(' %10.2f',o.zoneHeads);  fprintf('\n');
+                    fprintf('Totaal transmissivity: [m2/d]:        ');  fprintf(' %10.4g',sum(o.kD,1));  fprintf('\n');
+                    fprintf('Totale vert. hydraul. resistance [d]: ');  fprintf(' %10.4g',sum(o.c ,1));  fprintf('\n');
+
+                    for iL=1:o.Nz
+                       fprintf('Ground layer %2d [m NAP]: %10.0f:',iL,o.zoneBot(iL));
+                       fprintf(' %3s',o.zoneCodes{iL,:}); fprintf('\n');
+                    end
+                    fprintf('\n');
+
+                otherwise
+                    error('xsConfObj:display:unknownOption',...
+                        '%s: unknown option <<%s>>',mfilename,what)
+            end
+        end
+end
+
+end
+
+
+##### SOURCE END #####
+--></body></html>

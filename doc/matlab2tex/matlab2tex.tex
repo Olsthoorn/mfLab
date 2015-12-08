@@ -1,0 +1,60 @@
+\begin{alltt}
+\textcolor{keyword}{function} status = matlab2tex(mfile,varargin)
+\textcolor{comment}{% function status = publish2pdf(mfile,varargin)}
+\textcolor{comment}{%  Writes a file with tex for syntax colored listing of matlab code in mfile}
+\textcolor{comment}{%  an example of how to include tex in Lyx: }
+\textcolor{comment}{%  Paste into Document preamble (without matlab comments, of course)}
+\textcolor{comment}{%      \(\backslash\)usepackage\{alltt\}}
+\textcolor{comment}{%      \(\backslash\)usepackage\{color\}}
+\textcolor{comment}{%      \(\backslash\)definecolor\{string\}\{rgb\}\{0.7,0.0,0.0\}}
+\textcolor{comment}{%      \(\backslash\)definecolor\{comment\}\{rgb\}\{0.13,0.54,0.13\}}
+\textcolor{comment}{%      \(\backslash\)definecolor\{keyword\}\{rgb\}\{0.0,0.0,1.0\}}
+\textcolor{comment}{%  Insert a float figure}
+\textcolor{comment}{%  Click in figure, start an insert ERT (ctrl-L)}
+\textcolor{comment}{%  Do Insert|file|plain text and navigate to tex file}
+\textcolor{comment}{%  click outside ERT}
+\textcolor{comment}{%  ---}
+\textcolor{comment}{%  inputs: }
+\textcolor{comment}{%    mfile: the m-file path and name. If no path is specified, looks in matlab working dir }
+\textcolor{comment}{%    linenumbers: (optional = false) If present, includes linenumbers in listing}
+\textcolor{comment}{%  outputs:}
+\textcolor{comment}{%    creates a file mfilename.tex in same dir as original matlabfile}
+\textcolor{comment}{%    status: the last 'status' from the file open/close commands. 0 if executed without errors}
+\textcolor{comment}{%  REA 5/11/09}
+
+  \textcolor{comment}{% process the optional arguments}
+nreqargs = 1;
+linenumbers= false;
+
+\textcolor{keyword}{if}(nargin>nreqargs)
+  i=1;
+  \textcolor{keyword}{while}(i<=size(varargin,2))
+     \textcolor{keyword}{switch} lower(varargin\{i\})
+     \textcolor{keyword}{case} \textcolor{string}{'linenumbers'};          linenumbers=true;
+    \textcolor{keyword}{otherwise}
+      error(\textcolor{string}{'Unknown argument \%s given'},varargin\{i\});
+     \textcolor{keyword}{end}
+     i=i+1;
+  \textcolor{keyword}{end}
+\textcolor{keyword}{end}
+
+    \textcolor{comment}{% options for highlight function}
+opt.type = \textcolor{string}{'tex'};
+opt.linenb = linenumbers; 
+
+     \textcolor{comment}{% get the directory and file name }
+[pathstr, name, ext, versn] = fileparts(mfile);
+pathfull = [pathstr filesep];
+mfile\_name\_with\_path = [pathfull name]; \textcolor{comment}{% no extension}
+mfile\_name = [name ext];
+
+     \textcolor{comment}{% create a file pointer as input to highlight}
+texname =  [pathfull name \textcolor{string}{'.tex'}];
+fid = fopen(texname,\textcolor{string}{'wt'});
+\textcolor{keyword}{if} fid == 0
+   error(\textcolor{string}{'could not open tex file \%s'},texname);
+   status = 1;
+\textcolor{keyword}{end}   
+highlight(mfile,opt,fid);
+status = fclose(fid);
+\end{alltt}

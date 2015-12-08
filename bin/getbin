@@ -1,0 +1,46 @@
+# MAKEFILE to copy all executables to same location for mflab
+# TO 091011
+
+
+#### moet nog debuggen to 091011
+#### doel is dat deze makefile alle executables uit de goede directories naar de goede stuurt
+
+USER  =/Domain/tudelft.net/Users/tolsthoorn
+MODELS= $(USER)/GRWMODELS
+
+
+MFLAB= $(MODELS)/mflab/bin
+
+MF2K  = mf2k.1_18
+MF05  = mf2005
+MT3D = mt3dms5s
+SWI   = SWI
+SWT   = swt_v4_00_03/
+
+
+all: $(MF2K) $(MF05) $(MT3S) $(MT3DB) $(SWI) $(SWT)
+
+$(MF2K) : $(MFLAB)/mf2k*.exe $(MFLAB)/mf2k*.exe 
+	echo $(USER)
+	echo $(MODELS)
+	echo $(MF2K)
+	cp $(MODELS)/$(MF2K)/bin/mf2k.exe      $(MFLAB)
+	cp $(MODELS)/$(MF2K)/src/mf2k/mf2k.mac $(MFLAB)
+
+$(MF05) : $(MFLAB)/mf2005.exe $(MFLAB)/mf2005.mac
+	cp $(MODELS)/$(MF05)v1_7_00/bin/$(MF05).exe $(MFLAB)
+	cp $(MODELS)/$(MF05)v1_7_00/src/$(MF05).mac $(MFLAB)
+
+$(MT3D) : $(MFLAB)/mt3dms5s.exe $(MFLAB)/mt3dms5b.exe $(MFLAB)/mt3dms5s.mac $(MFLAB)/mt3dms5b.mac
+	cp $(MODELS)/$(MT3D)/bin/$(MT3D)s.exe          $(MFLAB)
+	cp $(MODELS)/$(MT3D)/bin/$(MT3D)b.exe          $(MFLAB)
+	cp $(MODELS)/$(MT3D)/src/standard/$(MT3D)s.mac $(MFLAB)
+	cp $(MODELS)/$(MT3D)/src/standard/$(MT3D)b.mac $(MFLAB)
+
+$(SWI) :  $(MFLAB)/mf2kswi.exe $(MFLAB)/mf2kswi.mac
+	cp $(MODELS)/$(SWI)/mf2kswi.exe $(MFLAB)
+	cp $(MODELS)/$(SWI)/mf2kswi.mac $(MFLAB)
+
+$(SWT) : $(FMLAB)/swt_v4.exe $(FMLAB)/swt_v4.mac 
+	cp $(MODELS)/$(SWT)_00_03/exe/$(SWT).exe         $(MFLAB)
+	cp $(MODELS)/$(SWT)_00_03/source/$(SWT).mac $(MFLAB)

@@ -1,0 +1,492 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>gridTransfer</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2012-08-30"><meta name="DC.source" content="gridTransfer.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">var2 = gridObj.gridTransfer(var,grNew,code,dim)</a></li><li><a href="#3">Algorithm</a></li><li><a href="#4">Check size of varFr</a></li><li><a href="#6">To grid and to values</a></li><li><a href="#7">working with entire grids</a></li><li><a href="#8">put the well size in a single vector after permuting the grids the grid</a></li><li><a href="#9">Intermediate grid and intermediate values</a></li><li><a href="#10">Pointers from intermediate grid into from grid Ifr and into target grid Ito</a></li><li><a href="#11">Get unique varTo indices</a></li><li><a href="#12">Use only the overlapping grids</a></li><li><a href="#13">In this case the we deal with a stress list with LRC indices of which</a></li><li><a href="#15">Fill vInt (pull varFr values into vInt</a></li><li><a href="#16">Fill new to-grid</a></li><li><a href="#17">Round off by reshaping varTo to its  (Ny,Nx,Nz) form</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> varTo = gridTransfer(grOld,varFr,grNew,code,dim)
+</pre><h2>var2 = gridObj.gridTransfer(var,grNew,code,dim)<a name="2"></a></h2><pre>Allows to resample a complete grid into a new grid implied by planes and grOld to grNew.
+This is a powerfull, sophisticated and advanced procedure because it
+works with arbitrary grids of the MODFLOW type as long as no confining beds are present.
+Its use is to adapt grids so that they can be used with transport models
+like mt3dms and seawat.</pre><pre>grNew is subject to the following conditions:
+*  the outer planes of both grids must coincide.
+*  the two dimensions not tranferred must have the same number of elements
+in the two grids.
+* the intermediate planes of Znew have arbitrary elevations but must be in
+  sequence from high to low.</pre><pre>use Znew = grOld.newZ(layersToKeep,subdivisions) to generate Znew</pre><pre>code = 'geometric' implying geometric addition
+or     'harmonic'  implying harmonic weighting
+or     'abundant'  'median','max','min'
+or     'divide',   'width' ,'thickness'  --- for cell widths (all mean the same)</pre><pre>Procedure:
+all cells are put in a single vector in sequence along the dimension to
+be tranferred.
+A intermediate grid wint and vInt with values vInt are generated first.
+Its cell boundaries, wInt, combine those of the two grids</pre><pre>The data from the grid are then pulled into the intermediate grid
+using V(:) = VFr(IFr), with no indexing required</pre><pre>Then the data from the intermiate grid vInt must be transferred to the to output grid varTo.
+Because each toGrid index may occur more than once in the output index vector, we
+must do this cell by tocell with simultaneous weighting of the pulled values.
+Weighting is specified by the 'code' argument and can be done geometrically,
+harmonically by median, max and min.</pre><p>Geometrically: ito is index over Vto  Vto(ito)= D(Ito==ito).*V(Ito==ito)/Dto(ito);  % note that DTo(ito)=sum(D(ITo==ito)); Harmonically  Vto(ito)= 1./(D(Ito==ito)./V(Ito==ito)/Dto(ito)) Abundant or median  Vto(ito)= median(V(Ito==ito),2); Minimum  Vto(ito)= min   (V(Ito==ito),[],2); Maximum  Vto(ito)= max   (V(Ito==ito),[],2);</p><pre>target grid, thereby allying either geometric or harmonic weighting.</pre><p>Copyright 2009-2012 Theo Olsthoorn, TU-Delft and Waternet, without any warranty under free software foundation GNU license version 3 or later</p><p>See examples/tutorial/modelObj for verification and application See examples/swt_v04/SWIM22/ASTRseasonal for application</p><pre>TO 120821</pre><pre class="codeinput"><span class="keyword">if</span> any(grOld.LAYCBD&gt;0), error(<span class="string">'%s: LAYCBD must be all zero (no confining beds'</span>); <span class="keyword">end</span>
+</pre><h2>Algorithm<a name="3"></a></h2><pre class="codeinput">code =lower(code);
+
+<span class="keyword">switch</span> code
+    <span class="keyword">case</span> {<span class="string">'k'</span>,<span class="string">'g'</span>}, code=<span class="string">'geometric'</span>;
+    <span class="keyword">case</span> {<span class="string">'c'</span>,<span class="string">'h'</span>}, code=<span class="string">'harmonic'</span>;
+<span class="keyword">end</span>
+</pre><h2>Check size of varFr<a name="4"></a></h2><pre class="codeinput"> <span class="keyword">if</span> ~strcmpi(code,<span class="string">'layer'</span>) &amp;&amp; ~all(size(varFr)==[grOld.size])
+     error(<span class="string">'%s: size of varFr [%d %d %d] does notmatch size of grid [%d %d %d]'</span>,mfilename,size(varFr),grOld.size);
+ <span class="keyword">end</span>
+</pre><p>Combine all columns of the data and Z-arrays into column vectors and transfer it back after the data have been transferred to the new grid. This way we can handle the entire grid in a linear interpolation operation. Care must be taken that we remain consistent with our numbering. So it is not allowed to throw away output grid planes, but thowing away input grid duplicates is no problem but desired. We dont' care about the input numbering, only the output numbering matters.</p><h2>To grid and to values<a name="6"></a></h2><pre class="codeinput"><span class="keyword">if</span> strcmpi(code,<span class="string">'zlist'</span>)
+    <span class="comment">% one value per layer, don't need to transfer entire grid, which may be large</span>
+
+    <span class="comment">% elevation vector grid averate</span>
+    wFr = grOld.zGr;
+    wTo = grNew.zGr;
+    wInt = unique([wFr(:); wTo(:)]);
+    wmInt=0.5*(wInt(1:end-1)+wInt(2:end));
+
+    varTo = zeros(grNew.Nz,1);
+
+    <span class="comment">% indices from intermediate grid wInt into fr and to grid</span>
+    Ifr = min(numel(wFr)-1,floor(interp1(wFr,1:length(wFr),wmInt))); <span class="comment">% index grid 1 in merged, size(Nint,1)</span>
+    Ito = min(numel(wTo)-1,floor(interp1(wTo,1:length(wTo),wmInt))); <span class="comment">% index grid 2 in merged, size(Nint,1)</span>
+
+    <span class="comment">% pull values from from grid into intermediategrid</span>
+    vInt = varFr(Ifr);
+
+    <span class="comment">% find start and end index of if to grid in intermediate grid</span>
+    [~,First] = unique(Ito,<span class="string">'first'</span>);  <span class="comment">% First where they start in vInt</span>
+    [~,Last ] = unique(Ito,<span class="string">'last'</span>);   <span class="comment">% and Last where they end</span>
+
+    <span class="comment">% pull values from intermediate grid into to-grid</span>
+    <span class="keyword">for</span> j=1:length(varTo)
+        varTo(j) = round(median(vInt(First(j):Last(j))));
+    <span class="keyword">end</span>
+    <span class="keyword">return</span>;
+<span class="keyword">end</span>
+</pre><h2>working with entire grids<a name="7"></a></h2><h2>put the well size in a single vector after permuting the grids the grid<a name="8"></a></h2><p>to aline the transfer diretion with the primary dimension (dimension 1) along the first dimension.</p><pre class="codeinput"><span class="keyword">switch</span> dim
+    <span class="keyword">case</span> {1,<span class="string">'y'</span>}
+        dFr  = reshape(permute(grOld.DY,[1,2,3]), [grOld.Ny*grOld.Nx*grOld.Nz,1]);
+        dTo  = reshape(permute(grNew.DY,[1,2,3]), [grNew.Ny*grNew.Nx*grNew.Nz,1]);
+        varFr=permute(varFr,[1,2,3]);
+    <span class="keyword">case</span> {2,<span class="string">'x'</span>}
+        dFr  = reshape(permute(grOld.DX,[2,1,3]), [grOld.Ny*grOld.Nx*grOld.Nz,1]);
+        dTo  = reshape(permute(grNew.DX,[2,1,3]), [grNew.Ny*grNew.Nx*grNew.Nz,1]);
+        varFr=permute(varFr,[2,1,3]);
+    <span class="keyword">case</span> {3,<span class="string">'z'</span>}
+        dFr  = reshape(permute(grOld.DZ,[3,2,1]), [grOld.Ny*grOld.Nx*grOld.Nz,1]);
+        dTo  = reshape(permute(grNew.DZ,[3,2,1]), [grNew.Ny*grNew.Nx*grNew.Nz,1]);
+        varFr=permute(varFr,[3,2,1]);
+<span class="keyword">end</span>
+varFr=varFr(:);
+varTo= zeros(size(dTo));
+
+wFr  = [0; cumsum(dFr(:))]; <span class="comment">% from coordinates (L) in a single vector</span>
+wTo  = [0; cumsum(dTo(:))]; <span class="comment">% to   coordinates (L) in a single vector</span>
+</pre><h2>Intermediate grid and intermediate values<a name="9"></a></h2><pre class="codeinput">wInt  = unique([wFr;wTo]);                 <span class="comment">% intermediate grid-line coords</span>
+wmInt = 0.5*(wInt(1:end-1)+wInt(2:end));   <span class="comment">% intermediate center coords</span>
+dInt =  diff(wInt);                        <span class="comment">% intermediate grid cell widths</span>
+vInt  = zeros(size(dInt));                 <span class="comment">% intermediate grid values</span>
+</pre><h2>Pointers from intermediate grid into from grid Ifr and into target grid Ito<a name="10"></a></h2><pre class="codeinput">Ifr = min(numel(wFr)-1,floor(interp1(wFr,1:length(wFr),wmInt))); <span class="comment">% index grid 1 in merged, size(Nint,1)</span>
+Ito = min(numel(wTo)-1,floor(interp1(wTo,1:length(wTo),wmInt))); <span class="comment">% index grid 2 in merged, size(Nint,1)</span>
+</pre><h2>Get unique varTo indices<a name="11"></a></h2><pre class="codeinput">[I,First] = unique(Ito,<span class="string">'first'</span>);  <span class="comment">% First where they start in vInt</span>
+[~,Last ] = unique(Ito,<span class="string">'last'</span>);   <span class="comment">% and Last where they end</span>
+</pre><h2>Use only the overlapping grids<a name="12"></a></h2><pre class="codeinput">J  = find(~isnan(Ifr)); <span class="comment">% J are valid indices in Ifr in case of non overlapping grid portions</span>
+
+<span class="keyword">if</span> strcmpi(code,<span class="string">'layer'</span>)
+</pre><h2>In this case the we deal with a stress list with LRC indices of which<a name="13"></a></h2><p>the index for the current dimension has to be adapted to the new grid. We pass the linear layer index. We rcompute it for the permuted grid. The index then correspoinds with the linear cell in the wFr vector. We can thus immediately compute the center of the cell of the stress in the wFr vector. This w-value (grid coordinate) is the same in the zTo vector, which is in sequence of the idx of the new grid. We kan thus immediately look up the linear index of the zNew array, compute the new layer and transfer that back to the stress list. The condition for this to work is that the top and bottom planes of the from and the to networks are the same.</p><pre class="codeinput">    <span class="comment">% varFr contains the linear index of the cells</span>
+    CRL = cellIndices(varFr,grOld.size,<span class="string">'CRL'</span>);
+    <span class="keyword">switch</span> dim
+        <span class="keyword">case</span> 1
+            idx = cellIndex(CRL([1 2 3]),[grOld.Nx,grOld.Ny,grOld.Nz]);
+            ymIdx = 0.5*(wFr(idx)+wFr(idx+1));
+            varTo = min(floor(interp1(wTo,1:length(wTo),ymIdx)),length(wTo)); <span class="comment">% linear index grid 2, size(Nint,1)</span>
+        <span class="keyword">case</span> 2
+            idx = cellIndex(CRL([2 1 3]),[grOld.Ny,grOld.Nx,grOld.Nz]);
+            xmIdx = 0.5*(wFr(idx)+wFr(idx+1));
+            varTo = min(floor(interp1(wTo,1:length(wTo),xmIdx)),length(wTo)); <span class="comment">% linear index grid 2, size(Nint,1)</span>
+        <span class="keyword">case</span> 3 <span class="comment">% varFr = idxOld, varTo =idxNew</span>
+            idx = cellIndex(CRL([3 1 2]),[grOld.Nz,grOld.Nx,grOld.Ny]);
+            zmIdx = 0.5*(wFr(idx)+wFr(idx+1));
+            varTo = min(floor(interp1(wTo,1:length(wTo),zmIdx)),length(wTo)); <span class="comment">% linear index grid 2, size(Nint,1)</span>
+    <span class="keyword">end</span>
+    <span class="keyword">return</span>;
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><h2>Fill vInt (pull varFr values into vInt<a name="15"></a></h2><pre class="codeinput"><span class="keyword">if</span> ismember(code,{<span class="string">'divide'</span>,<span class="string">'thickness'</span>,<span class="string">'width'</span>})
+    <span class="comment">% This is necessary for cell widths,</span>
+    vInt(J) = varFr(Ifr(J)) .* dInt(J)./dFr(Ifr(J));
+    code = <span class="string">'width'</span>;
+<span class="keyword">else</span> <span class="comment">% just pull the value from varFr into vInt</span>
+    vInt(J) = varFr(Ifr(J));
+<span class="keyword">end</span>
+</pre><h2>Fill new to-grid<a name="16"></a></h2><p>We will pull the data from the intermedate grid into the target grid. This way we can deal with integer grid, by selecting the most abundant value of the integers in the intermediate grid where it overlaps cells of the target grid. Most abundant is median or round(median). This can also be applied to zone arrays. However some data will drop out like small rows with boundaries. Alternatives are choosing minium or maximum values in a range. This is up to the user. Non-overlapping is autmatically taken care of. It yieds NaN's in the resulting var2 except if min or max are used.</p><pre class="codeinput"><span class="keyword">switch</span> code
+    <span class="keyword">case</span> {<span class="string">'width'</span>,<span class="string">'layer'</span>}
+        <span class="keyword">for</span> j=I'
+            varTo(j) = sum(vInt(First(j):Last(j)));
+        <span class="keyword">end</span>
+    <span class="keyword">case</span>  <span class="string">'geometric'</span>,
+        vInt=dInt.*vInt;
+         <span class="keyword">for</span> j=I';
+             varTo(j) = sum(vInt(First(j):Last(j)))./dTo(j);
+         <span class="keyword">end</span>
+    <span class="keyword">case</span> <span class="string">'harmonic'</span>
+        vInt = dInt./vInt;
+        <span class="keyword">for</span> j=I'
+            varTo(j) = dTo(j)./sum(vInt(First(j):Last(j)));
+        <span class="keyword">end</span>
+    <span class="keyword">case</span> {<span class="string">'abundant'</span>,<span class="string">'median'</span>}
+        <span class="keyword">for</span> j=I'
+            varTo(j) = round(median(vInt(First(j):Last(j))));
+        <span class="keyword">end</span>
+    <span class="keyword">case</span> <span class="string">'maximum'</span>
+        <span class="keyword">for</span> j=I'
+            varTo(j) = max(vInt(First(j):Last(j)));
+        <span class="keyword">end</span>
+    <span class="keyword">case</span> <span class="string">'minimum'</span>
+        <span class="keyword">for</span> j=I'
+            varTo(j) = min(vInt(First(j):Last(j)));
+        <span class="keyword">end</span>
+    <span class="keyword">case</span> <span class="string">'zlist'</span>
+        <span class="keyword">for</span> j=I';
+            varTo(j) = vInt(First(j));
+        <span class="keyword">end</span>
+    <span class="keyword">otherwise</span>
+        legalCodes ={<span class="string">'harmonic'</span>,<span class="string">'geometric'</span>,<span class="string">'abundant'</span>,<span class="string">'median'</span>,<span class="keyword">...</span>
+            <span class="string">'mininum'</span>,<span class="string">'maximum'</span>,<span class="string">'divide'</span>,<span class="string">'thickness'</span>,<span class="string">'width'</span>,<span class="keyword">...</span>
+            <span class="string">'layer'</span>,<span class="string">'zlist'</span>};
+        <span class="keyword">if</span> ~ismember(code,legalCodes)
+            error(sprintf(<span class="string">'%s: code must be one of\n%s\n'</span>,mfilename,repmat(<span class="string">' ''%s'''</span>,[1,length(legalCodes)])),legalCodes{:});
+        <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>Round off by reshaping varTo to its  (Ny,Nx,Nz) form<a name="17"></a></h2><pre class="codeinput"><span class="keyword">switch</span> dim
+    <span class="keyword">case</span> 1
+        varTo = permute(reshape(varTo,[grNew.Ny,grNew.Nx,grNew.Nz]),[1 2 3]);
+    <span class="keyword">case</span> 2
+        varTo = permute(reshape(varTo,[grNew.Nx,grNew.Ny,grNew.Nz]),[2 1 3]);
+    <span class="keyword">case</span> 3
+        varTo = permute(reshape(varTo,[grNew.Nz,grNew.Nx,grNew.Ny]),[3 2 1]);
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">The class gridObj has no property or method named 'gridTransfer'.
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+function varTo = gridTransfer(grOld,varFr,grNew,code,dim)
+%% var2 = gridObj.gridTransfer(var,grNew,code,dim)
+%  Allows to resample a complete grid into a new grid implied by planes and grOld to grNew.
+%  This is a powerfull, sophisticated and advanced procedure because it
+%  works with arbitrary grids of the MODFLOW type as long as no confining beds are present.
+%  Its use is to adapt grids so that they can be used with transport models
+%  like mt3dms and seawat.
+%
+%  grNew is subject to the following conditions:
+%  *  the outer planes of both grids must coincide.
+%  *  the two dimensions not tranferred must have the same number of elements
+%  in the two grids.
+%  * the intermediate planes of Znew have arbitrary elevations but must be in
+%    sequence from high to low.
+%
+%  use Znew = grOld.newZ(layersToKeep,subdivisions) to generate Znew
+%
+%  code = 'geometric' implying geometric addition
+%  or     'harmonic'  implying harmonic weighting
+%  or     'abundant'  'median','max','min'
+%  or     'divide',   'width' ,'thickness'  REPLACE_WITH_DASH_DASH- for cell widths (all mean the same)
+%
+%  Procedure:
+%  all cells are put in a single vector in sequence along the dimension to
+%  be tranferred.
+%  A intermediate grid wint and vInt with values vInt are generated first.
+%  Its cell boundaries, wInt, combine those of the two grids
+%
+%  The data from the grid are then pulled into the intermediate grid
+%  using V(:) = VFr(IFr), with no indexing required
+%
+%  Then the data from the intermiate grid vInt must be transferred to the to output grid varTo.
+%  Because each toGrid index may occur more than once in the output index vector, we
+%  must do this cell by tocell with simultaneous weighting of the pulled values.
+%  Weighting is specified by the 'code' argument and can be done geometrically,
+%  harmonically by median, max and min.
+%
+% Geometrically: ito is index over Vto
+%  Vto(ito)= D(Ito==ito).*V(Ito==ito)/Dto(ito);  % note that DTo(ito)=sum(D(ITo==ito));
+% Harmonically
+%  Vto(ito)= 1./(D(Ito==ito)./V(Ito==ito)/Dto(ito))
+% Abundant or median
+%  Vto(ito)= median(V(Ito==ito),2);
+% Minimum
+%  Vto(ito)= min   (V(Ito==ito),[],2);
+% Maximum
+%  Vto(ito)= max   (V(Ito==ito),[],2);
+%
+%  target grid, thereby allying either geometric or harmonic weighting.
+%
+% Copyright 2009-2012 Theo Olsthoorn, TU-Delft and Waternet, without any warranty
+% under free software foundation GNU license version 3 or later
+%
+% See examples/tutorial/modelObj for verification and application
+% See examples/swt_v04/SWIM22/ASTRseasonal for application
+%
+%  TO 120821
+
+if any(grOld.LAYCBD>0), error('%s: LAYCBD must be all zero (no confining beds'); end
+
+%% Algorithm
+code =lower(code);
+
+switch code
+    case {'k','g'}, code='geometric';
+    case {'c','h'}, code='harmonic';
+end
+
+%% Check size of varFr
+ if ~strcmpi(code,'layer') && ~all(size(varFr)==[grOld.size])
+     error('%s: size of varFr [%d %d %d] does notmatch size of grid [%d %d %d]',mfilename,size(varFr),grOld.size);
+ end
+
+%%
+% Combine all columns of the data and Z-arrays into column vectors and
+% transfer it back after the data have been transferred to the new grid.
+% This way we can handle the entire grid in a linear interpolation
+% operation. Care must be taken that we remain consistent with our
+% numbering. So it is not allowed to throw away output grid planes, but
+% thowing away input grid duplicates is no problem but desired.
+% We dont' care about the input numbering, only the output numbering
+% matters.
+
+%% To grid and to values
+
+if strcmpi(code,'zlist')
+    % one value per layer, don't need to transfer entire grid, which may be large
+    
+    % elevation vector grid averate
+    wFr = grOld.zGr;
+    wTo = grNew.zGr;
+    wInt = unique([wFr(:); wTo(:)]);
+    wmInt=0.5*(wInt(1:end-1)+wInt(2:end));
+    
+    varTo = zeros(grNew.Nz,1);
+    
+    % indices from intermediate grid wInt into fr and to grid
+    Ifr = min(numel(wFr)-1,floor(interp1(wFr,1:length(wFr),wmInt))); % index grid 1 in merged, size(Nint,1)
+    Ito = min(numel(wTo)-1,floor(interp1(wTo,1:length(wTo),wmInt))); % index grid 2 in merged, size(Nint,1)
+    
+    % pull values from from grid into intermediategrid
+    vInt = varFr(Ifr);
+    
+    % find start and end index of if to grid in intermediate grid
+    [~,First] = unique(Ito,'first');  % First where they start in vInt
+    [~,Last ] = unique(Ito,'last');   % and Last where they end
+    
+    % pull values from intermediate grid into to-grid
+    for j=1:length(varTo)
+        varTo(j) = round(median(vInt(First(j):Last(j))));
+    end
+    return;
+end
+
+%% working with entire grids
+%% put the well size in a single vector after permuting the grids the grid
+% to aline the transfer diretion with the primary dimension (dimension 1)
+% along the first dimension.
+switch dim
+    case {1,'y'}
+        dFr  = reshape(permute(grOld.DY,[1,2,3]), [grOld.Ny*grOld.Nx*grOld.Nz,1]);
+        dTo  = reshape(permute(grNew.DY,[1,2,3]), [grNew.Ny*grNew.Nx*grNew.Nz,1]);
+        varFr=permute(varFr,[1,2,3]);
+    case {2,'x'}
+        dFr  = reshape(permute(grOld.DX,[2,1,3]), [grOld.Ny*grOld.Nx*grOld.Nz,1]);
+        dTo  = reshape(permute(grNew.DX,[2,1,3]), [grNew.Ny*grNew.Nx*grNew.Nz,1]);
+        varFr=permute(varFr,[2,1,3]);
+    case {3,'z'}
+        dFr  = reshape(permute(grOld.DZ,[3,2,1]), [grOld.Ny*grOld.Nx*grOld.Nz,1]);
+        dTo  = reshape(permute(grNew.DZ,[3,2,1]), [grNew.Ny*grNew.Nx*grNew.Nz,1]);
+        varFr=permute(varFr,[3,2,1]);
+end
+varFr=varFr(:);
+varTo= zeros(size(dTo));
+
+wFr  = [0; cumsum(dFr(:))]; % from coordinates (L) in a single vector
+wTo  = [0; cumsum(dTo(:))]; % to   coordinates (L) in a single vector
+
+%% Intermediate grid and intermediate values
+wInt  = unique([wFr;wTo]);                 % intermediate grid-line coords
+wmInt = 0.5*(wInt(1:end-1)+wInt(2:end));   % intermediate center coords
+dInt =  diff(wInt);                        % intermediate grid cell widths
+vInt  = zeros(size(dInt));                 % intermediate grid values
+
+%% Pointers from intermediate grid into from grid Ifr and into target grid Ito
+Ifr = min(numel(wFr)-1,floor(interp1(wFr,1:length(wFr),wmInt))); % index grid 1 in merged, size(Nint,1)
+Ito = min(numel(wTo)-1,floor(interp1(wTo,1:length(wTo),wmInt))); % index grid 2 in merged, size(Nint,1)
+
+%% Get unique varTo indices
+[I,First] = unique(Ito,'first');  % First where they start in vInt
+[~,Last ] = unique(Ito,'last');   % and Last where they end
+
+%% Use only the overlapping grids
+J  = find(~isnan(Ifr)); % J are valid indices in Ifr in case of non overlapping grid portions
+
+if strcmpi(code,'layer')
+    %% In this case the we deal with a stress list with LRC indices of which
+    % the index for the current dimension has to be adapted to the new grid.
+    % We pass the linear layer index. We rcompute it for the permuted
+    % grid. The index then correspoinds with the
+    % linear cell in the wFr vector. We can thus immediately compute
+    % the center of the cell of the stress in the wFr vector. This
+    % w-value (grid coordinate) is the same in the zTo vector, which is in
+    % sequence of the idx of the new grid. We kan thus immediately look up the
+    % linear index of the zNew array, compute the new layer and
+    % transfer that back to the stress list.
+    % The condition for this to work is that the top and
+    % bottom planes of the from and the to networks are the same.
+
+    % varFr contains the linear index of the cells
+    CRL = cellIndices(varFr,grOld.size,'CRL');
+    switch dim
+        case 1
+            idx = cellIndex(CRL([1 2 3]),[grOld.Nx,grOld.Ny,grOld.Nz]); 
+            ymIdx = 0.5*(wFr(idx)+wFr(idx+1));
+            varTo = min(floor(interp1(wTo,1:length(wTo),ymIdx)),length(wTo)); % linear index grid 2, size(Nint,1)
+        case 2
+            idx = cellIndex(CRL([2 1 3]),[grOld.Ny,grOld.Nx,grOld.Nz]); 
+            xmIdx = 0.5*(wFr(idx)+wFr(idx+1));
+            varTo = min(floor(interp1(wTo,1:length(wTo),xmIdx)),length(wTo)); % linear index grid 2, size(Nint,1)
+        case 3 % varFr = idxOld, varTo =idxNew
+            idx = cellIndex(CRL([3 1 2]),[grOld.Nz,grOld.Nx,grOld.Ny]); 
+            zmIdx = 0.5*(wFr(idx)+wFr(idx+1));
+            varTo = min(floor(interp1(wTo,1:length(wTo),zmIdx)),length(wTo)); % linear index grid 2, size(Nint,1)
+    end
+    return;
+end
+
+
+%% Fill vInt (pull varFr values into vInt
+if ismember(code,{'divide','thickness','width'})
+    % This is necessary for cell widths,
+    vInt(J) = varFr(Ifr(J)) .* dInt(J)./dFr(Ifr(J));
+    code = 'width';    
+else % just pull the value from varFr into vInt
+    vInt(J) = varFr(Ifr(J));
+end
+
+%% Fill new to-grid
+% We will pull the data from the intermedate grid into the target grid.
+% This way we can deal with integer grid, by selecting the most abundant
+% value of the integers in the intermediate grid where it overlaps cells of
+% the target grid. Most abundant is median or round(median). This can also
+% be applied to zone arrays. However some data will drop out like small
+% rows with boundaries. Alternatives are choosing minium or maximum values
+% in a range. This is up to the user.
+% Non-overlapping is autmatically taken care of. It yieds NaN's in the
+% resulting var2 except if min or max are used.
+
+switch code
+    case {'width','layer'}
+        for j=I'
+            varTo(j) = sum(vInt(First(j):Last(j)));
+        end
+    case  'geometric',
+        vInt=dInt.*vInt;
+         for j=I';
+             varTo(j) = sum(vInt(First(j):Last(j)))./dTo(j);
+         end
+    case 'harmonic'
+        vInt = dInt./vInt;
+        for j=I'
+            varTo(j) = dTo(j)./sum(vInt(First(j):Last(j)));
+        end
+    case {'abundant','median'}
+        for j=I'
+            varTo(j) = round(median(vInt(First(j):Last(j))));
+        end
+    case 'maximum'
+        for j=I'
+            varTo(j) = max(vInt(First(j):Last(j)));
+        end
+    case 'minimum'
+        for j=I'
+            varTo(j) = min(vInt(First(j):Last(j)));
+        end
+    case 'zlist'
+        for j=I';
+            varTo(j) = vInt(First(j));
+        end
+    otherwise
+        legalCodes ={'harmonic','geometric','abundant','median',...
+            'mininum','maximum','divide','thickness','width',...
+            'layer','zlist'};
+        if ~ismember(code,legalCodes)
+            error(sprintf('%s: code must be one of\n%s\n',mfilename,repmat(' ''%s''',[1,length(legalCodes)])),legalCodes{:});
+        end
+end        
+
+%% Round off by reshaping varTo to its  (Ny,Nx,Nz) form
+switch dim
+    case 1
+        varTo = permute(reshape(varTo,[grNew.Ny,grNew.Nx,grNew.Nz]),[1 2 3]);
+    case 2
+        varTo = permute(reshape(varTo,[grNew.Nx,grNew.Ny,grNew.Nz]),[2 1 3]);
+    case 3
+        varTo = permute(reshape(varTo,[grNew.Nz,grNew.Nx,grNew.Ny]),[3 2 1]);
+end
+
+
+##### SOURCE END #####
+--></body></html>

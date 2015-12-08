@@ -1,0 +1,343 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Simple calibration of a 1D analytic model</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2013-07-05"><meta name="DC.source" content="CalibSimple.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>Simple calibration of a 1D analytic model</h1><!--introduction--><p>TO May 2013</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Intro</a></li><li><a href="#4">Parameters used in the calibration</a></li><li><a href="#5">Initial parameter values and perturbations</a></li><li><a href="#6">Change of default of model parameters, add any (see model for possible parameters</a></li><li><a href="#7">Number of observations and measurement locatons</a></li><li><a href="#8">Initial parameter vectors, usage above determines which ones are used.</a></li><li><a href="#9">Generate synthetic measurements</a></li><li><a href="#10">Offset from true parameters (implemented in terms of multiplyers</a></li><li><a href="#11">True parameters that will make the model equal to the measurements</a></li><li><a href="#12">True model without random errors</a></li><li><a href="#13">Add synthetic random errors to yM if necessary</a></li><li><a href="#14">Initial parameters and model outcome</a></li><li><a href="#15">Sensitivities computation (Jacobian)</a></li><li><a href="#16">perturbation of model parameter values</a></li><li><a href="#17">Compute Jacobian matrix (sensitivities)</a></li><li><a href="#18">Optimal update of initial parameters</a></li><li><a href="#19">Show results for comparison</a></li><li><a href="#20">Covariance matrix and other statistics</a></li><li><a href="#21">Display results</a></li><li><a href="#22">Issue results for the parameters in readable format</a></li><li><a href="#23">The next step</a></li></ul></div><h2>Intro<a name="1"></a></h2><p>The model is a 1D steady state phreatic head between two ditches at distance L. We have a fixed head in the ditches. The conductivity is kL between xL&lt;alpha*L and kR voor x&gt;alpha*L. The bottom of the aquifer is at zB = -13. Free parameters are kL kR alpha and zB.</p><p>We set up a calibration from scratch. Linearizing the relatin between model parameters and the outcomes at measurement locations and then updating the parameter vector such that we get a good fit between model and measurements. We use one step only. In this case we get generally a good fit. Clearly, because the relation between model parameters and heads is non-linear, we should repeat this procedure several times in real-world situation. Whether we reach a minimum or not, depends on the shape of the cost function and the method that is applied to reach such a minimum. The Marqardt-Levenber methed is the most applied non-linear search method, which is a weighted mix of steepest decend and the method shown here using the linearization and solving for the parameter vector update. The Marquardt-Levenberg methods is implemented in the Matlab function lsqnonlin (least squares non linear). This method is used in the other script called CalibNonLin in this same directory. It uses parObj to define parameters and is quite generic, so that with little effort much more complicated models may be calibrated.</p><p>In the current file we use a simple approach, with no fancy objects, so that every step is transparent.</p><pre class="codeinput"><span class="comment">% TO 130619</span>
+
+clear <span class="string">variables</span>
+</pre><h2>Parameters used in the calibration<a name="4"></a></h2><pre class="codeinput">usage =    [ 1    0       1    1 ];  <span class="comment">% set to 0 to switch off and 1 to switch on</span>
+parname = {<span class="string">'kL'</span>,<span class="string">'kR'</span>,<span class="string">'alpha'</span>,<span class="string">'zB'</span>};  <span class="comment">% the switches pertain to these parameters</span>
+
+use = usage~=0;  <span class="comment">% Use is now a logical array telling which of the parmeters</span>
+                 <span class="comment">% will be calibrated and which not.</span>
+</pre><h2>Initial parameter values and perturbations<a name="5"></a></h2><pre class="codeinput">kL    = 1;       dkL = 0.05*kL;
+kR    = 20;      dkR = 0.05*kR;
+alpha = 0.25;    da  = 0.05*alpha;
+zB    = -10;     dzB = 0.05*zB;
+</pre><h2>Change of default of model parameters, add any (see model for possible parameters<a name="6"></a></h2><pre class="codeinput">L     = 1000;
+defaults = {<span class="string">'L'</span>,L};
+</pre><h2>Number of observations and measurement locatons<a name="7"></a></h2><pre class="codeinput">Np    = 50;
+xM    = unique(L * rand(Np,1));  <span class="comment">% random locations between 0 and L</span>
+</pre><h2>Initial parameter vectors, usage above determines which ones are used.<a name="8"></a></h2><pre class="codeinput">p0  =[kL kR alpha zB]';  <span class="comment">% initial paramter vector</span>
+dp0 =[dkL dkR da dzB];   <span class="comment">% change applied to compute sensitivity (Jacobian)</span>
+</pre><h2>Generate synthetic measurements<a name="9"></a></h2><p>The measurements are generated using the model in "model.m" with its parameters a bit offset from the "true" parameters and with random errors added.</p><h2>Offset from true parameters (implemented in terms of multiplyers<a name="10"></a></h2><pre class="codeinput">off_kL    =-0.2*kL;
+off_kR    = 0.2*kR;
+off_alpha = 0.2*alpha;
+off_zB    = 0.0*zB;
+</pre><h2>True parameters that will make the model equal to the measurements<a name="11"></a></h2><pre class="codeinput">pTrue = [kL+off_kL,kR+off_kR,alpha+off_alpha,zB+off_zB]';
+</pre><h2>True model without random errors<a name="12"></a></h2><pre class="codeinput">yM = model(<span class="string">'xM'</span>,xM,<span class="string">'kL'</span>,kL+off_kL,<span class="string">'kR'</span>,kR+off_kR,<span class="string">'alpha'</span>,alpha+off_alpha,<span class="string">'zB'</span>,zB+off_zB,defaults{:});
+</pre><h2>Add synthetic random errors to yM if necessary<a name="13"></a></h2><pre class="codeinput"><span class="keyword">try</span>   <span class="comment">% try to load random errors (to keep them the same all the time)</span>
+    load <span class="string">randErrors</span>
+    <span class="keyword">if</span> numel(yM)~=numel(randErrors)
+        error(<span class="string">'Generating random errors'</span>);
+    <span class="keyword">end</span>
+    fprintf(<span class="string">'Random errors loaded.\n'</span>);
+<span class="keyword">catch</span> ME  <span class="comment">% renew random errors</span>
+    fprintf(<span class="string">'%s\nGenerating and saving random errors.'</span>,ME.message);
+    randErrors = 0.05*randn(size(yM));
+    save <span class="string">randErrors</span> <span class="string">randErrors</span>;
+<span class="keyword">end</span>
+
+<span class="comment">% simulated measurements</span>
+yM = yM + randErrors;
+</pre><pre class="codeoutput">Random errors loaded.
+</pre><h2>Initial parameters and model outcome<a name="14"></a></h2><p>The initial parameters for the calibration were given above. We have at most 4 parameters in this model kL kR alpha and zB. The active ones are selected with the usage near the top of this file.</p><h2>Sensitivities computation (Jacobian)<a name="15"></a></h2><pre class="codeinput"><span class="comment">% Model outcome for initial parameters</span>
+y0=  model(<span class="string">'xM'</span>,xM,<span class="string">'kL'</span>,kL,<span class="string">'kR'</span>,kR,<span class="string">'alpha'</span>,alpha,<span class="string">'zB'</span>,zB,defaults{:});
+</pre><h2>perturbation of model parameter values<a name="16"></a></h2><p>Run model for all parameters in turn with a small value change</p><pre class="codeinput">sp= [
+    model(<span class="string">'xM'</span>,xM,<span class="string">'kL'</span>,kL+dkL,<span class="string">'kR'</span>,kR,<span class="string">'alpha'</span>,alpha,<span class="string">'zB'</span>,zB,defaults{:}),<span class="keyword">...</span><span class="comment"> % par1</span>
+    model(<span class="string">'xM'</span>,xM,<span class="string">'kL'</span>,kL,<span class="string">'kR'</span>,kR+dkR,<span class="string">'alpha'</span>,alpha,<span class="string">'zB'</span>,zB,defaults{:}),<span class="keyword">...</span><span class="comment"> % par2</span>
+    model(<span class="string">'xM'</span>,xM,<span class="string">'kL'</span>,kL,<span class="string">'kR'</span>,kR,<span class="string">'alpha'</span>,alpha+da,<span class="string">'zB'</span>,zB,defaults{:}),<span class="keyword">...</span><span class="comment">  % par3</span>
+    model(<span class="string">'xM'</span>,xM,<span class="string">'kL'</span>,kL,<span class="string">'kR'</span>,kR,<span class="string">'alpha'</span>,alpha,<span class="string">'zB'</span>,zB+dzB,defaults{:})     <span class="comment">% par4</span>
+    ];
+</pre><h2>Compute Jacobian matrix (sensitivities)<a name="17"></a></h2><pre class="codeinput">J = bsxfun(@rdivide,bsxfun(@minus,sp(:,use),y0),dp0(use));
+</pre><h2>Optimal update of initial parameters<a name="18"></a></h2><pre class="codeinput">Inv    = (J'*J)^(-1);
+B      = Inv*J';
+
+dp     = B *(yM-y0); <span class="comment">% dp  = (J'*J)^(-1)*J' * (yM-y0)</span>
+
+y      = y0+J*dp;     <span class="comment">% end results, initial + update through parameter change</span>
+p      = p0(use)+dp;  <span class="comment">% end results for parameters</span>
+</pre><h2>Show results for comparison<a name="19"></a></h2><pre class="codeinput">fsz = 14; <span class="comment">% fontsize used in plot</span>
+
+figure; axes(<span class="string">'nextplot'</span>,<span class="string">'add'</span>,<span class="string">'fontsize'</span>,fsz);
+xlabel(<span class="string">'x [m]'</span>,<span class="string">'fontsize'</span>,fsz);
+ylabel(<span class="string">'head [m]'</span>,<span class="string">'fontsize'</span>,fsz);
+title(<span class="string">'Calibration: Head in measurement points'</span>,<span class="string">'fontsize'</span>,fsz);
+
+plot(xM,yM,<span class="string">'bx'</span>);  <span class="comment">% model measured data</span>
+plot(xM,y0,<span class="string">'ro'</span>);  <span class="comment">% model initial parameters</span>
+plot(xM,y ,<span class="string">'gs'</span>);  <span class="comment">% model optimized parameters</span>
+legend(<span class="string">'measured'</span>,<span class="string">'initial'</span>,<span class="string">'optmized'</span>);
+</pre><img vspace="5" hspace="5" src="CalibSimple_01.png" alt=""> <h2>Covariance matrix and other statistics<a name="20"></a></h2><pre class="codeinput">e      = (yM-y);                <span class="comment">% heads errors, measured - computed</span>
+sigma  = std(e);                <span class="comment">% errors in heads after calibration</span>
+Cov    = sigma^2*Inv;           <span class="comment">% covariance matrix of the parameters</span>
+sigmaP = sqrt(diag(Cov));       <span class="comment">% std of the parameters</span>
+uncert = 100*sigmaP./abs(p);    <span class="comment">% uncertainty</span>
+Cor    = Cov./(sigmaP*sigmaP'); <span class="comment">% correlation matrix of the parameters</span>
+</pre><h2>Display results<a name="21"></a></h2><pre class="codeinput">display(Cov);
+display(Cor);
+</pre><pre class="codeoutput">
+Cov =
+
+    0.0057    0.0006    0.0119
+    0.0006    0.0001    0.0007
+    0.0119    0.0007    0.0442
+
+
+Cor =
+
+    1.0000    0.7070    0.7495
+    0.7070    1.0000    0.2942
+    0.7495    0.2942    1.0000
+
+</pre><h2>Issue results for the parameters in readable format<a name="22"></a></h2><pre class="codeinput">fprintf(<span class="string">'results: error = %.4g m\nUncertainty = 100*sigmaP/abs(p)\n'</span>,sigma);
+fprintf(<span class="string">'%10s%10s%10s%10s%10s%10s\n'</span>,<span class="string">'parameter'</span>,<span class="string">'pTrue'</span>,<span class="string">'pInit'</span>,<span class="string">'pEnd'</span>,<span class="string">'sigmaP'</span>,<span class="string">'uncert%'</span>);
+k=0;
+<span class="keyword">for</span> i=find(use)
+    k=k+1;
+    fprintf(<span class="string">'%10.4s'</span>,parname{i});
+    fprintf(<span class="string">'%10.4g'</span>,pTrue(i));
+    fprintf(<span class="string">'%10.4g'</span>,p0(i));
+    fprintf(<span class="string">'%10.4g'</span>,p(k));
+    fprintf(<span class="string">'%10.4g'</span>,sigmaP(k));
+    fprintf(<span class="string">'%10.4g'</span>,uncert(k));
+    fprintf(<span class="string">'\n'</span>);
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">results: error = 0.1504 m
+Uncertainty = 100*sigmaP/abs(p)
+ parameter     pTrue     pInit      pEnd    sigmaP   uncert%
+        kL       0.8         1    0.5941   0.07541     12.69
+      alph       0.3      0.25    0.3276   0.01181     3.606
+        zB       -10       -10    -11.58    0.2103     1.816
+</pre><h2>The next step<a name="23"></a></h2><p>the next step is to change the initial parameters into the correct direction This is done in mfCalib, using Matlab's lsqnonlin solver.</p><p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+%% Simple calibration of a 1D analytic model
+% TO May 2013
+
+%% Intro
+% The model is a 1D steady state phreatic head between two ditches at
+% distance L. We have a fixed head in the ditches. The conductivity is kL
+% between xL<alpha*L and kR voor x>alpha*L. The bottom of the aquifer is at
+% zB = -13. Free parameters are kL kR alpha and zB.
+
+%%
+% We set up a calibration from scratch. Linearizing the relatin between
+% model parameters and the outcomes at measurement locations and then
+% updating the parameter vector such that we get a good fit between model
+% and measurements. We use one step only. In this case we get generally a
+% good fit. Clearly, because the relation between model parameters and
+% heads is non-linear, we should repeat this procedure several times in
+% real-world situation. Whether we reach a minimum or not, depends on the
+% shape of the cost function and the method that is applied to reach such a
+% minimum. The Marqardt-Levenber methed is the most applied non-linear
+% search method, which is a weighted mix of steepest decend and the method
+% shown here using the linearization and solving for the parameter vector
+% update. The Marquardt-Levenberg methods is implemented in the Matlab
+% function lsqnonlin (least squares non linear). This method is used in the
+% other script called CalibNonLin in this same directory. It uses parObj to
+% define parameters and is quite generic, so that with little effort much
+% more complicated models may be calibrated.
+
+%%
+% In the current file we use a simple approach, with no fancy objects, so
+% that every step is transparent.
+
+% TO 130619
+
+clear variables
+
+%% Parameters used in the calibration
+usage =    [ 1    0       1    1 ];  % set to 0 to switch off and 1 to switch on
+parname = {'kL','kR','alpha','zB'};  % the switches pertain to these parameters
+
+use = usage~=0;  % Use is now a logical array telling which of the parmeters
+                 % will be calibrated and which not.
+
+%% Initial parameter values and perturbations
+kL    = 1;       dkL = 0.05*kL;
+kR    = 20;      dkR = 0.05*kR;
+alpha = 0.25;    da  = 0.05*alpha;
+zB    = -10;     dzB = 0.05*zB;
+
+%% Change of default of model parameters, add any (see model for possible parameters
+L     = 1000;
+defaults = {'L',L};
+
+%% Number of observations and measurement locatons
+Np    = 50;
+xM    = unique(L * rand(Np,1));  % random locations between 0 and L
+
+%% Initial parameter vectors, usage above determines which ones are used.
+p0  =[kL kR alpha zB]';  % initial paramter vector
+dp0 =[dkL dkR da dzB];   % change applied to compute sensitivity (Jacobian)
+
+
+%% Generate synthetic measurements
+% The measurements are generated using the model in "model.m" with its
+% parameters a bit offset from the "true" parameters and with random errors added.
+
+%% Offset from true parameters (implemented in terms of multiplyers
+off_kL    =-0.2*kL;
+off_kR    = 0.2*kR;
+off_alpha = 0.2*alpha;
+off_zB    = 0.0*zB;
+
+%% True parameters that will make the model equal to the measurements
+pTrue = [kL+off_kL,kR+off_kR,alpha+off_alpha,zB+off_zB]';
+
+%% True model without random errors
+yM = model('xM',xM,'kL',kL+off_kL,'kR',kR+off_kR,'alpha',alpha+off_alpha,'zB',zB+off_zB,defaults{:});
+
+%% Add synthetic random errors to yM if necessary
+try   % try to load random errors (to keep them the same all the time)
+    load randErrors
+    if numel(yM)~=numel(randErrors)
+        error('Generating random errors');
+    end
+    fprintf('Random errors loaded.\n');
+catch ME  % renew random errors
+    fprintf('%s\nGenerating and saving random errors.',ME.message);
+    randErrors = 0.05*randn(size(yM));
+    save randErrors randErrors;
+end
+
+% simulated measurements
+yM = yM + randErrors;
+
+%% Initial parameters and model outcome
+% The initial parameters for the calibration were given above.
+% We have at most 4 parameters in this model kL kR alpha and zB.
+% The active ones are selected with the usage near the top of this file.
+
+%% Sensitivities computation (Jacobian)
+
+% Model outcome for initial parameters
+y0=  model('xM',xM,'kL',kL,'kR',kR,'alpha',alpha,'zB',zB,defaults{:});
+
+%% perturbation of model parameter values
+% Run model for all parameters in turn with a small value change
+sp= [
+    model('xM',xM,'kL',kL+dkL,'kR',kR,'alpha',alpha,'zB',zB,defaults{:}),... % par1
+    model('xM',xM,'kL',kL,'kR',kR+dkR,'alpha',alpha,'zB',zB,defaults{:}),... % par2
+    model('xM',xM,'kL',kL,'kR',kR,'alpha',alpha+da,'zB',zB,defaults{:}),...  % par3
+    model('xM',xM,'kL',kL,'kR',kR,'alpha',alpha,'zB',zB+dzB,defaults{:})     % par4
+    ];
+
+%% Compute Jacobian matrix (sensitivities)
+J = bsxfun(@rdivide,bsxfun(@minus,sp(:,use),y0),dp0(use));
+
+%% Optimal update of initial parameters
+Inv    = (J'*J)^(-1);
+B      = Inv*J';
+
+dp     = B *(yM-y0); % dp  = (J'*J)^(-1)*J' * (yM-y0)
+
+y      = y0+J*dp;     % end results, initial + update through parameter change
+p      = p0(use)+dp;  % end results for parameters
+
+%% Show results for comparison
+fsz = 14; % fontsize used in plot
+
+figure; axes('nextplot','add','fontsize',fsz);
+xlabel('x [m]','fontsize',fsz);
+ylabel('head [m]','fontsize',fsz);
+title('Calibration: Head in measurement points','fontsize',fsz);
+
+plot(xM,yM,'bx');  % model measured data
+plot(xM,y0,'ro');  % model initial parameters
+plot(xM,y ,'gs');  % model optimized parameters
+legend('measured','initial','optmized');
+
+%% Covariance matrix and other statistics
+e      = (yM-y);                % heads errors, measured - computed
+sigma  = std(e);                % errors in heads after calibration
+Cov    = sigma^2*Inv;           % covariance matrix of the parameters
+sigmaP = sqrt(diag(Cov));       % std of the parameters
+uncert = 100*sigmaP./abs(p);    % uncertainty
+Cor    = Cov./(sigmaP*sigmaP'); % correlation matrix of the parameters
+
+%% Display results
+display(Cov);
+display(Cor);
+
+%% Issue results for the parameters in readable format
+fprintf('results: error = %.4g m\nUncertainty = 100*sigmaP/abs(p)\n',sigma);
+fprintf('%10s%10s%10s%10s%10s%10s\n','parameter','pTrue','pInit','pEnd','sigmaP','uncert%');
+k=0;
+for i=find(use)
+    k=k+1;
+    fprintf('%10.4s',parname{i});
+    fprintf('%10.4g',pTrue(i));
+    fprintf('%10.4g',p0(i));
+    fprintf('%10.4g',p(k));
+    fprintf('%10.4g',sigmaP(k));
+    fprintf('%10.4g',uncert(k));
+    fprintf('\n');
+end
+
+%% The next step
+% the next step is to change the initial parameters into the correct direction
+% This is done in mfCalib, using Matlab's lsqnonlin solver.
+##### SOURCE END #####
+--></body></html>

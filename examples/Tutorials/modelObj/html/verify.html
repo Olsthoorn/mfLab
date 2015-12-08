@@ -1,0 +1,160 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>verify</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2012-08-30"><meta name="DC.source" content="verify.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">%verify</span>
+<span class="comment">% display transmissivity HK, resistance and VK at given position</span>
+
+gr = Model.grid();
+
+Ix = hit(gr.xGr,mean(gr.xGr));
+Iy = hit(gr.yGr,mean(gr.yGr));
+
+[kD,HK] = Model.transm(    Ix(1),Iy(1));
+[c ,VK] = Model.resistance(Ix(1),Iy(1));
+
+DZ = gr.DZ(Iy(1),Ix(1),:);
+
+fprintf(<span class="string">'\n\n%s\n'</span>,Model(1).description{end});
+
+fprintf(<span class="string">'%10s %10s %10s %10s %10s %10s\n'</span>,<span class="string">'layer'</span>,<span class="string">'DZ'</span>,<span class="string">'kD'</span>,<span class="string">'HK'</span>,<span class="string">'c'</span>,<span class="string">'VK'</span>);
+fprintf(<span class="string">'%10g %10g %10g %10g %10g %10g\n'</span>,[(1:gr.Nz)' XS(DZ) XS(kD)   XS(HK) XS(c) XS(VK)]'); fprintf <span class="string">\n</span>
+fprintf(<span class="string">'%10s %10g %10g %10s %10g %10s\n'</span>,<span class="string">'total:'</span>,sum(DZ,3), sum(kD,3),<span class="string">' '</span>, sum(c), <span class="string">' '</span>);
+fprintf(<span class="string">'\n'</span>);
+</pre><pre class="codeoutput">
+
+Changed: Minimum layer thickness for layers [4 8 12] to 2.000000 m
+     layer         DZ         kD         HK          c         VK
+         1   0.555556   0.555556          1   0.555556          1
+         2   0.555556   0.555556          1   0.555556          1
+         3   0.555556   0.555556          1   0.555556          1
+         4   0.555556   0.555556          1   0.555556          1
+         5          2          2          1          2          1
+         6        0.1        0.1          1        0.1          1
+         7        0.1        0.1          1        0.1          1
+         8        0.1        0.1          1        0.1          1
+         9    2.25556    2.25556          1    2.25556          1
+        10        0.1        0.1          1        0.1          1
+        11        0.1        0.1          1        0.1          1
+        12        0.1        0.1          1        0.1          1
+        13    2.14444    3.52961    1.64593    1.30287    1.64593
+        14   0.111111    0.19883    1.78947  0.0620915    1.78947
+        15        0.1   0.207143    2.07143  0.0482759    2.07143
+        16    1.84444    4.91852    2.66667   0.691667    2.66667
+        17    2.05556    5.48148    2.66667   0.770833    2.66667
+        18        2.5    6.66667    2.66667     0.9375    2.66667
+        19        2.5    6.66667    2.66667     0.9375    2.66667
+        20        2.5    6.66667    2.66667     0.9375    2.66667
+        21        2.5    6.66667    2.66667     0.9375    2.66667
+        22        2.5    6.66667    2.66667     0.9375    2.66667
+        23        2.5    6.66667    2.66667     0.9375    2.66667
+        24        2.5    6.66667    2.66667     0.9375    2.66667
+        25        2.5    6.66667    2.66667     0.9375    2.66667
+        26    3.33333    16.6667          5   0.666667          5
+        27    3.33333    16.6667          5   0.666667          5
+        28    3.33333    16.6667          5   0.666667          5
+        29    3.33333    16.6667          5   0.666667          5
+        30    3.33333    16.6667          5   0.666667          5
+        31    3.33333    16.6667          5   0.666667          5
+        32    3.33333    16.6667          5   0.666667          5
+        33    3.33333    21.3333        6.4   0.520833        6.4
+        34    3.33333         26        7.8    0.42735        7.8
+        35    3.33333         26        7.8    0.42735        7.8
+        36    3.33333         26        7.8    0.42735        7.8
+        37    3.33333         26        7.8    0.42735        7.8
+        38    3.33333         26        7.8    0.42735        7.8
+        39    3.33333         26        7.8    0.42735        7.8
+        40    3.33333         26        7.8    0.42735        7.8
+        41    3.33333         26        7.8    0.42735        7.8
+        42    3.33333         26        7.8    0.42735        7.8
+        43    3.33333         26        7.8    0.42735        7.8
+        44    3.33333         26        7.8    0.42735        7.8
+        45    3.33333         26        7.8    0.42735        7.8
+
+    total:        100    524.747               27.7692           
+
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+%verify
+% display transmissivity HK, resistance and VK at given position
+
+gr = Model.grid();
+
+Ix = hit(gr.xGr,mean(gr.xGr));
+Iy = hit(gr.yGr,mean(gr.yGr));
+
+[kD,HK] = Model.transm(    Ix(1),Iy(1));
+[c ,VK] = Model.resistance(Ix(1),Iy(1));
+
+DZ = gr.DZ(Iy(1),Ix(1),:);
+
+fprintf('\n\n%s\n',Model(1).description{end});
+
+fprintf('%10s %10s %10s %10s %10s %10s\n','layer','DZ','kD','HK','c','VK');
+fprintf('%10g %10g %10g %10g %10g %10g\n',[(1:gr.Nz)' XS(DZ) XS(kD)   XS(HK) XS(c) XS(VK)]'); fprintf \n
+fprintf('%10s %10g %10g %10s %10g %10s\n','total:',sum(DZ,3), sum(kD,3),' ', sum(c), ' ');
+fprintf('\n');
+
+##### SOURCE END #####
+--></body></html>

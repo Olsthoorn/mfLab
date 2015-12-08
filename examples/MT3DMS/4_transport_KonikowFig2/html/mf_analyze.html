@@ -1,0 +1,313 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Visualization of steady model with transport of a tracer and temperature</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2013-06-16"><meta name="DC.source" content="mf_analyze.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>Visualization of steady model with transport of a tracer and temperature</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Close existing graphs and variables to prevent memory overflow</a></li><li><a href="#2">The options and steps will be outlined here</a></li><li><a href="#3">Retrieve the basename of this model</a></li><li><a href="#4">Generate an animation object</a></li><li><a href="#5">Simulate the concentration of all species</a></li><li><a href="#6">Generate observation wells and install them in the grid.</a></li><li><a href="#7">Plot observations of given species.</a></li></ul></div><h2>Close existing graphs and variables to prevent memory overflow<a name="1"></a></h2><pre class="codeinput">close <span class="string">all</span>;
+clear <span class="string">variables</span>;
+</pre><h2>The options and steps will be outlined here<a name="2"></a></h2><p>We will use an animation to visualize the model results, followed by concentation and temperature breakthrough. Notice that there are many more visualization options.</p><h2>Retrieve the basename of this model<a name="3"></a></h2><pre class="codeinput">load <span class="string">name</span>        <span class="comment">% retrieve basename stored in file name.mat</span>
+load(basename)   <span class="comment">% get model arrays that were saved by mf_setup</span>
+load <span class="string">underneath</span>  <span class="comment">% info from mf_adapt, contains the species names</span>
+</pre><h2>Generate an animation object<a name="4"></a></h2><p>The animation object created reads the simulated concentrations, the heads and budget (cell by cell flows). It needs the budget to draw the streamlines in the cross sections. Heads are only required if they are to be plotted.</p><pre class="codeinput">animate = animateObj(basename,species,<span class="string">'head'</span>,<span class="string">'budget'</span>);
+</pre><pre class="codeoutput">animateObj: Reading HEADS from &lt;&lt;generic_steady_transport_xSec.HDS&gt;&gt;
+Reading MODFLOW binary output file &lt;&lt;generic_steady_transport_xSec.HDS&gt;&gt; verbose= 0
+Scanning headers
+..................................................5000 records read
+......................finished, 7200 records scanned
+File contains the following:
+Number of records in file  :       7200
+Number of stress userPeriods:        240
+Number of time steps       :          1
+Number of layers           :         30
+Number of rows             :          1
+Number of columns          :        100
+Maximum time in file       "       7200
+Reading requested data ...
+..................................................iRecIn=5000 iRecOut=167
+......................  7200 records read.
+.   240 records in output struct.
+
+animateObj: Reading CELL BY CELL FLOWS from &lt;&lt;generic_steady_transport_xSec.bgt&gt;&gt;
+
+Trying to read generic_steady_transport_xSec.BGT as BINARY file...it works!
+Scanning 960 headers
+.........finished, 960 records scanned
+File contains the following:
+Number of records in file:        960
+Number of stress periods :        240
+Number of time steps     :          1
+Number of layers         :         30
+Number of Rows           :          1
+Number of columns        :        100
+Number of unique labels  :          4
+CONSTANTHEAD
+FLOWLOWERFACE
+FLOWRIGHTFACE
+WELLS
+
+Reading the requested data ...
+Please wait while I'm getting the requested data ...
+..................................................13
+..................................................25
+..................................................38
+..................................................50
+..................................................63
+..................................................75
+..................................................88
+..................................................100
+..................................................113
+..................................................125
+..................................................138
+..................................................150
+..................................................163
+..................................................175
+..................................................188
+..................................................200
+..................................................213
+..................................................225
+..................................................238
+..........   240 records in output struct.
+
+mf_Psi: Adding Psi along x-axis through row 1 to the budget struct
+animateObj: &lt;&lt;2&gt;&gt; components used for animation: &lt;&lt;Tracer&gt;&gt; &lt;&lt;Temp&gt;&gt;
+animateObj: Reading &lt;&lt;TRACER&gt;&gt; from &lt;&lt;MT3D001.UCN&gt;&gt;
+Reading MT3DMS binary output file &lt;&lt;MT3D001.UCN&gt;&gt; verbose= 0
+Scanning headers...
+..................................................5000 records read
+.........................finished, 7200 records read
+File contains the following:
+Number of records in file :       7200
+Number of stress periods  :        240
+Number of time steps      :          1
+Highest time in file      :       7200
+Number of times in file   :        240
+Number of layers          :         30
+Number of Rows            :          1
+Number of columns         :        100
+..................................................iRecIn=5000 iRecOut= 167
+......................  7200 records read.
+.   240 records in output struct.
+
+animateObj: Reading &lt;&lt;TEMP&gt;&gt; from &lt;&lt;MT3D002.UCN&gt;&gt;
+Reading MT3DMS binary output file &lt;&lt;MT3D002.UCN&gt;&gt; verbose= 0
+Scanning headers...
+..................................................5000 records read
+.........................finished, 7200 records read
+File contains the following:
+Number of records in file :       7200
+Number of stress periods  :        240
+Number of time steps      :          1
+Highest time in file      :       7200
+Number of times in file   :        240
+Number of layers          :         30
+Number of Rows            :          1
+Number of columns         :        100
+..................................................iRecIn=5000 iRecOut= 167
+......................  7200 records read.
+.   240 records in output struct.
+
+</pre><h2>Simulate the concentration of all species<a name="5"></a></h2><pre class="codeinput">animate.concXS(gr)
+</pre><pre class="codeoutput">
+ans = 
+
+  animateObj
+
+  Properties:
+                      gr: [1x1 gridObj]
+                   NCOMP: 2
+                  STCONC: {[]}
+                basename: 'generic_steady_transport_xSec'
+                titleStr: {'Tracer'  'Temp'}
+    numberOfHeadContours: 50
+    numberOfConcContours: 50
+     numberOfStreamLines: 50
+                    xLim: []
+                    yLim: []
+               framerate: 3
+                 quality: 75
+                    time: [1x240 double]
+                       H: [240x1 struct]
+                       D: []
+                     UCN: {[240x1 struct]  [240x1 struct]}
+                      t0: 0
+                       B: [240x1 struct]
+                  tscale: 1
+                    tdim: 'd'
+                   patch: []
+                 psiMask: []
+              dateformat: 'dd/mmm/yyyy'
+                  topfig: []
+                  hrange: [1x37 double]
+                  prange: [1x51 double]
+                  crange: {[1x52 double]  [1x51 double]}
+                  drange: []
+
+
+</pre><img vspace="5" hspace="5" src="mf_analyze_01.png" alt=""> <h2>Generate observation wells and install them in the grid.<a name="6"></a></h2><pre class="codeinput">obsWells = observationObj(basename,<span class="string">'observations'</span>,gr,HK,[species,<span class="string">'head'</span>]);
+</pre><pre class="codeoutput">Reading MODFLOW binary output file &lt;&lt;generic_steady_transport_xSec.HDS&gt;&gt; verbose= 0
+Scanning headers
+..................................................5000 records read
+......................finished, 7200 records scanned
+File contains the following:
+Number of records in file  :       7200
+Number of stress userPeriods:        240
+Number of time steps       :          1
+Number of layers           :         30
+Number of rows             :          1
+Number of columns          :        100
+Maximum time in file       "       7200
+Reading requested data ...
+..................................................iRecIn=5000 iRecOut=167
+......................  7200 records read.
+.   240 records in output struct.
+
+Reading MT3DMS binary output file &lt;&lt;MT3D002.UCN&gt;&gt; verbose= 0
+Scanning headers...
+..................................................5000 records read
+.........................finished, 7200 records read
+File contains the following:
+Number of records in file :       7200
+Number of stress periods  :        240
+Number of time steps      :          1
+Highest time in file      :       7200
+Number of times in file   :        240
+Number of layers          :         30
+Number of Rows            :          1
+Number of columns         :        100
+..................................................iRecIn=5000 iRecOut= 167
+......................  7200 records read.
+.   240 records in output struct.
+
+Reading MT3DMS binary output file &lt;&lt;MT3D001.UCN&gt;&gt; verbose= 0
+Scanning headers...
+..................................................5000 records read
+.........................finished, 7200 records read
+File contains the following:
+Number of records in file :       7200
+Number of stress periods  :        240
+Number of time steps      :          1
+Highest time in file      :       7200
+Number of times in file   :        240
+Number of layers          :         30
+Number of Rows            :          1
+Number of columns         :        100
+..................................................iRecIn=5000 iRecOut= 167
+......................  7200 records read.
+.   240 records in output struct.
+
+</pre><h2>Plot observations of given species.<a name="7"></a></h2><p>The color, order of the graphs and their lineWidths are obtained from the worsheet observations" in workbook basename. This worksheet name was given in the call of observationObj above.</p><pre class="codeinput"><span class="comment">% Plot break-through graphs of species 1, all observation wells</span>
+obsWells.plot(<span class="string">'fig'</span>,species{1},species{1},<span class="string">'ylabel'</span>,[species(1) <span class="string">' [g/L]'</span>]);
+
+<span class="comment">% same for species(2), i.e. the temperature.</span>
+obsWells.plot(<span class="string">'fig'</span>,species{2},species{2},<span class="string">'ylabel'</span>,[species(1) <span class="string">' oC'</span>]);
+
+<span class="comment">% finished.</span>
+
+<span class="comment">% TO 130614</span>
+</pre><img vspace="5" hspace="5" src="mf_analyze_02.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_03.png" alt=""> <p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+%% Visualization of steady model with transport of a tracer and temperature
+
+%% Close existing graphs and variables to prevent memory overflow
+close all;
+clear variables;
+
+%% The options and steps will be outlined here
+% We will use an animation to visualize the model results, followed by
+% concentation and temperature breakthrough.
+% Notice that there are many more visualization options.
+
+%% Retrieve the basename of this model
+load name        % retrieve basename stored in file name.mat
+load(basename)   % get model arrays that were saved by mf_setup
+load underneath  % info from mf_adapt, contains the species names
+
+%% Generate an animation object
+% The animation object created reads the simulated concentrations, the heads
+% and budget (cell by cell flows). It needs the budget to draw the streamlines
+% in the cross sections.
+% Heads are only required if they are to be plotted.
+animate = animateObj(basename,species,'head','budget');
+
+%% Simulate the concentration of all species
+animate.concXS(gr)
+
+%% Generate observation wells and install them in the grid.
+obsWells = observationObj(basename,'observations',gr,HK,[species,'head']);
+
+%% Plot observations of given species. 
+% The color, order of the graphs and their lineWidths are obtained from the
+% worsheet observations" in workbook basename. This worksheet name was
+% given in the call of observationObj above.
+
+% Plot break-through graphs of species 1, all observation wells
+obsWells.plot('fig',species{1},species{1},'ylabel',[species(1) ' [g/L]']);
+
+% same for species(2), i.e. the temperature.
+obsWells.plot('fig',species{2},species{2},'ylabel',[species(1) ' oC']);
+
+% finished.
+
+% TO 130614
+##### SOURCE END #####
+--></body></html>

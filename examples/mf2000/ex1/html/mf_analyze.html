@@ -1,0 +1,284 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Ex1 -- Analyzing output of the model</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-01-11"><meta name="DC.source" content="mf_analyze.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>Ex1 -- Analyzing output of the model</h1><!--introduction--><p>Visualization of example EX1 of modflow 2000</p><p>TO 091011 091129</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Load model name and the data generated and saved by mf_adapt</a></li><li><a href="#2">Read computed head data</a></li><li><a href="#3">Perpare plots</a></li><li><a href="#4">Annotate plot with text</a></li><li><a href="#5">Use zonebudget to get budget overview</a></li></ul></div><h2>Load model name and the data generated and saved by mf_adapt<a name="1"></a></h2><pre class="codeinput">load(<span class="string">'name.mat'</span>) <span class="comment">% get basename stored in file name.mat</span>
+load(basename);  <span class="comment">% having retrieved basename, load the data in [basename '.mat']</span>
+load <span class="string">underneath</span>  <span class="comment">% load possible non-standard info from mf_adapt</span>
+
+fsz=10;          <span class="comment">% set fontsize for plots</span>
+</pre><h2>Read computed head data<a name="2"></a></h2><pre class="codeinput">H=readDat([basename,<span class="string">'.hds'</span>]);  <span class="comment">% read the file</span>
+
+hrange = ContourRange(H,50);   <span class="comment">% determine suitable contour elevations</span>
+</pre><pre class="codeoutput">Reading MODFLOW binary output file &lt;&lt;ex1.hds&gt;&gt; verbose= 0
+Scanning headers
+finished, 3 records scanned
+File contains the following:
+Number of records in file  :          3
+Number of stress userPeriods:          1
+Number of time steps       :          1
+Number of layers           :          3
+Number of rows             :         15
+Number of columns          :         15
+Maximum time in file       "        100
+Reading requested data ...
+     3 records read.
+.     1 records in output struct.
+
+</pre><h2>Perpare plots<a name="3"></a></h2><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'example1'</span>,<span class="string">'position'</span>,screenPos(1)); <span class="comment">% new figure</span>
+
+P=[0 0 0.4 0.4]; <span class="comment">% size of subaxis</span>
+
+<span class="comment">% create axes at their desired position</span>
+ax(1)=axes(<span class="string">'position'</span>, [0.05 0.55 0 0]+P,<span class="string">'nextplot'</span>,<span class="string">'add'</span>,<span class="string">'fontsize'</span>,fsz);
+ax(2)=axes(<span class="string">'position'</span>, [0.55 0.55 0 0]+P,<span class="string">'nextplot'</span>,<span class="string">'add'</span>,<span class="string">'fontsize'</span>,fsz);
+ax(3)=axes(<span class="string">'position'</span>, [0.05 0.05 0 0]+P,<span class="string">'nextplot'</span>,<span class="string">'add'</span>,<span class="string">'fontsize'</span>,fsz);
+ax(4)=axes(<span class="string">'position'</span>, [0.55 0.05 0 0]+P,<span class="string">'nextplot'</span>,<span class="string">'add'</span>,<span class="string">'fontsize'</span>,fsz,<span class="keyword">...</span>
+        <span class="string">'xColor'</span>,grey,<span class="string">'yColor'</span>,grey,<span class="string">'color'</span>,<span class="string">'k'</span>,<span class="string">'ticklength'</span>,[0 0]);
+
+<span class="comment">% for all layers make contour plot</span>
+<span class="keyword">for</span> iLay=1:gr.Nlay
+    set(gca,<span class="string">'clim'</span>,hrange([1 end]));
+
+    xlabel(ax(iLay),<span class="string">'x [1000ft]'</span>);
+    ylabel(ax(iLay),<span class="string">'y [1000ft]'</span>);
+    title( ax(iLay), sprintf(<span class="string">'head in layer %d'</span>,iLay))
+
+    [c,hdl] = contourf(ax(iLay),gr.xm,gr.ym,H.values(:,:,iLay),hrange,<span class="string">'edgecolor'</span>,<span class="string">'none'</span>); <span class="comment">% contour layer iLay</span>
+    clabel(c,hdl); <span class="comment">% plot contour labels</span>
+
+    Iw=find([well.iLay]==iLay);
+    well.plotXY(ax(iLay),<span class="string">'ro'</span>);
+
+    <span class="keyword">if</span> iLay == 1, plot(ax(iLay),drn(:,1),drn(:,2),<span class="string">'color'</span>,<span class="string">'g'</span>,<span class="string">'linewidth'</span>,2); <span class="keyword">end</span>
+
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="mf_analyze_01.png" alt=""> <h2>Annotate plot with text<a name="4"></a></h2><pre class="codeinput">s={<span class="string">'Example from MODFLOW 2000 manual, p89'</span>;<span class="string">''</span>; <span class="string">'Computed in mfLab'</span>;<span class="string">''</span>; <span class="string">'TO 2012-04-07'</span>};
+text(0.5,0.5,s,<span class="string">'HorizontalAlignment'</span>,<span class="string">'center'</span>,<span class="string">'color'</span>,<span class="string">'yellow'</span>,<span class="string">'fontsize'</span>,fsz);
+</pre><img vspace="5" hspace="5" src="mf_analyze_02.png" alt=""> <h2>Use zonebudget to get budget overview<a name="5"></a></h2><pre class="codeinput">B=readBud([basename, <span class="string">'.bgt'</span>]); <span class="comment">% read the Budget file</span>
+
+Zonearray=gr.const(1:gr.Nlay);  <span class="comment">% first create a zone array (here onze zone per layer)</span>
+zonebudget(B,Zonearray,1); <span class="comment">% budget of layer 1</span>
+zonebudget(B,Zonearray,2); <span class="comment">% same for layer 2</span>
+zonebudget(B,Zonearray,3); <span class="comment">% same for layer 3</span>
+zonebudget(B,Zonearray,[1 2 3]); <span class="comment">% for all 3 layers totaled</span>
+</pre><pre class="codeoutput">
+Trying to read ex1.bgt as BINARY file...it works!
+Scanning 7 headers
+finished, 7 records scanned
+File contains the following:
+Number of records in file:          7
+Number of stress periods :          1
+Number of time steps     :          1
+Number of layers         :          3
+Number of Rows           :         15
+Number of columns        :         15
+Number of unique labels  :          7
+CONSTANTHEAD
+DRAINS
+FLOWFRONTFACE
+FLOWLOWERFACE
+FLOWRIGHTFACE
+RECHARGE
+WELLS
+
+Reading the requested data ...
+Please wait while I'm getting the requested data ...
+.......     1 records in output struct.
+
+
+============================================
+zoneBudget will be computed for zones:  1
+
+Budget [consistent model units] for period=1, itsp=1:
+
+BUDGET FOR ZONE  1               -----IN-----  ----OUT-----
+total for         CONSTANTHEAD =         0.00         54.65
+total for        FLOWRIGHTFACE =         0.00         -0.00
+total for        FLOWFRONTFACE =         0.00         -0.00
+total for        FLOWLOWERFACE =         0.93         16.95
+total for                WELLS =         0.00         60.00
+total for               DRAINS =         0.00         26.84
+total for             RECHARGE =       157.50         -0.00
+                                 ------------  ------------
+total for              ZONE  1 =       158.43        158.44
+total net              ZONE  1 =        -0.00  
+
+============================================
+zoneBudget will be computed for zones:  2
+
+Budget [consistent model units] for period=1, itsp=1:
+
+BUDGET FOR ZONE  2               -----IN-----  ----OUT-----
+total for         CONSTANTHEAD =         0.00          1.01
+total for        FLOWRIGHTFACE =         0.00         -0.00
+total for        FLOWFRONTFACE =         0.00         -0.00
+total for        FLOWLOWERFACE =        18.44          7.43
+total for                WELLS =         0.00         10.00
+total for               DRAINS =         0.00         -0.00
+total for             RECHARGE =         0.00         -0.00
+                                 ------------  ------------
+total for              ZONE  2 =        18.44         18.44
+total net              ZONE  2 =         0.00  
+
+============================================
+zoneBudget will be computed for zones:  3
+
+Budget [consistent model units] for period=1, itsp=1:
+
+BUDGET FOR ZONE  3               -----IN-----  ----OUT-----
+total for         CONSTANTHEAD =         0.00         -0.00
+total for        FLOWRIGHTFACE =         0.00         -0.00
+total for        FLOWFRONTFACE =         0.00         -0.00
+total for        FLOWLOWERFACE =         6.50          1.50
+total for                WELLS =         0.00          5.00
+total for               DRAINS =         0.00         -0.00
+total for             RECHARGE =         0.00         -0.00
+                                 ------------  ------------
+total for              ZONE  3 =         6.50          6.50
+total net              ZONE  3 =         0.00  
+
+============================================
+zoneBudget will be computed for zones:  1 2 3
+
+Budget [consistent model units] for period=1, itsp=1:
+
+BUDGET FOR ZONE  1 2 3           -----IN-----  ----OUT-----
+total for         CONSTANTHEAD =         0.00         55.66
+total for        FLOWRIGHTFACE =         0.00         -0.00
+total for        FLOWFRONTFACE =         0.00         -0.00
+total for        FLOWLOWERFACE =         0.00         -0.00
+total for                WELLS =         0.00         75.00
+total for               DRAINS =         0.00         26.84
+total for             RECHARGE =       157.50         -0.00
+                                 ------------  ------------
+total for          ZONE  1 2 3 =       157.50        157.50
+total net          ZONE  1 2 3 =        -0.00  
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+%% Ex1 REPLACE_WITH_DASH_DASH Analyzing output of the model
+% Visualization of example EX1 of modflow 2000
+%
+% TO 091011 091129
+
+%% Load model name and the data generated and saved by mf_adapt
+load('name.mat') % get basename stored in file name.mat
+load(basename);  % having retrieved basename, load the data in [basename '.mat']
+load underneath  % load possible non-standard info from mf_adapt
+
+fsz=10;          % set fontsize for plots
+
+%% Read computed head data
+
+H=readDat([basename,'.hds']);  % read the file
+
+hrange = ContourRange(H,50);   % determine suitable contour elevations
+
+%% Perpare plots
+
+figure('name','example1','position',screenPos(1)); % new figure
+
+P=[0 0 0.4 0.4]; % size of subaxis
+
+% create axes at their desired position
+ax(1)=axes('position', [0.05 0.55 0 0]+P,'nextplot','add','fontsize',fsz);
+ax(2)=axes('position', [0.55 0.55 0 0]+P,'nextplot','add','fontsize',fsz);
+ax(3)=axes('position', [0.05 0.05 0 0]+P,'nextplot','add','fontsize',fsz);
+ax(4)=axes('position', [0.55 0.05 0 0]+P,'nextplot','add','fontsize',fsz,...
+        'xColor',grey,'yColor',grey,'color','k','ticklength',[0 0]);
+
+% for all layers make contour plot
+for iLay=1:gr.Nlay
+    set(gca,'clim',hrange([1 end]));
+    
+    xlabel(ax(iLay),'x [1000ft]');
+    ylabel(ax(iLay),'y [1000ft]');
+    title( ax(iLay), sprintf('head in layer %d',iLay))
+
+    [c,hdl] = contourf(ax(iLay),gr.xm,gr.ym,H.values(:,:,iLay),hrange,'edgecolor','none'); % contour layer iLay
+    clabel(c,hdl); % plot contour labels
+
+    Iw=find([well.iLay]==iLay);
+    well.plotXY(ax(iLay),'ro');
+
+    if iLay == 1, plot(ax(iLay),drn(:,1),drn(:,2),'color','g','linewidth',2); end
+    
+end
+
+%% Annotate plot with text
+s={'Example from MODFLOW 2000 manual, p89';''; 'Computed in mfLab';''; 'TO 2012-04-07'};
+text(0.5,0.5,s,'HorizontalAlignment','center','color','yellow','fontsize',fsz);
+
+%% Use zonebudget to get budget overview
+
+B=readBud([basename, '.bgt']); % read the Budget file
+
+Zonearray=gr.const(1:gr.Nlay);  % first create a zone array (here onze zone per layer)
+zonebudget(B,Zonearray,1); % budget of layer 1
+zonebudget(B,Zonearray,2); % same for layer 2
+zonebudget(B,Zonearray,3); % same for layer 3
+zonebudget(B,Zonearray,[1 2 3]); % for all 3 layers totaled
+
+##### SOURCE END #####
+--></body></html>

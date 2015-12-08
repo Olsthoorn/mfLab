@@ -1,0 +1,2199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>Routes.kml</name>
+	<Style id="inline133">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline97">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline38">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline27</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline14</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline82">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline19">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline48</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline6</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="inline75">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline164</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline78</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline157">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline50">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline139">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline51">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline320">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline107">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline43">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline471">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline271">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline42</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline85</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline117">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline42">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline49">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline74">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline241</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline10</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline66">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline151">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline72">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline76">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline530">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline96">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline24">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline155">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline73">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline155</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline320</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="inline138">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline119</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline86</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="inline132">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline107</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline106</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline381">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline106">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline131">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline134">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline30</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline92</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline191">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline62">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline31">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline108</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline157</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline93">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline108">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline92">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline114">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline43</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline116</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline02">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline54">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline62</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline29</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="inline21">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline711</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline44</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="inline130">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline136</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline81</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline501">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline1090">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline27">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline153">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline3">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline79">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline127</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline95</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline0">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline81">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline156">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline103</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline97</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline6">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline1311">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline127">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline83">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline69">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline411</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline1090</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline123">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline112">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline163">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline64</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline22</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline78">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline103">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="m_ylw-pushpin01">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin11</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin_hl01</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="inline11">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline51</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline45</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline45">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline152">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline35">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline135">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline61</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline67</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline711">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline33">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline152</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline144</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline119">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline105">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline128</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline149</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline65">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline56">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline8">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline26</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline50</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline29">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline22">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline47">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline24</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline83</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="inline55">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline72</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline154</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline95">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline90">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline116">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline30">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline16">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline96</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline90</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline118">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline80">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline164">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline26">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline85">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline162">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline18</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline104</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="inline1220">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline191</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline590</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline113">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="s_ylw-pushpin_hl01">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<StyleMap id="inline1170">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline76</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline122</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline10">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline68">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline80</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline88</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline14">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline7">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline680">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline65</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline820</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="inline46">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline91</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline131</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline154">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline312">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline123</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline40</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline18">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline820">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline25">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline112</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline141</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline44">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline125">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline67">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline1510">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline1">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline3</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline109</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline144">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline128">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline2">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline4</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline56</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline89">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline122">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline126">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline780">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline137</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline125</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline104">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline590">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline124">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline93</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline02</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="inline161">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline20</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline63</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="inline351">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline7</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline117</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline88">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="s_ylw-pushpin11">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<StyleMap id="inline77">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline35</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline371</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline141">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline40">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline158">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline261</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline99</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline64">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline136">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline159">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline91">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline411">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline115">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline89</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline1510</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline371">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline59">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline151</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline1311</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="inline52">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline126</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline381</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline99">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline200">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline66</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline49</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline261">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline32">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline0</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline82</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline241">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline560">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline48">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline36">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline501</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline139</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline20">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline580">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline113</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline133</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline137">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline28">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline153</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline530</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline4">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline61">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline63">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline149">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline109">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline17">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline471</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline118</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="inline98">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline560</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline159</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline86">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Folder>
+		<name>Routes</name>
+		<visibility>0</visibility>
+		<Folder>
+			<name>Khettaras Fezna</name>
+			<visibility>0</visibility>
+			<Placemark>
+				<name>Fezna1</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline74</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.515093742023046,31.52226717612944,0 -4.508487848571327,31.52323827052576,0 -4.502884118025677,31.5251878795164,0 -4.496851695961125,31.52772143303707,0 -4.476231913367757,31.53285648628338,0 -4.470551695508924,31.53270901505351,0 -4.465961788957581,31.53052294441265,0 -4.463988764325247,31.52993063557043,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Fezna2</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline163</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.499937004903115,31.52516404854334,0 -4.496316401889796,31.52614123851589,0 -4.486650121975466,31.52901574664591,0 -4.479165449507491,31.53196690103688,0 -4.47072241319816,31.53228238776311,0 -4.465686117770623,31.52909794811306,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Fezna3</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline32</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.526015759245363,31.52139609083195,0 -4.523784706263882,31.52206831715572,0 -4.519625726440271,31.52294152991509,0 -4.51282572857331,31.52348713557345,0 -4.510722460853041,31.52425873970222,0 -4.506176581023137,31.52461605037706,0 -4.49832836651473,31.52859844420874,0 -4.48983120972692,31.5297135240588,0 -4.475021222413147,31.5332541848739,0 -4.46967335947445,31.5325533895919,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Fezna4</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline19</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.517898852855332,31.5237765336418,0 -4.512354420073122,31.52498295157675,0 -4.505387383184687,31.52706058838476,0 -4.499595527269396,31.52898889191364,0 -4.489503584117218,31.53041714293053,0 -4.482551448554966,31.53222060369734,0 -4.477515792365812,31.5327983000243,0 -4.468586232143034,31.5321590965337,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Fezna6</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline11</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.530193208705765,31.52221581994511,0 -4.526681267748669,31.52389385946347,0 -4.520270918514258,31.52351339471198,0 -4.508674487957003,31.52741548996103,0 -4.50422964583256,31.52827013401257,0 -4.500332413007974,31.52919156824394,0 -4.487793498647438,31.53126175626313,0 -4.475273613087167,31.53342767508159,0 -4.470504274297737,31.53302754761429,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Fezna7</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline38</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.470539852859234,31.53318680732945,0 -4.473453534481267,31.53386382642786,0 -4.475297814181037,31.53378174433902,0 -4.479316246765002,31.53301482704511,0 -4.49297457077852,31.53116055334662,0 -4.499583195007434,31.53034267698951,0 -4.505404246487861,31.53007219668906,0 -4.508688292997104,31.52881994036686,0 -4.513126295936868,31.52852918755286,0 -4.51731193905834,31.52711953818035,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Fezna8</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline1</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.470598100875094,31.53344459483504,0 -4.473618721282166,31.53394252683396,0 -4.475843581999575,31.53385015118211,0 -4.487846086717946,31.53253946574561,0 -4.490346711990256,31.53251771278723,0 -4.49586829877786,31.53118054373072,0 -4.497500112154354,31.53098538137659,0 -4.498705842032793,31.53102163353978,0 -4.50106803645559,31.53072773368308,0 -4.504330792061043,31.53038316444291,0 -4.504951874203819,31.53019964540772,0 -4.506233824767701,31.5301000212922,0 -4.508293983026159,31.52949522791365,0 -4.512219765666398,31.52915100786045,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Fezna9</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline2</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.468353118547177,31.53381139998032,0 -4.473885310785898,31.53406708182586,0 -4.481917458781386,31.5335487105101,0 -4.489893727540306,31.53357868800716,0 -4.502319897084329,31.53128250175386,0 -4.5047824970707,31.53113056456436,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Fezna10</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline47</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.468753861651868,31.53407097170456,0 -4.475499496098423,31.53410539557256,0 -4.481365303271402,31.53384530314334,0 -4.485680592729859,31.53424692334017,0 -4.491137164752281,31.53397006500133,0 -4.497575102738006,31.53330086835431,0 -4.502075775868147,31.53175515311045,0 -4.509312342878024,31.53063847872316,0 -4.513832897175838,31.52951864912353,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Fezna11</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline8</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.469768390883772,31.53419148517886,0 -4.474307358452273,31.53420685843575,0 -4.478919785861945,31.53414733609278,0 -4.48423532748143,31.53486847753385,0 -4.48836053212431,31.53497064208844,0 -4.491644963182076,31.53519311389619,0 -4.495677434579843,31.53455437983567,0 -4.497703056309165,31.53426209113169,0 -4.500864644797405,31.53500062646511,0 -4.505730032744073,31.5326117042593,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Fezna12</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline132</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.523211908300522,31.52315846933175,0 -4.51890642529987,31.52253806758423,0 -4.515289608121926,31.52152515301197,0 -4.507995143077752,31.52091230236135,0 -4.49976923240576,31.51961290233539,0 -4.492370713668635,31.51726135362841,0 -4.482800397846168,31.51485821350364,0 -4.478087352281158,31.51519151390079,0 -4.472308030177135,31.51460406213925,0 -4.456011290886651,31.52011866999157,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Fezna13</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline680</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.531128123381741,31.51666032034884,0 -4.527896481903753,31.51663070183131,0 -4.523784090577031,31.51973840912953,0 -4.51511660393511,31.52142259743702,0 -4.508134320618154,31.52125993779814,0 -4.49993980469953,31.52015589359763,0 -4.498441859997872,31.51941707253831,0 -4.492128786414974,31.51746158236441,0 -4.486990545516882,31.51588937509558,0 -4.477446334893798,31.51422527259129,0 -4.469485980857248,31.51602004380144,0 -4.454214411144141,31.5193386815701,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Fezna14</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline271</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.514030096457252,31.5232506912493,0 -4.509868199180001,31.52256597249409,0 -4.504292282612483,31.52217257414984,0 -4.500668397519566,31.52088779752403,0 -4.497755359855229,31.51955444067875,0 -4.492250809731755,31.51805256332485,0 -4.489410522506611,31.51791223821481,0 -4.486175752622997,31.51597959803532,0 -4.475321541184838,31.51408147253211,0 -4.454047622627964,31.51892147450691,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Fezna15</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline21</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.511030745396955,31.51728681897179,0 -4.501589119328431,31.51570405903881,0 -4.494502464770416,31.5158332936258,0 -4.481906902007261,31.5136477101983,0 -4.47949013632919,31.51179956445286,0 -4.466000552475506,31.51459367366017,0 -4.455611531565595,31.51833505535171,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+		</Folder>
+		<Folder>
+			<name>Khettaras Jorf</name>
+			<visibility>0</visibility>
+			<Placemark>
+				<name>Mbarkia Monkara</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline75</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.452182891844378,31.47648939723725,0 -4.446361396661067,31.47778982006684,0 -4.437864292750589,31.47868782246778,0 -4.435411784728213,31.48058235976601,0 -4.430715709406066,31.48151731118504,0 -4.410664515660082,31.48068218305591,0 -4.400114897671475,31.47908970880996,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf1</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline79</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.457011703334573,31.47757999658539,0 -4.453765134647227,31.47760583030761,0 -4.440315850634757,31.47985412259218,0 -4.433197523191538,31.48181720145407,0 -4.428636837815693,31.48215131675765,0 -4.422197336656598,31.48168306131836,0 -4.407154275983253,31.48200284601653,0 -4.40063517084384,31.48033957278217,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf2</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline134</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.447602630093813,31.47980324561684,0 -4.436317649175358,31.48174954743413,0 -4.428748966699252,31.48260342538934,0 -4.421927106101266,31.48207921907563,0 -4.418255622939512,31.4833686103533,0 -4.41353994065517,31.48409273298657,0 -4.401156168789915,31.48025149849564,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf3 (oud)</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline351</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.460921135701207,31.48569577190263,0 -4.457842587270488,31.48384067455917,0 -4.451874157350169,31.48045092013589,0 -4.439508832269123,31.48275027751681,0 -4.432899139060554,31.48356166218503,0 -4.421934587238615,31.48238107561959,0 -4.418246705055051,31.48133911308288,0 -4.400635077361208,31.48051791870149,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf4</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline68</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.469545929793992,31.48956587798699,0 -4.466101808902399,31.48802249027106,0 -4.459269165539352,31.48776895953409,0 -4.447294276316212,31.48613300385192,0 -4.438774602930735,31.48818431538973,0 -4.425925220886957,31.48822533023325,0 -4.420602845345832,31.48853087085556,0 -4.414406305354081,31.48619516045505,0 -4.411130799305018,31.4859481186342,0 -4.396148541511193,31.48577511087787,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf5 (oud)</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline124</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.466884358381447,31.49167538578345,0 -4.459789909890523,31.4938790677639,0 -4.453894779753557,31.49429196066694,0 -4.447292313186103,31.49427523753762,0 -4.444589176059457,31.49274901110641,0 -4.432482420099336,31.49232404036511,0 -4.428896209082448,31.49091884104037,0 -4.42395220347298,31.4930929585769,0 -4.413756856325087,31.49377041038356,0 -4.398605719821206,31.49391083357972,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf6 (oud)</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline115</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.466203245130926,31.49460075988828,0 -4.460338713294414,31.49481451883825,0 -4.449266319779079,31.49535653981787,0 -4.43819383767373,31.49267864771964,0 -4.435179196206801,31.49042106003878,0 -4.428406262488553,31.48480683817991,0 -4.421878602743695,31.48243228015058,0 -4.418970962792635,31.48490805940113,0 -4.416340385400939,31.48641699001134,0 -4.394417144023683,31.48357197894056,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf7</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline98</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.449811447525942,31.49568841967988,0 -4.434643396669033,31.49483691808351,0 -4.42543362098654,31.4935163669006,0 -4.410451410393089,31.49423307645403,0 -4.398118299619585,31.49465329116498,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf8 (oud)</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline16</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.482643738119496,31.49674689982555,0 -4.479871905934139,31.49618219878348,0 -4.471546176024662,31.49716805543402,0 -4.46393286288534,31.49611931328972,0 -4.457547850232182,31.49678565381888,0 -4.441594263152195,31.49644902953433,0 -4.43121282731804,31.49649270883474,0 -4.424875072935089,31.49485621323651,0 -4.421240770496317,31.49582892878494,0 -4.40179600968813,31.4952362913582,0 -4.398942835242254,31.49488786756104,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf9</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline28</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.475873450933521,31.49857325638554,0 -4.467262693882605,31.49781336875022,0 -4.447285884744684,31.49855024237387,0 -4.441473052119274,31.49960298444239,0 -4.43387018313981,31.503483735396,0 -4.426396154382987,31.50507116525837,0 -4.418268640937601,31.50159529085575,0 -4.416062764435463,31.50060693391112,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf10</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline69</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.494371302771334,31.50319579542835,0 -4.491105016094256,31.50121900820618,0 -4.481651847623867,31.50077697346578,0 -4.465555461604527,31.49938836407486,0 -4.453168150941417,31.49967764053999,0 -4.425950167395197,31.50567050161868,0 -4.416702659865756,31.50413387507859,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf12</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline580</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.503634249761655,31.50866814713835,0 -4.499471857262241,31.50745512640062,0 -4.493861901579256,31.50656866887362,0 -4.488563410202177,31.50469504422616,0 -4.4861194625802,31.50310839206872,0 -4.48428658686314,31.50273882704878,0 -4.478396748482857,31.50212475919173,0 -4.472704546413341,31.50194203702064,0 -4.46638284607931,31.50189717042372,0 -4.457254861040604,31.50152797815293,0 -4.446248303209414,31.50204312347453,0 -4.441511946194164,31.50186068109516,0 -4.438008482466527,31.50172849234189,0 -4.425693732532162,31.50519330106942,0 -4.399286629033799,31.49711355409053,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf13</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline161</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.488705042079094,31.50514201059364,0 -4.486841555374738,31.50391493825254,0 -4.480305353289556,31.50345106830878,0 -4.477385960425803,31.5046853709531,0 -4.468977081286274,31.50468941365608,0 -4.460806283289975,31.50518284808359,0 -4.450628499797832,31.50666918848262,0 -4.441182884192258,31.50864238802107,0 -4.437571066562748,31.51045863296711,0 -4.429652416696036,31.5097080123701,0 -4.418322029968048,31.5091107795408,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf15</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline31</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.498556003841149,31.5078874414411,0 -4.49381840289596,31.50709835137299,0 -4.490020546365377,31.50543071734378,0 -4.484199211092362,31.50518520918965,0 -4.47841193800096,31.5068350966472,0 -4.475064479075349,31.50768056503533,0 -4.456643541199815,31.51079415880916,0 -4.44854532582505,31.51060096107744,0 -4.440239300968361,31.51306634553633,0 -4.432891117072301,31.51334993437241,0 -4.427046937869287,31.51122242315272,0 -4.410485031152716,31.50604256967859,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf16</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline156</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.483875942348988,31.50289011252422,0 -4.480685726872318,31.50245725312385,0 -4.47473563927465,31.5036490280961,0 -4.471282043749199,31.50358979866381,0 -4.468779502985354,31.50343588098916,0 -4.464410215000187,31.50331749404076,0 -4.44727319318548,31.50552056428636,0 -4.443861402202368,31.50668928595534,0 -4.43755156485511,31.50473451612465,0 -4.433459878401634,31.5029699788849,0 -4.423534725313347,31.50274101311289,0 -4.397422526145411,31.49372343604939,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf17</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline135</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.484693486020128,31.50445867287554,0 -4.478948842935352,31.50550786131482,0 -4.469148760681973,31.50680143351754,0 -4.464722157901726,31.50727055039165,0 -4.455355151649828,31.50965861535088,0 -4.445043059541646,31.50999100375343,0 -4.436812072840787,31.51264775417662,0 -4.428126037458412,31.50986342301124,0 -4.419676342075678,31.50776424441758,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf18</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline17</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.481997804473395,31.50448396271635,0 -4.473104483566925,31.50320596202423,0 -4.463580812804493,31.5029920766325,0 -4.453054122270482,31.50364537186445,0 -4.441553315996228,31.50614727720885,0 -4.4386373787959,31.50512175481676,0 -4.435438350240993,31.50524269598364,0 -4.430068217789573,31.50642151329656,0 -4.426267019263579,31.50530159051316,0 -4.42563695795818,31.5053439011152,0 -4.423661830818339,31.50429104054623,0 -4.416334602558404,31.50285415270853,0 -4.413619521585906,31.50207823175442,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf19</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline46</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.471638577669078,31.50213515390428,0 -4.467280274591593,31.502334986671,0 -4.461250391638182,31.5020765545156,0 -4.455891773534596,31.50176697365304,0 -4.447706776647904,31.50232026914439,0 -4.440655472127656,31.50279344242062,0 -4.437850284504616,31.50271971979321,0 -4.434692394778113,31.50319032318031,0 -4.420707725041701,31.5020528143894,0 -4.394891843480895,31.49039726087572,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf20</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline162</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.39427411982273,31.48640856941644,0 -4.407091266243906,31.4918362226334,0 -4.433945058719916,31.50106336613573,0 -4.44143115338678,31.50300903913714,0 -4.449208233116989,31.50253372506323,0 -4.455495727266715,31.50206325938003,0 -4.459602300542816,31.50213959063142,0 -4.462898681749811,31.50277973791437,0 -4.468547134027769,31.50297925187489,0 -4.474742744888317,31.50327477137671,0 -4.475681553491004,31.50327463821558,0 -4.477407607472747,31.50278326233566,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf21</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline138</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.475047657193242,31.50539272644384,0 -4.466099956988877,31.50658461654028,0 -4.453838747183413,31.50758444452994,0 -4.439256208930296,31.50923495483047,0 -4.424756079602062,31.50914206905063,0 -4.418572284147158,31.50762620129635,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf 22 (oud)</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline33</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.455440276605982,31.49708713016815,0 -4.446997834320431,31.49731534595613,0 -4.439704441175426,31.49807233430195,0 -4.429577013406593,31.49695264404395,0 -4.422673062122149,31.49684883985575,0 -4.41693341897008,31.49649107300235,0 -4.39818679180326,31.49073319109716,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf23 (oud)</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline780</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.449022698729896,31.49690169911599,0 -4.439899601187587,31.49731127977878,0 -4.434870766539655,31.49703228836789,0 -4.429836496810848,31.49647817150576,0 -4.410624076720525,31.49469562385595,0 -4.398544158853333,31.49066767913702,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf24 (oud)</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline158</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.458978630405132,31.49737035884609,0 -4.451230974199919,31.4974875474941,0 -4.439954982608915,31.49902810271028,0 -4.428191040468366,31.49796289703588,0 -4.42583852449716,31.4973522160067,0 -4.424813954848138,31.49773463932699,0 -4.423700552526998,31.49890976694596,0 -4.419271116249154,31.49914014036946,0 -4.41555346047214,31.4980418391807,0 -4.397967757687185,31.49022535074679,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf25 (oud)</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline54</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.445966532112998,31.4999016968071,0 -4.43988827536235,31.50080010536111,0 -4.432771496148594,31.49928504985694,0 -4.430408527414262,31.49956961091177,0 -4.426856380163122,31.5004107024463,0 -4.420477343012167,31.49951610097275,0 -4.415029064228181,31.49807927371592,0 -4.398544319206513,31.49165030135982,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf26 (oud)</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline59</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.44678937090659,31.50027392983444,0 -4.438291736112885,31.50147180443827,0 -4.435849699696192,31.50188323518038,0 -4.435155973489002,31.50182273169309,0 -4.430655667216196,31.50118879549193,0 -4.42714921452686,31.50177193721586,0 -4.42444551625953,31.50103623197463,0 -4.420273059905926,31.50119269569548,0 -4.412581634793275,31.49636450181702,0 -4.398256064289657,31.48934093460548,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf27 (oud)</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline36</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.459462535424317,31.50252694950376,0 -4.454406380721966,31.50271056167152,0 -4.444319008375563,31.50384650776293,0 -4.440066649928987,31.50398201046642,0 -4.435567660107038,31.50336586324478,0 -4.43137918192546,31.50277688077633,0 -4.418320334860134,31.50105584601912,0 -4.399293425995952,31.49327146180595,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf28 (oud)</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline130</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.473083787922677,31.50412206024834,0 -4.463456586976858,31.50412947265026,0 -4.447452747819881,31.50623313049202,0 -4.431106461918263,31.50848630636723,0 -4.426747030431502,31.50611681505903,0 -4.423400749198425,31.5076943010717,0 -4.420814262595849,31.50695233798689,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf29 (oud)</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline25</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.482205663127735,31.50453423269686,0 -4.473857468707944,31.50329709828771,0 -4.467728805525187,31.50309398758922,0 -4.462537727385084,31.50267877553715,0 -4.459016839203337,31.50210679557575,0 -4.452003530298542,31.50213447863018,0 -4.443612760457675,31.50304049065301,0 -4.437982892465539,31.50231456932266,0 -4.428040571006996,31.49878787913245,0 -4.398193379739757,31.48725750866669,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf30</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline77</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.473872777063778,31.50218367113078,0 -4.468086793924342,31.50218658512404,0 -4.466036567772411,31.50257978432702,0 -4.458683053641536,31.50183410617122,0 -4.448164298976507,31.50215134654869,0 -4.440734749444507,31.50275888633767,0 -4.438060444443568,31.50267637996502,0 -4.434303643832889,31.50308775338817,0 -4.431123325736425,31.50263411174219,0 -4.421580496640882,31.50256407111538,0 -4.398366048086637,31.491287529443,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf31</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline105</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.464012607207676,31.50307828543325,0 -4.454133048897591,31.50355136453195,0 -4.447425505234364,31.5047900676738,0 -4.441697365600393,31.50610851160697,0 -4.437951590269094,31.50506624138286,0 -4.430427885957981,31.50651667042795,0 -4.427577250755031,31.50586587528045,0 -4.398712445360042,31.49512105410479,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf32 (oud)</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline73</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.448846421424642,31.49687170449882,0 -4.440819145733094,31.49737735219721,0 -4.434115742701144,31.49721971727681,0 -4.42706366343365,31.49601094903041,0 -4.421775283141891,31.49579224898932,0 -4.405290169722461,31.49452889751687,0 -4.398077931446631,31.49143490131474,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf33 (oud)</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline200</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.455602068900165,31.49712802755071,0 -4.449326517768503,31.49712859077923,0 -4.438849245743426,31.49795794016461,0 -4.429357382834045,31.49677787379557,0 -4.419294474461938,31.49685574130929,0 -4.398135685664979,31.49168077749779,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf34 (oud)</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline52</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.458503780289234,31.49737468310381,0 -4.448086089403019,31.4977804613828,0 -4.439699212312034,31.49906933009565,0 -4.427405111236562,31.49789528226878,0 -4.425723275873585,31.49741519799201,0 -4.42387801993026,31.49888410121157,0 -4.421193374971981,31.49864293888127,0 -4.419890344277987,31.49933980050976,0 -4.397558354899564,31.48981175213481,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf35</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline1220</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.445951495310665,31.49998097041006,0 -4.440011339680775,31.50061755961392,0 -4.436998827935145,31.50007714777781,0 -4.431811070393029,31.49927279878374,0 -4.427990441607404,31.50040693050818,0 -4.420340536963748,31.49967923779915,0 -4.415548087869686,31.49783844126775,0 -4.397904226356909,31.48981194653839,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf36</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline55</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.474962093258554,31.5052432381671,0 -4.459791637552026,31.5073742458927,0 -4.439575568457229,31.50921227827841,0 -4.42135551374335,31.50884364994434,0 -4.420010134720882,31.50827745113135,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf37</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline1170</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.484970458621453,31.5045004287535,0 -4.47939443662352,31.5053998015045,0 -4.468592065275661,31.50682971112948,0 -4.45249845948183,31.51001612329874,0 -4.444935417895659,31.50997278837162,0 -4.434869648173145,31.51287445056639,0 -4.417998443198888,31.50837700623292,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf38</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline312</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.479909629882854,31.50594239041686,0 -4.4726872135461,31.50687776251636,0 -4.466566469411619,31.50753961856862,0 -4.45942566426658,31.509610443516,0 -4.452007893222035,31.51107886935334,0 -4.438297191162777,31.51305385272155,0 -4.419323004683154,31.50783777194294,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Jorf39 (oud)</name>
+				<visibility>0</visibility>
+				<styleUrl>#inline114</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.498154636759768,31.51354216689471,0 -4.492827941871194,31.51252357106964,0 -4.476362736423145,31.50725491579624,0 -4.471891708951872,31.50716603734963,0 -4.468063543336966,31.50737538546534,0 -4.458254488657686,31.5096479817278,0 -4.432133662896,31.51249652483286,0 -4.419034359602976,31.50911298481401,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+		</Folder>
+		<Folder>
+			<name>Khettaras Hannabou</name>
+			<visibility>0</visibility>
+			<Placemark>
+				<name>Sayed</name>
+				<visibility>0</visibility>
+				<styleUrl>#m_ylw-pushpin01</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.391179352140059,31.43792926035175,0 -4.384863894331245,31.43622317830566,0 -4.38366218303778,31.43618507238863,0 -4.380515436729925,31.43477851293213,0 -4.378687570707943,31.43463310718366,0 -4.37266942907126,31.43392591310015,0 -4.36684796187731,31.433780149677,0 -4.363596872352259,31.43374975155111,0 -4.349247926408337,31.43500031069154,0 -4.345967390164432,31.43457276908665,0 -4.344102959112997,31.43371506623069,0 -4.331161517942437,31.42819624938347,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Fougania</name>
+				<visibility>0</visibility>
+				<styleUrl>#m_ylw-pushpin01</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.397948267619745,31.43833053196441,0 -4.385887021073792,31.43440245848823,0 -4.381364379161987,31.4338030423497,0 -4.377400188544391,31.43294403875358,0 -4.369445694518497,31.43291449447611,0 -4.364047308094275,31.43195136302504,0 -4.358763722083498,31.43298410274529,0 -4.354119343295593,31.43407185867132,0 -4.34829396127356,31.43410613809477,0 -4.346148289039262,31.4337511518313,0 -4.34451517778904,31.43293770378918,0 -4.333592737923593,31.4258087895725,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Lakdima</name>
+				<visibility>0</visibility>
+				<styleUrl>#m_ylw-pushpin01</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.393950670378722,31.4334665556899,0 -4.38761228197983,31.43086747230619,0 -4.381200095018918,31.43083867434827,0 -4.378273252933305,31.43002112259947,0 -4.36938048157654,31.4298048247545,0 -4.362394629165155,31.42971403083834,0 -4.357412540405463,31.42993064264538,0 -4.354354727866268,31.43062445766675,0 -4.352906354043541,31.4304972338039,0 -4.344206089822499,31.43227703668547,0 -4.342058554649607,31.4298575822326,0 -4.328668360303977,31.41896202962228,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Bouia Lakadima</name>
+				<visibility>0</visibility>
+				<styleUrl>#m_ylw-pushpin01</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.410777274255263,31.45233950472089,0 -4.407726794819682,31.45186691625705,0 -4.401373502608207,31.45048012547856,0 -4.39734691399492,31.44933525090181,0 -4.390270891839743,31.44941911821037,0 -4.383693762071678,31.45105093422207,0 -4.380226360950231,31.45223773498663,0 -4.379091148503376,31.45200841810073,0 -4.373333426206686,31.45245298006927,0 -4.369776438868184,31.45280568835704,0 -4.366679073144562,31.45244508734921,0 -4.361924666002759,31.45254815867292,0 -4.359225940795692,31.45243243598588,0 -4.354231667424401,31.4515362367654,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Bouia Gadida</name>
+				<visibility>0</visibility>
+				<styleUrl>#m_ylw-pushpin01</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.41133590888334,31.45404096117758,0 -4.400482578050069,31.45347607277875,0 -4.395203307457285,31.45190807232806,0 -4.388851706017812,31.45202983108995,0 -4.382216434614951,31.45389769027923,0 -4.371398609833389,31.45415844772357,0 -4.366901276115125,31.45325437387891,0 -4.361599058638138,31.45287406782655,0 -4.354614005447612,31.45241513105106,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Krayr Lakadima</name>
+				<visibility>0</visibility>
+				<styleUrl>#m_ylw-pushpin01</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.4015481014149,31.44595610318051,0 -4.392228907424221,31.44459383395308,0 -4.379970247944448,31.44376068060976,0 -4.376281191858109,31.44294756237868,0 -4.37427443239093,31.44350693271243,0 -4.372319039020627,31.44328091553081,0 -4.36896733118718,31.44380090126325,0 -4.365272689443015,31.44147749172755,0 -4.357434909892036,31.44106348098451,0 -4.342453903407848,31.44007755609825,0 -4.339861531484032,31.43820018634735,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Mustaphia</name>
+				<visibility>0</visibility>
+				<styleUrl>#m_ylw-pushpin01</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.320926821322892,31.39757016011102,0 -4.325504218970773,31.3991000612573,0 -4.346348310574378,31.40545421275931,0 -4.349290797787145,31.40884572790851,0 -4.353061500934306,31.41305677033309,0 -4.353193012500283,31.41430727853463,0 -4.357783745654072,31.41797110406649,0 -4.363125279361281,31.42134337327836,0 -4.368108068680742,31.42366354699501,0 -4.371382095217014,31.42286164017763,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Aloria</name>
+				<visibility>0</visibility>
+				<styleUrl>#m_ylw-pushpin01</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.325741177232326,31.41075659618245,0 -4.329792731539724,31.41285291483841,0 -4.342891126462339,31.4176423320352,0 -4.350585965191539,31.4205461878698,0 -4.356476036053496,31.42211778218312,0 -4.361042515076462,31.42355250526775,0 -4.367331671854893,31.42427078112619,0 -4.371318850552839,31.42454497469312,0 -4.376490958126245,31.42403192914731,0 -4.38156512736305,31.42479572340652,0 -4.388084368685508,31.42649045482067,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Krayr Gadida</name>
+				<visibility>0</visibility>
+				<styleUrl>#m_ylw-pushpin01</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.403802997786702,31.44483489049401,0 -4.391027550872813,31.44248239464822,0 -4.380520302837772,31.44164203044106,0 -4.373378262240961,31.4406326086317,0 -4.370377967080006,31.44049684160155,0 -4.368261006387911,31.43804737151912,0 -4.359339572619033,31.43780656810088,0 -4.352205813489015,31.43952279662014,0 -4.3405764697015,31.44286670548114,0 -4.33978008819463,31.44190143496766,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Grenia</name>
+				<visibility>0</visibility>
+				<styleUrl>#m_ylw-pushpin01</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.327347351006018,31.4138718157387,0 -4.331677082782846,31.41501089958244,0 -4.337196607546728,31.41685272369106,0 -4.34299947337731,31.41912247619838,0 -4.350748834456704,31.42212345700181,0 -4.354750544695341,31.42315527835677,0 -4.36060280696624,31.42445344725282,0 -4.362975842976135,31.42469211622066,0 -4.366274881264197,31.42527810547781,0 -4.368876208937165,31.42542076496687,0 -4.37028592339737,31.42572175606343,0 -4.375007074964459,31.42548861497367,0 -4.379617773571349,31.42571539710982,0 -4.388422127095378,31.42769235321899,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+			<Placemark>
+				<name>Auctania</name>
+				<visibility>0</visibility>
+				<styleUrl>#m_ylw-pushpin01</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						-4.395561535562025,31.43549675114271,0 -4.3872331278344,31.43186018512616,0 -4.381554236481852,31.43193228725289,0 -4.376279800360882,31.43125423556175,0 -4.374552703215743,31.43062745001581,0 -4.368920709666766,31.43097167159149,0 -4.366930224274745,31.43048541616063,0 -4.362669371264496,31.4306092808566,0 -4.358710746719313,31.4314191124227,0 -4.350878744240124,31.43281923595455,0 -4.344077382870283,31.43237898056802,0 -4.332279368064985,31.42222043295559,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+		</Folder>
+	</Folder>
+</Document>
+</kml>

@@ -1,0 +1,96 @@
+% Seawat V4, Benchmark example, See Langevin e.a. 2008, p23ff
+
+% NOTE the BUG in MNW1 PACKAGE --> YOU MUST HAVE AS LEAST TWO MNW1 wells
+% WITH ONE, THE PACKAGE CRASHES MODFLOW WITH A SEGMENTATION FAULT.
+%
+%  TO 110816 110833
+
+% Checking the budget for the axially symmetric situations
+% Based on Langevings Coastal problem
+
+basename='CheckAxBudget';
+
+% The entire table of Langevin et al, has been stored in the excel workbook
+[LanNams,LanVals]=getExcelData([basename, '.xls'],'TableLangevin','Vertical');
+
+% Assiging values from table for as far as needed for this model
+top =LanVals(strmatchi('top' ,LanNams));  % Lan... = Langevin...
+NX  =LanVals(strmatchi('NCOL',LanNams));
+NY  =LanVals(strmatchi('NROW',LanNams));
+NZ  =LanVals(strmatchi('NLAY',LanNams));
+Dx  =LanVals(strmatchi('Dx'  ,LanNams));
+Dy  =LanVals(strmatchi('Dy'  ,LanNams));
+Dz  =LanVals(strmatchi('Dz'  ,LanNams));
+kh  =LanVals(strmatchi('kh'  ,LanNams));
+kv  =LanVals(strmatchi('kv'  ,LanNams));
+peff=LanVals(strmatchi('peff'  ,LanNams));
+Ss  =LanVals(strmatchi('Ss'  ,LanNams));
+h_ocean=LanVals(strmatchi('h_ocean',LanNams));
+c_ocean=LanVals(strmatchi('c_ocean',LanNams));
+T_ocean=LanVals(strmatchi('T_ocean',LanNams));
+c_inflow=LanVals(strmatchi('c_inflow',LanNams));
+T_inflow=LanVals(strmatchi('T_inflow',LanNams));
+Q_inflow=LanVals(strmatchi('Qinflow',LanNams));
+
+%% Mesh using table data
+
+AXIAL=0;
+
+xGr=sinespace(0,1000,30,pi/20, pi/2);
+xGr=0:10:1000;
+%xGr=[0 Dx*(1:NX)];
+NZ=NZ*2; Dz=Dz/2;
+zGr=[top, -(1:NZ)*Dz];
+
+[xGr,yGr,zGr,xm,ym,zm,DX,DY,DZ,NX,NY,NZ]=...
+    modelsize3(xGr,[0 Dy*(1:NY)],zGr);
+
+Z=zGr(ones(NY,1),ones(1,NX),1:NZ+1);
+
+%% Generate all other matrices using table data
+M=ones(NY,NX,NZ);      % dummy array of ones, size of model
+
+IBOUND   =M;  IBOUND(:,end,:)=-1; IBOUND(:,1,:)=2;
+ICBUND   =M;  % use CHD package
+STRTHD   =M*h_ocean;
+STCONC{1}=M*0;
+STCONC{2}=M*0;
+
+HK       =M*kh;
+VK       =M*kv;
+PEFF     =M*peff;
+SS       =M*Ss;
+
+%% Generate MNW objects and the acompanying PNTSRC for MT3DMS
+
+[MNW,PNTSRC,WEL]=mf_setmnwells(basename,xGr,yGr,Z,{'Q_','C_','T_'},HK);
+
+%% CHD right flow boundary
+
+CHDDENSOPT=2;   % environmental head at ocean boundary, Langevin et al 2008, p22
+
+% similar for CHD boundary conditions on right hand boundary of model
+[XM,YM,ZM]=meshgrid(xm,ym,zm);
+LRCright=cellIndices(find(XM>xGr(end-1)),size(M),'LRC');
+
+CHD=[];
+u=ones(size(LRCright(:,1)));
+for iPer=1:MNW(1).NPER
+    CHD=[CHD;[iPer*u LRCright u*[h_ocean h_ocean CHDDENSOPT]]];
+end
+
+%% PNTSRC for SSM source sink mixing module MT3DMS/Seawat
+
+ITYPEleft =2;  % conc in prescribed flow at left boundary
+ITYPEright=1;  % conc at prescribed head at right boundary     
+dummy=0;
+% Notice that we have two species, salinity and temperature
+
+for iPer=1:MNW(1).NPER
+    PNTSRC=[PNTSRC; [...
+                        iPer*u LRCright u*[dummy ITYPEright c_ocean  T_ocean],...
+                    ]...
+           ];
+end
+
+save Underneath c_ocean T_ocean

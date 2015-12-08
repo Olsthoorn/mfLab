@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>RherisUpstream for infiltration.kml</name>
+	<StyleMap id="inline11">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline8</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline2</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline8">
+		<LineStyle>
+			<color>ffff0055</color>
+			<width>7</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline2">
+		<LineStyle>
+			<color>ffff0055</color>
+			<width>7</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Placemark>
+		<name>RherisUpstream for infiltration</name>
+		<open>1</open>
+		<styleUrl>#inline11</styleUrl>
+		<LineString>
+			<tessellate>1</tessellate>
+			<coordinates>
+				-4.626396556770991,31.55286459754105,0 -4.594078852543505,31.54498537933954,0 -4.578059842146893,31.54035533457397,0 -4.550906021613805,31.53178213214007,0 -4.529119170654669,31.53149164460411,0 -4.523624247146119,31.52899497540715,0 -4.50861783738397,31.53309404429557,0 -4.501947916375064,31.53875372516116,0 -4.486516441024278,31.54015845664769,0 
+			</coordinates>
+		</LineString>
+	</Placemark>
+</Document>
+</kml>

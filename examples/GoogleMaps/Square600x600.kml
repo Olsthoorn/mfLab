@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>Square660x600.kml</name>
+	<Style id="sn_ylw-pushpin">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Placemark>
+		<name>Square660x600</name>
+		<styleUrl>#sn_ylw-pushpin</styleUrl>
+		<LineString>
+			<tessellate>1</tessellate>
+			<coordinates>
+				55.17799999893315,25.25314350247007,0 55.18098184759819,25.25314346927857,0 55.18098193695323,25.25585586809078,0 55.17501806367255,25.25585586824777,0 55.17501819613003,25.25041557401444,0 55.18097756005209,25.25040933297747,0 55.18097759737138,25.25313634018858,0 
+			</coordinates>
+		</LineString>
+	</Placemark>
+</Document>
+</kml>

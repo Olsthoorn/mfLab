@@ -1,0 +1,13 @@
+function m_view(xGr,yGr,M)
+% M_VIEW provides a colored face-filled view of matrix M
+% USAGE
+%  m_view(xGr,yGr,M[,colormap])
+%  m_view(M[,colormap])
+
+figure; hold on;
+shading('faceted');
+%shading('flat');
+
+surf(xGr,yGr,0*(yGr*xGr),M,'edgecolor','none');
+
+%surf(xGr,yGr,M);

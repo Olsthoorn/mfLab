@@ -1,0 +1,1189 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+MULTI NODE WELL PACKAGE INPUT
+\end_layout
+
+\begin_layout Author
+Theo Olsthoorn
+\end_layout
+
+\begin_layout Date
+16 Nov 2012
+\end_layout
+
+\begin_layout Standard
+The MNW manual is extremely difficult to comprehend.
+ It is just badly explained, which has caused me many hours in comprehending
+ the concepts of the input of the package.
+\end_layout
+
+\begin_layout Standard
+The flow from a model cell into the well is computed as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Q=\sum_{i=1}^{n}C_{cw}(i)\left(h_{i}-h_{well}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $h$
+\end_inset
+
+ is the head in the model cell in through which the well screen penetrates.
+ 
+\begin_inset Formula $h_{well}$
+\end_inset
+
+ is the head inside the well screen, which is shared by all cells that are
+ part of the multinode well and 
+\begin_inset Formula $C_{CW}$
+\end_inset
+
+ is the cell-to-well conductance, which is cell specific, 
+\begin_inset Formula $n$
+\end_inset
+
+ is the number of cells penetrated by the screen.
+ The package tries to extract a targed flow 
+\begin_inset Formula $Q$
+\end_inset
+
+ from the nodes of the MNW cells combined.
+ It iterates until both the target extraction is met for a certain head
+ in the well screen.
+ Once this is achieved, all 
+\begin_inset Formula $h_{i}$
+\end_inset
+
+ outside the screen are also known.
+ They generally differ form each other.
+ Then the computed head inside the screen may drop below some set limit
+ 
+\begin_inset Formula $h_{lim}$
+\end_inset
+
+, which may be the exptraction point of the submersible pump inside the
+ screen.
+ Hence the extraction can not match the target extraction given this drawdown
+ of head limit inside the screen.
+ The total extraction will then be reduced until the head in the screen
+ is at the head limit 
+\begin_inset Formula $h_{lim}$
+\end_inset
+
+.
+ If, for any reasons the head in the well rises above 
+\begin_inset Formula $h_{lim}$
+\end_inset
+
+ while extracting the target dicharge, it will again be produced.
+ This system is thus self-regulating.
+\end_layout
+
+\begin_layout Standard
+The same is true for recharge.
+ For instance, if for any reason the head in the well rises above some limit,
+ for instance the top of the well casing, so that the casing will overflow,
+ the injection rate will be reduced until the head in the well is at this
+ 
+\begin_inset Formula $h_{lim}$
+\end_inset
+
+.
+ Also this system is self-regulating.
+\end_layout
+
+\begin_layout Standard
+So, when the head is the extraction well is at 
+\begin_inset Formula $h_{lim}$
+\end_inset
+
+ the extraction 
+\begin_inset Formula $\left|Q\right|<\left|Q_{target}\right|$
+\end_inset
+
+.
+ 
+\begin_inset Formula $Q$
+\end_inset
+
+ would even be zero if the head in the cells around the screen would drop
+ below 
+\begin_inset Formula $h_{lim}$
+\end_inset
+
+.
+ If the 
+\begin_inset Formula $\left|Q\right|$
+\end_inset
+
+ drops below some set value called 
+\begin_inset Formula $Qfrmn$
+\end_inset
+
+, the well will switch off entirely.
+ This minimum flow can be specfied in absolute value or as a percentage
+ of the target discharge.
+\end_layout
+
+\begin_layout Standard
+If for any reasons the heads in the aquifer rise, so that the potential
+ extraction rate exceeds a given limit 
+\begin_inset Formula $Qfrmx$
+\end_inset
+
+, the pump will be automatically switched on.
+ It will of course only reach the target discharge if the head in the aquifer
+ is sufficiently high.
+ Clearly 
+\begin_inset Formula $Qfrmx>Qfrmn$
+\end_inset
+
+.
+ The values are positive if specified as a percentage of the total extraction
+ and negative if absolute extraction values are used.
+\end_layout
+
+\begin_layout Standard
+The same scheme is used for injection, although this may be a bit less obvious.
+ Here too, if the injection rate is below some set flow value 
+\begin_inset Formula $Qfrmn$
+\end_inset
+
+, the pump will be switched off.
+ If then for any reason the potential injection rate exceeds flow value
+ 
+\begin_inset Formula $Qfrmx$
+\end_inset
+
+, the injection pump will be switched on again.
+ For injection 
+\begin_inset Formula $Qfrmx>Qfrmn$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Some parameters are definitly cell dependent, and others only make sense
+ for the well as a whole.
+ Cell dependent variable are 
+\begin_inset Formula $R_{w}$
+\end_inset
+
+ if 
+\begin_inset Formula $\ne$
+\end_inset
+
+ 0, 
+\begin_inset Formula $skin$
+\end_inset
+
+, 
+\begin_inset Formula $C$
+\end_inset
+
+.
+ Parameters that only make sense for a well are 
+\begin_inset Formula $Qdes$
+\end_inset
+
+, 
+\begin_inset Formula $R_{w}$
+\end_inset
+
+ if 
+\begin_inset Formula $R_{w}=0$
+\end_inset
+
+, 
+\begin_inset Formula $QWval$
+\end_inset
+
+, 
+\begin_inset Formula $Hlim$
+\end_inset
+
+ (presumably), 
+\begin_inset Formula $Href$
+\end_inset
+
+ (presumably), 
+\begin_inset Formula $Iqwgrp$
+\end_inset
+
+, 
+\begin_inset Formula $Qfrcmn$
+\end_inset
+
+, 
+\begin_inset Formula $Qfrcmx$
+\end_inset
+
+, 
+\begin_inset Formula $MNWsite$
+\end_inset
+
+.
+ Note that 
+\begin_inset Formula $LOSSTYPE$
+\end_inset
+
+ inclusing 
+\begin_inset Formula $PLossMNW$
+\end_inset
+
+ can only be specified for an entire simulation and so are the same for
+ all wells.
+\end_layout
+
+\begin_layout Standard
+All required variable will always be written out to the first record for
+ each well (cell 1), while subsequent lines will only have parameters that
+ are usefull per cell.
+ Only 
+\begin_inset Formula $Qdes$
+\end_inset
+
+ will be zero on subsequent lines, as it has to be specified on every record.
+\end_layout
+
+\begin_layout Section
+INPUT format
+\end_layout
+
+\begin_layout Standard
+The MNW package requires information for the simulation as a whole and informait
+on for each stress period per well node (well cell).
+ below, bold is verbatim, parantheses denote option
+\end_layout
+
+\begin_layout Subsection
+Input for each simulation:
+\end_layout
+
+\begin_layout Standard
+-
+\end_layout
+
+\begin_layout Standard
+MXMNW IWL2CB IWELPT 
+\series bold
+REF
+\series default
+ 
+\series bold
+SP:
+\series default
+kspref
+\end_layout
+
+\begin_layout Standard
+LOSSTYPE (PLossMNW)
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+FILE:
+\series default
+filename 
+\series bold
+WEL1:
+\series default
+iunw1
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+FILE:
+\series default
+filename 
+\series bold
+BYNODE:
+\series default
+iunby 
+\series bold
+(ALLTIME)
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+FILE:
+\series default
+filename 
+\series bold
+QSUM:
+\series default
+iunqs 
+\series bold
+(ALLTIME)
+\end_layout
+
+\begin_layout Subsection
+Iinput for each stress period
+\end_layout
+
+\begin_layout Standard
+-
+\end_layout
+
+\begin_layout Standard
+ITMP 
+\series bold
+(ADD)
+\end_layout
+
+\begin_layout Standard
+LAY ROW COL Qdes (
+\series bold
+MN|MULTI
+\series default
+) QWval Rw Skin Hlim Href (
+\series bold
+DD
+\series default
+) Iwgrp Cp:C (
+\series bold
+QCUT|Q-%CUT
+\series default
+: Qfrcmn Qfrcmx) 
+\series bold
+DEFAULT
+\series default
+ 
+\series bold
+SITE:
+\series default
+MNWsite
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Remarks:
+\end_layout
+
+\begin_layout Standard
+The line staring with LAY should be specified for every multinode well cell
+ that is defiend or changed.
+ It is not defined what happens if the same cells are added.
+ Probably they are overwritten by the new input.
+\end_layout
+
+\begin_layout Standard
+Also note that all values QWval, Rw Skin Him Href IwGrp plus the group containin
+g Qfrcmn/Qfrcmx and the labels DEFAULT and SITE:MNWsite are optional.
+ Hence LAY ROW COL Qdes are the only required data plus MN|MULTI to indicate
+ start or end of a multinode well.
+ The difference with ordinary wells is then abolutely minimal.
+ But the MNW will make sure the heads in the well cells of a each MNW are
+ equal and the cells beloning to a MNW can be distributed arbitrarily over
+ the model, they don't have to be vertically aligned.
+ This is really general.
+\end_layout
+
+\begin_layout Standard
+In mfLab we can automatically pick up the variables from the input, ignore
+ them if absent and use them if present.
+\end_layout
+
+\begin_layout Standard
+The label MN, MULTI and DD may appear anywhare on the intput line between
+ position 41 and 256.
+ To make sure reading works, we will use fixed format for the LAY ROW COL
+ Qdes using the first 40 positions exactly.
+ It is unclear what happens if Qdes is specified for each cell, so we specify
+ Qdes for the first record of each multinode well and zero for all subsequent
+ records of the same well.
+\end_layout
+
+\begin_layout Standard
+The manual states that KEY:Data pairs not within parenthesis have to be
+ specified, but I'm not sure if this is also true for Cp: as it default
+ to zero.
+\end_layout
+
+\begin_layout Standard
+We may always use default values for some of the parameters, for instance:
+\end_layout
+
+\begin_layout Description
+Rw=0
+\end_layout
+
+\begin_layout Description
+2 LOSSTYPE=Skin
+\end_layout
+
+\begin_layout Description
+3 Always use basename for the file and WEL1, BYNODE, QSUM for the extension.
+ Always let mfLab determine unique free unit numbers.
+ Always use ALLTIME
+\end_layout
+
+\begin_layout Description
+4 Never use label ADD
+\end_layout
+
+\begin_layout Description
+5 Alwaus use label MN indicating the first record of the multi-node well,
+ never use MULTI.
+ Further QWval=0, Rw=well radius, Skin = 0, Hlim=zscreen bot + 1 m if Qdes<0,
+ and ztop (ground surface) if Q<0, Href very large so that it does not take
+ effect, never use (DD), Iwgrp=well nr, never use C:, use Q-%CUT: label
+ with Qfrcmn 10 and Qfrmx 25 as percentrage of Qdes to switch pump off and
+ on.
+ Never use default, just specify.
+ Always use well name for MNWsite.
+\end_layout
+
+\begin_layout Section
+INPUT
+\end_layout
+
+\begin_layout Subsection
+Variables defined for the simulation
+\end_layout
+
+\begin_layout Description
+MXMNW the maximum number of well cells, i.e.
+ number of inpute records to be read, excluding comment lines.
+\end_layout
+
+\begin_layout Description
+IWL2CB flag and unit number.
+ If IWL2CB>0 and ICBCFL is set in the output control file, IWL2CB is the
+ unit number of the file of which cell-by-cell flows will be recorded.
+ If IWL2CB=0, no cell by cell flows will be recorded or printed.
+ If IWL2CB<0, and when ICBCFL in the output control file is set, water levels
+ in the well, in the cell, drawdown in the well and flow-rate weighted water-qua
+lity of the IQWGRP will be printed.
+ Note that ICBCFL detemines the frequency of printing or saving cell by
+ cell flows in MODFLOW.
+ The variable ICBCFL can be found on the PER worksheet of mfLab.
+\end_layout
+
+\begin_layout Description
+IWELPT If IWELPT=0, well information will be printed.
+ mfLab may use IHDDFL in the OC file (see PER worksheet) to determine printing
+ or not of well info.
+ Best way is to use default value of zero so that this info is always printed.
+\end_layout
+
+\begin_layout Description
+LOSSTYPE determines how well loss will be computed.
+ If LOSSTYPE=SKIN, the model is linear and the value specified by Skin is
+ used (see further down).
+ If LOSSTYPE=LINEAR, the model is linear and the value specified by Skin
+ is interpreted as coefficient 
+\begin_inset Formula $B$
+\end_inset
+
+ in equations 2 an d5.
+ If LOSSTYPE=NONLINEAR, the model is non-linear and the value specified
+ by Skin is also used as the coefficient 
+\series bold
+
+\begin_inset Formula $B$
+\end_inset
+
+, 
+\series default
+but now also coefficient C is used (see further down).
+ C defaults to zero if not specified.
+\end_layout
+
+\begin_layout Description
+PLossMNW optional, is the exponent P in non linear skin computation in equations
+ 2 and 5.
+\end_layout
+
+\begin_layout Description
+REF:kspref ispref is the stress period number.
+ The heads in the well-cells at the beginning of this stress period will
+ be used to calculate the drawdown from.
+ Default is 1, i.e.
+ initial head values will be used.
+ We will simply default this to 1 in mfLab.
+\end_layout
+
+\begin_layout Description
+Optinal Three optional records of the following form (note that all KEY:data
+ combinations must be written without a space after the colon, or otherwise
+ the package halts)
+\begin_inset Newline newline
+\end_inset
+
+
+\series bold
+FILE:
+\series default
+filename 
+\series bold
+WEL1
+\series default
+:iunw1
+\begin_inset Newline newline
+\end_inset
+
+
+\series bold
+FILE:
+\series default
+filename 
+\series bold
+BYNODE:
+\series default
+iunby 
+\series bold
+ALLTIME
+\series default
+
+\begin_inset Newline newline
+\end_inset
+
+
+\series bold
+FILE:
+\series default
+filename 
+\series bold
+QSUM:
+\series default
+iunqs 
+\series bold
+ALLTIME
+\end_layout
+
+\begin_layout Description
+FILE:filename filename is the name of an auxiliary output file.
+ We will use default filename [basename extension] where extension is WEL1,
+ BYNODE or QSUM.
+\end_layout
+
+\begin_layout Description
+WEL1:iunw1 iunw1 is a file unit number.
+ Filename will be written to this unit number.
+ The output is is a well input file with the flow rate specified at the
+ end of each stress period.
+ (This file can probably be read in by the package or by the standard WEL
+ package?)
+\end_layout
+
+\begin_layout Description
+BYNODE:iunby iunby is a unit number.
+ Filename will be written to unir iunby.
+ Output is the flow rate for each well node.
+\end_layout
+
+\begin_layout Description
+QSUM:iunqs iunqs is a unit number.
+ Filename will be written to unit number iunqs.
+ The output is the total flow rate from each multi-node well.
+\end_layout
+
+\begin_layout Description
+(ALLTIME) is a flag that indicates that the flow rates should be written
+ to BYNODE or QSUM at every time step regardless of the settings in the
+ output control (OC) file.
+\end_layout
+
+\begin_layout Subsection
+Variable to be specified per stress period, one record per well cell
+\end_layout
+
+\begin_layout Description
+ITMP if ITMP<0 wells from previous stress period will be reused.
+ if ITMP=0, no wells will be simulated using the current stress period.
+ ITMP>0 is the number of input records of well data for the current stress
+ period.
+ Use ADD label in record 3, to add ITMP records, otherwise ITMP is the total
+ number of (cell) records in the current stress period.
+\end_layout
+
+\begin_layout Description
+Lay,Row,Col Layer Row and Column of the cell that belongs to the multinode
+ well.
+\end_layout
+
+\begin_layout Description
+Qdes=Qtarget is the target well flow, negative if extracting positive if
+ infiltrating.
+ The manual states that the actual flow will vary between 0 and Qdes and
+ that it is not allowed to switch from discharge to infiltration and vice
+ versa within a stress period.
+ I think this last sentence is meaningless because Qdes can only be changed
+ between stress periods and its sign can never change during a stress period.
+\begin_inset Newline newline
+\end_inset
+
+Notice that one cannot spread the Qdes over the cells that comprise the
+ multi-node well, as the MNW1-package only uses the flow of the first cell
+ specified and does not count the flow values of its cells.
+ (This reduces compatibility with the standard well package, though).
+\end_layout
+
+\begin_layout Description
+MN means this record is part of a multinode well.
+ MN is not used in the first record of a multinode well and is exclusive
+ of MULTI.
+ MN, therefore means continuation of the input of the multinode well, i.e.
+ an extra cell added to the current MNW.
+ We reserve positions 42:45 for MN or MULTI
+\end_layout
+
+\begin_layout Description
+MULTI means this record is the end of the records of a multinode well.
+ All records between the previous record with flag MULTI up and including
+ the current one belong to a single multinode well.
+ MULTI is not included on the first record of a multinode well and is exclusive
+ of MN.
+ We reserve positions 42:45 to write MN or MULTI.
+\end_layout
+
+\begin_layout Description
+Qwval A preset water quality value for a given well to be rate averaged
+ with that of other wells that belong to the same group.
+\end_layout
+
+\begin_layout Description
+Rw If 
+\begin_inset Formula $Rw>0$
+\end_inset
+
+ it is the radius of the well in equation 5 to compute the well-to-cell
+ conductance.
+ If 
+\begin_inset Formula $Rw=0$
+\end_inset
+
+, the head in the well is assumed equivalent to the head in the cell and
+ the well-to-cell conductance is set 1000 times that of the cell.
+ The sentence in the manual 
+\begin_inset Quotes eld
+\end_inset
+
+The cell is then not allowed to be part of a muli-node well is completely
+ confusing, as every cell specified in the MNW package is part of a mulitnode
+ well
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Perhaps the authors mean that then each cell should be a well on its own,
+ a single-cell 
+\begin_inset Quotes eld
+\end_inset
+
+multi-node well
+\begin_inset Quotes erd
+\end_inset
+
+? If 
+\begin_inset Formula $Rw<0$
+\end_inset
+
+, its absolute value is the cell-to-well conductance.
+ This implies that the information on SKIN and non-linear coefficients C
+ and P are ignored.
+\end_layout
+
+\begin_layout Description
+Skin Skin is only used of 
+\begin_inset Formula $Rw>0$
+\end_inset
+
+.
+ Its intepretation depends on the variable LOSSTYPE.
+ If LOSSTYPE=
+\emph on
+SKIN
+\emph default
+, Skin is interpreted as Skin in equation as in equation 5, and the model
+ is linear, i.e.
+ the variables C and P are ignored.
+ If LOSSTYPE=linear, the model is linear as well, but Skin is interpreted
+ as the coeffiient 
+\begin_inset Formula $B$
+\end_inset
+
+ in equation 2 or 5 (left).
+ If LOSSTYPE=NONLINEAR, Skis is also interpreted as the coefficient 
+\begin_inset Formula $B$
+\end_inset
+
+, but the no-linear coefficients 
+\series bold
+
+\begin_inset Formula $C$
+\end_inset
+
+
+\series default
+ an 
+\begin_inset Formula $P$
+\end_inset
+
+ are now used as well.
+\end_layout
+
+\begin_layout Description
+Href is a reference elevation for the well cells, used to compute the drawdowns
+ from.
+ If 
+\begin_inset Formula $Href$
+\end_inset
+
+ is greater than the highest head in any of the well cells at het beginning
+ of stress period kspref (default was 1), then the values of that stress
+ period are used to calculate the drawdown from.
+ Therefore, to used the stress period values, set 
+\begin_inset Formula $Href$
+\end_inset
+
+ very high.
+ Note that this 
+\begin_inset Formula $Href$
+\end_inset
+
+ is only useful in combination with 
+\begin_inset Formula $H_{lim}$
+\end_inset
+
+.
+ 
+\begin_inset Formula $Hlim$
+\end_inset
+
+ will be treated as a drawdown relative to 
+\begin_inset Formula $Href$
+\end_inset
+
+ if the DD flag is set for a given well.
+ 
+\begin_inset Formula $Href$
+\end_inset
+
+ and for that matter 
+\begin_inset Formula $kspref$
+\end_inset
+
+ are irrelevant if the DD flag is not used.
+\end_layout
+
+\begin_layout Description
+(DD) Flag that indicates that 
+\begin_inset Formula $Hlim$
+\end_inset
+
+ is relative to 
+\begin_inset Formula $Href$
+\end_inset
+
+.
+ We reserve position 47:49 for this label, if ever needed.
+\end_layout
+
+\begin_layout Description
+Iqwgrp The group identifyer, used to rate average the water quality Qwval
+ over the wells that belong to the same group.
+\end_layout
+
+\begin_layout Description
+Cp:C Coefficient of non-linear head loss in equation 2.
+ The default is 0 if not specified.
+ It is only used if LOSSTYPE=NONLINEAR.The exponent P is found under LOSSTYPE
+ (see PLossMNW).
+\end_layout
+
+\begin_layout Description
+QCUT,Q-%CUT flags to indicate that the flow at which the pump switches off
+ or on is specified in absolute value or as percentage of the target value
+ Qdes,Qtarget.
+\end_layout
+
+\begin_layout Description
+Qfrmn minimum pumping rate below which the pump will be switched off.
+\end_layout
+
+\begin_layout Description
+Qfrmx potential pumping rate that must be exceeded to switch the pump back
+ on.
+\end_layout
+
+\begin_layout Description
+DEFAULT flag indicating that Qfrmn and Qfrmx will be defaults for subsequent
+ records of the multi-node well input file
+\end_layout
+
+\begin_layout Description
+Site:MNWsite MNWsite a name given to a multi-node well.
+ If it exists, a file will be written for this site which contains: time,
+ Q, hWell, conc, Qin, Qout and node-by-node flows of this well.
+ For this to work the MNWsite has to be unique among the sites specified
+ for all wells.
+\end_layout
+
+\begin_layout Section
+Example
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Complete input for the wells in the examples presented in the MNW1 document
+ by Halford and Hanson (2002)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename wellSheetExample.png
+	lyxscale 25
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that screens with negative numbers in the 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+nr
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ field are ignored.
+ Also note that the screens are defined by two coordinates in 
+\begin_inset Formula $x$
+\end_inset
+
+, 
+\begin_inset Formula $y$
+\end_inset
+
+ and 
+\begin_inset Formula $z$
+\end_inset
+
+, which allows inclined wells to be specified.
+ Vertical wells onle need a single column for 
+\begin_inset Formula $x$
+\end_inset
+
+ and one for 
+\begin_inset Formula $y$
+\end_inset
+
+.
+ Not all columns are used, like 
+\emph on
+lossC
+\emph default
+ and 
+\emph on
+lossP
+\emph default
+, the non-linear friction coefficient 
+\begin_inset Formula $C$
+\end_inset
+
+ and its power 
+\begin_inset Formula $p$
+\end_inset
+
+, as long as LOSSTYPE is not NONLINEAR.
+ In that case 
+\emph on
+C
+\emph default
+ will not be printed to the MNW1-input file.
+ All values have defaults; therefore, it is permitted to leave out any of
+ the columns except one 
+\begin_inset Formula $x$
+\end_inset
+
+-column, one 
+\begin_inset Formula $y$
+\end_inset
+
+-column and the two 
+\begin_inset Formula $z$
+\end_inset
+
+-columns necessary to defined at least a vertical screen.
+ Also the column 
+\begin_inset Formula $nr$
+\end_inset
+
+ is required as it is used to remove wells that have a negative number.
+ If names are not specified, names will be generated using the well numbers.
+ If column 
+\emph on
+PRINT
+\emph default
+ is omitted is defaults to 
+\emph on
+TRUE
+\emph default
+.
+ To prevent generating output files for specific wells by the MNW1 package,
+ set values in the 
+\emph on
+PRINT
+\emph default
+ column to 0.
+ The 
+\emph on
+QCUT
+\emph default
+ column has only two permitted (string) values: 
+\emph on
+'QCUT'
+\emph default
+ and 
+\emph on
+'Q-%CUT'
+\emph default
+ as used in the table.
+ If the column is left out, it defaults to an empty string string and 
+\emph on
+'Q-CUT'
+\emph default
+ with its values 
+\begin_inset Formula $Qfrcmn$
+\end_inset
+
+ and 
+\begin_inset Formula $Qfrcmx$
+\end_inset
+
+ will not be printed.
+ The 
+\begin_inset Formula $id$
+\end_inset
+
+ column may be omitted it is not used unless different screens are to be
+ glued together (see below).
+ The 
+\begin_inset Formula $id$
+\end_inset
+
+ field defaults to the obligatory 
+\begin_inset Formula $nr$
+\end_inset
+
+ field.
+\end_layout
+
+\begin_layout Standard
+Note that the minimal input (table columns) equals that for the specification
+ of ordinary wells.
+ Ordinary wells and multi-node wells are, therefore, perfectly exchangeable.
+ The difference is that the MNW1-package will glue cells that comprise a
+ single well into the proper input for the MNW1 package, such that these
+ cells will be treated as a single well (screen) in which all cells share
+ the same head and of which the combined flow equals that of the well and
+ for which the inflow and outflow for each of the cells of the multi-node
+ well are computed and reported separately.
+\end_layout
+
+\begin_layout Standard
+With the thus presented input table, each row in the table represents a
+ well or, perhaps rather, a screen, such that it defines a straight line
+ between the coordinate pairs.
+ This line, or screen, may intersect the grid in an arbitrary direction
+ and over an arbitrary length.
+ The only requirement is that its two ends both fall within the grid, otherwise
+ the line will be discarded.
+ This means, that each screen can lace a large string of grid cells into
+ a single the multi-node well.
+\end_layout
+
+\begin_layout Standard
+This now works the sam way for ordinary wells, i.e.
+ wells that use the standard WEL package, be it, that that the extraction
+ is divided over the individual cells of the well on the basis of the transmissi
+vity of these cells, a priori.
+ This may, of course, not be optimal.
+ The idea is, that all preveously made mfLab examples in which wells were
+ defined by a table, can now be turned into multi-node wells, without any
+ change ! Only if specific options of the MNW1package are desired, need
+ one extend the tables.
+\end_layout
+
+\begin_layout Standard
+We ca not only lace cells to a multi-node well, but also join more than
+ one screens to a single multi-node well.
+ This has been implemented in
+\emph on
+ mfLab.
+ 
+\emph default
+To join sveral screens as defined in the input table, give them the same
+ number, in the column with header 
+\begin_inset Formula $'id'$
+\end_inset
+
+.
+ If this column fails, you can add it to the table.
+\end_layout
+
+\begin_layout Standard
+Ranney wells, long and curved extraction galleries, are thus possible.
+ It is now also possible to interconnect or shortcut completely different
+ parts of the model, as if a pipeline connects cells at completely different
+ locations.
+ Simply join two (one-cell) screens in the table to make suh a 
+\begin_inset Quotes eld
+\end_inset
+
+pipe
+\begin_inset Quotes erd
+\end_inset
+
+ or make a very long screen to generate a drain or gallery.
+ The MNW1 package will balance incoming and outgoing flow between them.
+\end_layout
+
+\begin_layout Standard
+This also works for ordinary wells as implemented in 
+\emph on
+mfLab
+\emph default
+.
+ The 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+nr
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ field can be used for other purposes, such as to refer to the column in
+ the PER worksheet that hold the extraction data for the screen.
+ Often one wishes many well to refer to a single column with extraction
+ data.
+ Note that if not specified in the table, the 
+\emph on
+id
+\emph default
+ field defaults to the obligatory 
+\emph on
+nr
+\emph default
+ field.
+ In the example table one sees that the screens that all have 
+\begin_inset Formula $id=6$
+\end_inset
+
+ will be glued together in a single multi-node well, which may often be
+ hydrologically nonsense, it is possible and as simple as this.
+ Remove the column for ordinary behavior or, rename it or make sure all
+ numbers are different if you want to keep the screens apart.
+\end_layout
+
+\end_body
+\end_document

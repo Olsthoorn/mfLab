@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>RherisUpstream.kml</name>
+	<StyleMap id="inline112">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline8</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline24</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline24">
+		<LineStyle>
+			<color>ffff0055</color>
+			<width>7</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline8">
+		<LineStyle>
+			<color>ffff0055</color>
+			<width>7</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Placemark>
+		<name>RherisUpstream</name>
+		<open>1</open>
+		<styleUrl>#inline112</styleUrl>
+		<LineString>
+			<tessellate>1</tessellate>
+			<coordinates>
+				-4.626396556770991,31.55286459754105,0 -4.594078852543505,31.54498537933954,0 -4.578059842146893,31.54035533457397,0 -4.550906021613805,31.53178213214007,0 -4.529119170654669,31.53149164460411,0 -4.523624247146119,31.52899497540715,0 -4.50861783738397,31.53309404429557,0 -4.501947916375064,31.53875372516116,0 -4.486516441024278,31.54015845664769,0 -4.472407776924008,31.53551404100673,0 -4.467141325361641,31.53762356336691,0 -4.45547170261125,31.53603331664622,0 -4.445890564842035,31.53107524655576,0 -4.438052214899212,31.53134027803658,0 -4.427824688932129,31.53028489529347,0 -4.406860177156511,31.52535054984045,0 -4.396004668061769,31.52539445007557,0 -4.385599714011321,31.51936874828059,0 -4.38445235831499,31.51664555754515,0 -4.373708305822776,31.51000785273984,0 -4.365490338567188,31.50854498837144,0 
+			</coordinates>
+		</LineString>
+	</Placemark>
+</Document>
+</kml>

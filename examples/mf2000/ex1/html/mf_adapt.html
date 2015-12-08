@@ -1,0 +1,156 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>mf_adapt</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-01-11"><meta name="DC.source" content="mf_adapt.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">EX1 -- Example see USGS Modflow 2000 manual</a></li><li><a href="#2">Model grid</a></li><li><a href="#3">Model arrays</a></li><li><a href="#4">Boundary conditions</a></li><li><a href="#5">Saving non standard variables required in mf_analyse</a></li></ul></div><h2>EX1 -- Example see USGS Modflow 2000 manual<a name="1"></a></h2><p>First example described in the USGS Open-File Report 00-92 for modflow 2000. This file generates the required model arrays for this example. These arrays will be place in the Matlab workspace. Additional information will be obtained from workbook ex1.xls.</p><p>Run mf_setup from the command line to generate modflow input files and run modflow.</p><p>Visualize output by running mf_analyze thereafter, once modflow is ready.</p><p>TO 090806 091129</p><pre class="codeinput">clear <span class="string">variables</span>; close <span class="string">all</span>; <span class="comment">% ensure memory is clean and there are no remaining figures</span>
+
+basename=<span class="string">'ex1'</span>; <span class="comment">% name of this model, basename of all its files</span>
+</pre><h2>Model grid<a name="2"></a></h2><pre class="codeinput"><span class="comment">% specify grid coordinates</span>
+xGr    = 0:5000:75000;                     <span class="comment">% [ft] xGrid coordinates</span>
+yGr    = 0:5000:75000;                     <span class="comment">% [ft] yGrid coordinates</span>
+zGr    = [200 -150  -200 -300 -350 -450];  <span class="comment">% [ft] Plane elevation vector</span>
+
+LAYCBD = [1 1 1]; <span class="comment">% tell which layers have a confining bed below them</span>
+
+gr = gridObj(xGr,yGr,zGr,LAYCBD);          <span class="comment">% generate grid object</span>
+</pre><h2>Model arrays<a name="3"></a></h2><pre class="codeinput">IBOUND = gr.const(99);              <span class="comment">% Boundary array, by &gt;0 indicas cells to compute</span>
+IBOUND(:,1,1:2) = -1;               <span class="comment">% Overwrite left column for layers 1 &amp; 2, by &lt;0 --&gt; fixed heads</span>
+
+STRTHD = gr.const(0);               <span class="comment">% [ ft  ]starting heads are all zeros</span>
+
+HY     = gr.const(1e-3);            <span class="comment">% [ft/s ] kh of water-table layer</span>
+
+TRAN   = gr.const(1e-3*[1 1 2]');   <span class="comment">% [ft2/s] transmissivity of layers 2 and 3</span>
+
+VCONT=gr.const(1e-8*[2 1 0]');      <span class="comment">% [ 1/d ] Leakance of confining beds</span>
+
+RECH={3.0e-8*ones(gr.Ny,gr.Nx,1)};  <span class="comment">% [ft/s ] recharge in first stress period</span>
+</pre><h2>Boundary conditions<a name="4"></a></h2><pre class="codeinput">drn  = [5000 37500     0 1/5000;<span class="keyword">...</span><span class="comment"> % neaninf of numbers see line below.</span>
+        50000 37500  100 1/5000];   <span class="comment">% [x y Elev Leakance] assuming drain in layer 1</span>
+
+DRN  = gr.bcnLine(basename,<span class="string">'DRN'</span>,drn,drn(:,end)); <span class="comment">% DRN boundary array</span>
+
+well = wellObj(basename,<span class="string">'wells'</span>,gr,TRAN,<span class="string">'PER'</span>);   <span class="comment">% geneate well objects</span>
+</pre><h2>Saving non standard variables required in mf_analyse<a name="5"></a></h2><pre class="codeinput">save <span class="string">underneath</span> <span class="string">drn</span> <span class="comment">%  anything else you might need in mf_analyze</span>
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+%% EX1 REPLACE_WITH_DASH_DASH Example see USGS Modflow 2000 manual
+% First example described in the USGS Open-File Report 00-92
+% for modflow 2000.
+% This file generates the required model arrays for this example.
+% These arrays will be place in the Matlab workspace.
+% Additional information will be obtained from workbook ex1.xls.
+%
+% Run mf_setup from the command line to generate modflow input files
+% and run modflow.
+%
+% Visualize output by running mf_analyze thereafter, once modflow is ready.
+%
+% TO 090806 091129
+
+clear variables; close all; % ensure memory is clean and there are no remaining figures
+
+basename='ex1'; % name of this model, basename of all its files
+
+%% Model grid
+
+% specify grid coordinates
+xGr    = 0:5000:75000;                     % [ft] xGrid coordinates
+yGr    = 0:5000:75000;                     % [ft] yGrid coordinates
+zGr    = [200 -150  -200 -300 -350 -450];  % [ft] Plane elevation vector
+
+LAYCBD = [1 1 1]; % tell which layers have a confining bed below them
+
+gr = gridObj(xGr,yGr,zGr,LAYCBD);          % generate grid object
+
+%% Model arrays
+
+IBOUND = gr.const(99);              % Boundary array, by >0 indicas cells to compute
+IBOUND(:,1,1:2) = -1;               % Overwrite left column for layers 1 & 2, by <0 REPLACE_WITH_DASH_DASH> fixed heads
+
+STRTHD = gr.const(0);               % [ ft  ]starting heads are all zeros
+
+HY     = gr.const(1e-3);            % [ft/s ] kh of water-table layer
+
+TRAN   = gr.const(1e-3*[1 1 2]');   % [ft2/s] transmissivity of layers 2 and 3
+
+VCONT=gr.const(1e-8*[2 1 0]');      % [ 1/d ] Leakance of confining beds
+
+RECH={3.0e-8*ones(gr.Ny,gr.Nx,1)};  % [ft/s ] recharge in first stress period
+
+%% Boundary conditions
+
+drn  = [5000 37500     0 1/5000;... % neaninf of numbers see line below.
+        50000 37500  100 1/5000];   % [x y Elev Leakance] assuming drain in layer 1
+ 
+DRN  = gr.bcnLine(basename,'DRN',drn,drn(:,end)); % DRN boundary array
+
+well = wellObj(basename,'wells',gr,TRAN,'PER');   % geneate well objects
+
+%% Saving non standard variables required in mf_analyse
+
+save underneath drn %  anything else you might need in mf_analyze
+
+##### SOURCE END #####
+--></body></html>

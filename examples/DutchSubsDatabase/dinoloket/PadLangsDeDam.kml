@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>PadLangsDeDam.kml</name>
+	<Style id="s_ylw-pushpin">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Style id="s_ylw-pushpin_hl">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<StyleMap id="m_ylw-pushpin">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin_hl</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Placemark>
+		<name>PadLangsDeDam</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<LineString>
+			<tessellate>1</tessellate>
+			<coordinates>
+				4.833137215560541,52.39842626551214,0 4.853140247256606,52.37726400735783,0 4.884248026389488,52.35520905088231,0 4.92352313375881,52.34275215207328,0 4.956905063780754,52.33247371291397,0 
+			</coordinates>
+		</LineString>
+	</Placemark>
+</Document>
+</kml>

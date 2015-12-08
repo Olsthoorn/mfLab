@@ -1,0 +1,23 @@
+function [runs,L]=getruns(runs,L)
+
+if isempty(L), return; end
+
+if isempty(runs)
+    if size(L,1)==1,
+        [runs,L]=getruns({L},[]);
+    else
+        [runs,L]=getruns({L(1,:)},L(2:end,:));
+    end
+else
+    I=find(L(:,end)==runs{end}(end,end-1));
+    if ~isempty(I)
+        i=I(1);
+        runs{end}(end+1,:)=L(i,:);
+        L(i,:)=[];
+        [runs,L]=getruns(runs,L);
+    else
+        runs{end+1}=L(1,:);
+        L(1,:)=[];
+        [runs,L]=getruns(runs,L);
+    end
+end

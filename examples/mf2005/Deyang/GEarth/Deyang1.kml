@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>Deyang1.kml</name>
+	<Style id="inline9">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+	</Style>
+	<Style id="s_ylw-pushpin_hl7">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<StyleMap id="m_ylw-pushpin04">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin1</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin_hl0</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="m_ylw-pushpin">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin_hl</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="s_ylw-pushpin">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<StyleMap id="m_ylw-pushpin6">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin0</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin_hl7</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline13">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+	</Style>
+	<StyleMap id="inline39">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline9</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline13</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="s_ylw-pushpin_hl0">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Style id="s_ylw-pushpin0">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Style id="s_ylw-pushpin1">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Style id="s_ylw-pushpin_hl">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Folder>
+		<name>Deyang1</name>
+		<open>1</open>
+		<Placemark>
+			<name>Wells</name>
+			<open>1</open>
+			<styleUrl>#inline39</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					104.3917378503706,31.08503427929609,0 104.3912841586088,31.08371013982762,0 104.3919001829383,31.08265675148388,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>MiyungA</name>
+			<styleUrl>#m_ylw-pushpin04</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							104.3952277935149,31.10298910047209,0 104.3935621079243,31.09586452853682,0 104.3932895728207,31.09086907055772,0 104.3935353591883,31.08661320325934,0 104.3945622067535,31.08365439885873,0 104.3952038291588,31.08225982789756,0 104.396169750687,31.08135216599887,0 104.3988522208942,31.08225169889727,0 104.3966052325521,31.08804180164934,0 104.3962209013345,31.09046345268926,0 104.3965183535063,31.09524746972126,0 104.3981586015822,31.10227289366011,0 104.3952277935149,31.10298910047209,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>MiyungB</name>
+			<styleUrl>#m_ylw-pushpin04</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							104.3961459691924,31.08132888709056,0 104.3984921676725,31.07589822638093,0 104.3991883288454,31.07285676720265,0 104.3999166970886,31.06844246639427,0 104.3998259009259,31.06575245602833,0 104.402980303926,31.0658974995064,0 104.4029956442771,31.07112561140784,0 104.4024222961434,31.07395766589847,0 104.4007686535025,31.07801069341592,0 104.3988263968255,31.08224451436815,0 104.3961459691924,31.08132888709056,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Basin</name>
+			<styleUrl>#m_ylw-pushpin04</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							104.392596196111,31.08450020542152,0 104.3924860912333,31.08426748305283,0 104.3923878688764,31.0840582619877,0 104.3924245356738,31.08386321288349,0 104.3925064501246,31.08375226099547,0 104.3925501135231,31.08367029904594,0 104.3925853635971,31.08350642024466,0 104.3925591785011,31.08333719426809,0 104.3926264326932,31.08326902871371,0 104.3928446048219,31.08328694530895,0 104.3930219093458,31.08336107749362,0 104.393035785065,31.08362548644696,0 104.3929649103191,31.08399283752921,0 104.3928829985188,31.08429856584532,0 104.3927864476892,31.0845000245217,0 104.392596196111,31.08450020542152,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Wetland</name>
+			<styleUrl>#m_ylw-pushpin04</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							104.393299495559,31.08470225621235,0 104.393138589469,31.08469263013142,0 104.392950007569,31.08459426663907,0 104.3929521054085,31.08442885533561,0 104.3930981523945,31.08410961514218,0 104.3931420730379,31.08379637172513,0 104.393136921139,31.08353698787628,0 104.3931397911053,31.0833345236598,0 104.393403399732,31.08339456188426,0 104.3936618088382,31.08348259499098,0 104.3938809681825,31.08354489245484,0 104.3937842899902,31.08374979624501,0 104.3936243166223,31.08407317605494,0 104.3934676941307,31.08441587328382,0 104.393299495559,31.08470225621235,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>CoagSedim</name>
+			<styleUrl>#m_ylw-pushpin04</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							104.3929500761573,31.08519312323329,0 104.3928180478225,31.08498832354517,0 104.3927294660574,31.08470662619937,0 104.3928848151562,31.084669192783,0 104.3931051327379,31.08479227651907,0 104.3931694649062,31.08495584676116,0 104.3930913492486,31.08517880511393,0 104.3929500761573,31.08519312323329,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>Creek</name>
+			<open>1</open>
+			<styleUrl>#m_ylw-pushpin04</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							104.3929612357407,31.08542517582222,0 104.3928434331369,31.08540655315007,0 104.3925961441855,31.08485034927258,0 104.392331702688,31.08428517042776,0 104.3921935368218,31.08407879654386,0 104.392198886219,31.08393757932225,0 104.3922775594378,31.0837841322152,0 104.3924241481066,31.08355099686373,0 104.3924082252464,31.08343220962723,0 104.392318359905,31.08331981826008,0 104.392332435508,31.08316719008069,0 104.3924456515608,31.08302486221928,0 104.3926120893377,31.08285304257776,0 104.3926817241106,31.08269380490916,0 104.3927136918716,31.08239831774084,0 104.3926379241617,31.082224034235,0 104.3925521501378,31.08207860810333,0 104.3923537605398,31.08196583183019,0 104.3921414217145,31.08183509462204,0 104.3919978084526,31.08159794085519,0 104.3919319769361,31.08142051987131,0 104.3918488652094,31.08125887827974,0 104.3918095629117,31.08115581857068,0 104.3916942751916,31.08105426870668,0 104.3915953798825,31.08097016931603,0 104.3915770773239,31.08082504556589,0 104.3915988633057,31.08066293548791,0 104.3915795642603,31.08049182668544,0 104.3914954428663,31.08038056058983,0 104.3914251164378,31.08029278987028,0 104.3913768112711,31.0801666463803,0 104.3914267125031,31.08008773687075,0 104.3914898247477,31.07999673100138,0 104.3915730252735,31.07985416757242,0 104.3915445399695,31.0796383603375,0 104.3914121869069,31.07943188750773,0 104.3913054106629,31.07928350725332,0 104.3911819128823,31.07911153651589,0 104.3909324049107,31.07899285987606,0 104.3908381374774,31.0788757450348,0 104.3908973514617,31.07887278006777,0 104.3909937144163,31.0789744096871,0 104.3912312421184,31.07908551338237,0 104.3914682218453,31.07937672615353,0 104.3916247671833,31.07962043574525,0 104.3916690063795,31.07985889670518,0 104.3915751732129,31.07999859868105,0 104.3914685202694,31.08017789586596,0 104.3915069382934,31.08029322366024,0 104.3916347646645,31.08041203925776,0 104.3916652494038,31.08063347817026,0 104.3916375278615,31.08088558007507,0 104.3916999594329,31.08098697320207,0 104.3918484160586,31.08111730465768,0 104.3919038120196,31.08125931671882,0 104.3919852693108,31.08137811507235,0 104.3920135387319,31.08150135886886,0 104.3921093657991,31.08166866302685,0 104.3921685315508,31.08177495271941,0 104.392333199586,31.08188651801596,0 104.3925461253674,31.08201538444409,0 104.3926720376437,31.08214140806965,0 104.3928004003404,31.08240353782104,0 104.3927496253658,31.08273671267114,0 104.392653115772,31.08290052935707,0 104.3925595580876,31.08299543855268,0 104.3924393538574,31.08310035181949,0 104.3923626272055,31.08323915075562,0 104.392443339443,31.08339936829767,0 104.3924729729711,31.0835148040254,0 104.3923798056185,31.08372299105605,0 104.3922970112759,31.08383035222435,0 104.3922504244164,31.08395107270492,0 104.3922519876309,31.08407463510005,0 104.3923967957052,31.08426949274861,0 104.3926516286206,31.08485010799033,0 104.392853796922,31.08532207090884,0 104.3929625793769,31.08536772916403,0 104.3929612357407,31.08542517582222,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>DeyangSite</name>
+			<open>1</open>
+			<styleUrl>#m_ylw-pushpin</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							104.3929555433421,31.08549628770496,0 104.3928093249358,31.08529982399116,0 104.3922280838951,31.08396678588545,0 104.392481089811,31.08354618929146,0 104.3923257570496,31.08320149956941,0 104.3926824835526,31.08281543067103,0 104.3942208641087,31.08307473606176,0 104.3929555433421,31.08549628770496,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>SiteZero</name>
+			<LookAt>
+				<longitude>104.3927118269295</longitude>
+				<latitude>31.08388462395059</latitude>
+				<altitude>0</altitude>
+				<heading>-5.641747407847022e-11</heading>
+				<tilt>44.99973705329433</tilt>
+				<range>1000.001092394874</range>
+				<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			</LookAt>
+			<styleUrl>#m_ylw-pushpin6</styleUrl>
+			<Point>
+				<gx:drawOrder>1</gx:drawOrder>
+				<coordinates>104.3942292896839,31.08454174385621,0</coordinates>
+			</Point>
+		</Placemark>
+	</Folder>
+</Document>
+</kml>

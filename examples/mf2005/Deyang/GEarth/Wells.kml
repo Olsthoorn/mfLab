@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>Wells.kml</name>
+	<Style id="inline">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline0">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+	</Style>
+	<StyleMap id="inline1">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline2</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline2">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline3">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline0</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline4</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline4">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+	</Style>
+	<Folder>
+		<name>Wells</name>
+		<open>1</open>
+		<Placemark>
+			<name>Wells2</name>
+			<open>1</open>
+			<styleUrl>#inline1</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					104.3909703161253,31.08632319551792,0 104.3909620922684,31.0848600804345,0 104.3907170101018,31.08381402010937,0 104.3911179800849,31.0831182207684,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Wells</name>
+			<styleUrl>#inline3</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					104.3917094421651,31.08489942960086,0 104.3913033077248,31.08382309889883,0 104.3913008130575,31.08308664440276,0 104.3917070604643,31.08241237228869,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+	</Folder>
+</Document>
+</kml>

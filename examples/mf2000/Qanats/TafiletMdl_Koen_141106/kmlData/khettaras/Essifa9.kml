@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>Essifa9.kml</name>
+	<Style id="inline">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline0">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline1</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline1">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Placemark>
+		<name>Essifa9</name>
+		<styleUrl>#inline0</styleUrl>
+		<LineString>
+			<tessellate>1</tessellate>
+			<coordinates>
+				-4.343806572338603,31.35118943427032,0 -4.347163927250724,31.35548798693188,0 -4.349350173182335,31.35971072665634,0 -4.349791717203661,31.36213519027617,0 -4.349040965761347,31.36597801837124,0 -4.34983426609644,31.3688930577299,0 -4.349868839415877,31.3705191442043,0 -4.35124650826202,31.37161933399372,0 -4.354098794387827,31.37709486816123,0 -4.354352934061064,31.37983674702595,0 
+			</coordinates>
+		</LineString>
+	</Placemark>
+</Document>
+</kml>

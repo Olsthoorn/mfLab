@@ -1,0 +1,316 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Tutorial mfLab -- simple multi layer model</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2012-05-29"><meta name="DC.source" content="mf_build.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>Tutorial mfLab -- simple multi layer model</h1><!--introduction--><p>Example see USGS Modflow 2000 manual, Open-File Report 00-92 with some changes to apply it with more convenient units (m and d instead of ft and sec) TO 090806 091129 120522</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">For this version, we make use of the LPF (Layer Property File) package, not BCF</a></li><li><a href="#2">Set the basename for this problem</a></li><li><a href="#3">Define a grid. Note that Modflow is always 3D</a></li><li><a href="#5">Specify LAYCBD if there are any confining beds</a></li><li><a href="#7">Generate a grid object,</a></li><li><a href="#8">Cells with fixed heads area specified through the IBOUND array.</a></li><li><a href="#9">Generate the 3D boundary array (zoneArray) IBOUND using method const of the gridObj</a></li><li><a href="#12">Because we use a free water table in the uppermost aquifer, Modflow requires a separate conductivity for the top-most model</a></li><li><a href="#14">Vertical conductivity for the confinging beds</a></li><li><a href="#15">Vertical conductivity</a></li><li><a href="#16">Effective porosity</a></li><li><a href="#17">Recharge 3 mm/d</a></li><li><a href="#18">Boundary conditions, DRAINS etc:</a></li><li><a href="#19">Specify the drains</a></li><li><a href="#20">Use the mehtod bcnLine of the grid object to put this drain in the model.</a></li><li><a href="#23">Lastly we need to make sure the wells are put correctlty in the grid.</a></li><li><a href="#24">Starting points for particle tracking using MODPATH</a></li><li><a href="#32">Specify the number of points and iFace for these zones</a></li><li><a href="#35">After the groundwater model finished, we can analyze the results by running</a></li></ul></div><h2>For this version, we make use of the LPF (Layer Property File) package, not BCF<a name="1"></a></h2><p>The only things that change when using LPF instead of BCF are that TRAN is replaced by HK. That VCONT is replaced by VKCB, the vertical hydraulic conductivities of the confining beds. Packages that are on: WEL DRN RCH</p><pre class="codeinput">clear <span class="string">variables</span>; close <span class="string">all</span>;
+</pre><h2>Set the basename for this problem<a name="2"></a></h2><p>A basename is always given, as this will be the name of all files generated, which will only differ in their extension. Note that the workbook with the parameters must also have the name <a href="<Basename.xls">&lt;Basename.xls</a>&gt;:</p><pre class="codeinput">basename=<span class="string">'example1'</span>;
+</pre><h2>Define a grid. Note that Modflow is always 3D<a name="3"></a></h2><pre class="codeinput">xGr=0:50:1000;
+yGr=0:50:1000;
+</pre><p>The model has 5 layers, so 6 layer planes, here taken constant</p><pre class="codeinput">zGr=[0 -50  -60 -90 -110 -160];
+</pre><h2>Specify LAYCBD if there are any confining beds<a name="5"></a></h2><p>It has two confining beds, one below layer 1 and one below layer 2. This is specified by the vector LAYCBD. When the vector is defined in the workspace as is done here, this overrules the defintion in the worksheet LAY vof the workbook.</p><pre class="codeinput">LAYCBD = [1 1 0];
+</pre><p>As can be seen from the vector LAYCBD, the model has three aquifers, i.e. layers as contrasted with the two CBD's (confining beds)</p><h2>Generate a grid object,<a name="7"></a></h2><pre class="codeinput">gr=gridObj(xGr,yGr,zGr,LAYCBD);
+</pre><h2>Cells with fixed heads area specified through the IBOUND array.<a name="8"></a></h2><p>The IBOUND array is useful to define zones and to define which cells are inactive (IBOUND&lt;0), which which cells will be computed (IBOUND&gt;0) and which cells have a fixed head (IBOUND&lt;0).</p><h2>Generate the 3D boundary array (zoneArray) IBOUND using method const of the gridObj<a name="9"></a></h2><p>IBOUND is used as zone array. Use a convenient value for instance 99 to easily discern user-defined zones from background.</p><pre class="codeinput">IBOUND=gr.const(99);
+</pre><p>Fix the heads in the upper two aquifers at the rigth edge of the model:</p><pre class="codeinput">IBOUND(:,1,1:2)=-1;
+</pre><p>Choose starting heads. Here they are all made zero.</p><pre class="codeinput">STRTHD=gr.const(0);
+</pre><h2>Because we use a free water table in the uppermost aquifer, Modflow requires a separate conductivity for the top-most model<a name="12"></a></h2><pre class="codeinput">HY =20*ones(gr.Ny,gr.Nx);
+</pre><p>Hydraulic conductivity vector</p><pre class="codeinput">kh =[5; 8; 10];  <span class="comment">% m/d</span>
+
+HK   = gr.const(kh);        <span class="comment">%  use HY for setWells (if wells are in layer 1) else N</span>
+</pre><h2>Vertical conductivity for the confinging beds<a name="14"></a></h2><pre class="codeinput">vkcb=[0.1; 0.1]; <span class="comment">% m/d</span>
+
+VKCB = gr.const(vkcb);
+</pre><h2>Vertical conductivity<a name="15"></a></h2><pre class="codeinput">VK=HK/2;
+</pre><h2>Effective porosity<a name="16"></a></h2><pre class="codeinput">peff = 0.35;
+
+PEFF = gr.const(peff);  <span class="comment">% we need porosity for particle tracking</span>
+</pre><h2>Recharge 3 mm/d<a name="17"></a></h2><pre class="codeinput">RECH={0.003*ones(gr.Ny,gr.Nx,1)};
+</pre><h2>Boundary conditions, DRAINS etc:<a name="18"></a></h2><p>Drains are generated here in real world coordinates with a leakance value expressed per m length of drain. x,y,Elev,Leakance values are specified for concrete points and are then interpolated linaerly by mfLab to add to nodes of the model</p><h2>Specify the drains<a name="19"></a></h2><pre class="codeinput">drn=[ 50 375   -10 1/5000;<span class="keyword">...</span>
+     500 375   -10 1/5000];  <span class="comment">% [x y Elev Leakance] assumeing layer 1</span>
+</pre><h2>Use the mehtod bcnLine of the grid object to put this drain in the model.<a name="20"></a></h2><pre class="codeinput"><span class="comment">% The grid object method gr.bcnLine(data,'type') generates a list</span>
+<span class="comment">% requried by Modflow, one line per drain cell.</span>
+DRN=gr.bcnLine(basename,<span class="string">'DRN'</span>,drn);
+</pre><p>This list has the followign contents: [iPer iz iy ix head Conductance]</p><p>mfLab requires the first item of each tuple to be the stres period number. This is to allow sorting the lines so that they can be presented to the goundwater code in the direct in the right order to be executed in sequence. The same method can be used for other boundary conditions such as CHD and RIV..</p><h2>Lastly we need to make sure the wells are put correctlty in the grid.<a name="23"></a></h2><p>Pertinent data for undefined array of wells has been put in the worksheet wells of workbook <a href="<basename.xls">&lt;basename.xls</a>&gt;, where basename is ex2 inthis case. Pertinent data of the wells consist of at least the following list: [nr x y z1 z2 rw ] where z1 and z2 are the elevation of the top and the bottom of the screen of the well.</p><p>Well objects are generated from this list in the workbook by means of the mehod well of the gridObj. To be able to succeed it needs the name of the workbook (basename) and the worksheet with the pertinent well data,'wells' in this case. It further requires the horizonal conductivity array to allow distributing the well extraction over the layers penetrated by the screen. This distribution is weighed by the relative transmissivity of each screen cell. The wells will look for their dynamic flow data in the columsn of the worksheet PER where stress period parameters are defined.The headers of the columns must therefore be sufficiently large. Generate both the well objects and the file WEL necesary for MODFLOW.</p><pre class="codeinput">[well,WEL]=gr.well(basename,HK,<span class="string">'wells'</span>);
+</pre><h2>Starting points for particle tracking using MODPATH<a name="24"></a></h2><p>Show the grid</p><pre class="codeinput">gr.plotgrid;
+</pre><img vspace="5" hspace="5" src="mf_build_01.png" alt=""> <p>Choose some zone Numbers</p><pre class="codeinput">iZ1 = 66;
+iZ2 = 67;
+</pre><p>Select a contour (done by clicking on the screen with ginput)</p><pre class="codeinput">xpond = [ 522   483   393   370   310   271   344   453   575   603   699   734   699 522];
+ypond = [ 317   382   370   317   346   490   654   694   692   545   466   358   268 317];
+</pre><p>Plot this contour on the grid</p><pre class="codeinput">plot(xpond,ypond,<span class="string">'g'</span>);
+</pre><img vspace="5" hspace="5" src="mf_build_02.png" alt=""> <p>Find cells that are in the contour (with their center in the contour)</p><pre class="codeinput">Inpond = inpolygon(gr.Xm,gr.Ym,xpond,ypond);
+</pre><p>Add zone iZ1 to top layer of zoneArray IBOUND</p><pre class="codeinput">IB1=IBOUND(:,:,  1); IB1(Inpond)=iZ1; IBOUND(:,:,  1)=IB1;
+</pre><p>Add zone iZ2 to bottom layer of zoneArray IBOUND</p><pre class="codeinput">IB2=IBOUND(:,:,end); IB2(Inpond)=iZ2; IBOUND(:,:,end)=IB2;
+</pre><h2>Specify the number of points and iFace for these zones<a name="32"></a></h2><pre class="codeinput">zoneVals = {iZ1, 5 6; <span class="keyword">...</span><span class="comment">   % second arg is n, third is iFace</span>
+            iZ2, 1, 0};     <span class="comment">% same for second zone</span>
+
+LOCATIONS = gr.startLoc(IBOUND,zoneVals);
+
+figure; hold <span class="string">on</span>; view(3); xlabel(<span class="string">'x [m]'</span>); ylabel(<span class="string">'y [m]'</span>); zlabel(<span class="string">'z [m]'</span>);
+gr.mesh;
+xyz  = gr.relloc2model(LOCATIONS);
+<span class="keyword">for</span> i=1:length(LOCATIONS)
+    plot3(xyz{i}(:,1),xyz{i}(:,2),xyz{i}(:,3),[mf_color(i),<span class="string">'o'</span>]);
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="mf_build_03.png" alt=""> <p>Anything not specifically necessary for the MDOFLOW model and, therefore, not automatically saved, can be saved in underneath.mat to be retrieved in mf_analyze after the models have finished.</p><pre class="codeinput">save <span class="string">underneath</span> <span class="string">gr</span> <span class="string">drn</span> <span class="string">well</span> <span class="string">xpond</span> <span class="string">ypond</span> <span class="string">xyz</span>
+</pre><p>Before pressing <a href="ENTER">ENTER</a> check that the parameters in the workbook are correct: *Check that the correct model and packages are selected in the NAM worksheet. *Check that the stress periods are correct *Check layer variables are correct *Check that the boundary conditions are correct. *Check whether the run or individal stress periods are transient or not (parameter isTransient in the PER worksheet. *Check the solver settings and so on.</p><h2>After the groundwater model finished, we can analyze the results by running<a name="35"></a></h2><p>mf_analyze&lt;enter&gt; Adapt mf_analyze to your requirements.</p><p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+%% Tutorial mfLab REPLACE_WITH_DASH_DASH simple multi layer model
+% Example see USGS Modflow 2000 manual, Open-File Report 00-92 with some
+% changes to apply it with more convenient units (m and d instead of ft and sec)
+% TO 090806 091129 120522
+
+%% For this version, we make use of the LPF (Layer Property File) package, not BCF
+% The only things that change when using LPF instead of BCF are that
+% TRAN is replaced by HK.
+% That VCONT is replaced by VKCB, the vertical hydraulic conductivities of
+% the confining beds.
+% Packages that are on: WEL DRN RCH
+
+clear variables; close all;
+
+%% Set the basename for this problem
+% A basename is always given, as this will be the name of all files
+% generated, which will only differ in their extension.
+% Note that the workbook with the parameters must also have the name
+% <<Basename.xls>>:
+basename='example1';
+
+%% Define a grid. Note that Modflow is always 3D
+xGr=0:50:1000;
+yGr=0:50:1000;
+
+%%
+% The model has 5 layers, so 6 layer planes, here taken constant
+zGr=[0 -50  -60 -90 -110 -160];
+
+%% Specify LAYCBD if there are any confining beds
+% It has two confining beds, one below layer 1 and one below layer 2. This
+% is specified by the vector LAYCBD. When the vector is defined in the
+% workspace as is done here, this overrules the defintion in the worksheet
+% LAY vof the workbook.
+
+LAYCBD = [1 1 0];
+%%
+% As can be seen from the vector LAYCBD, the model has three aquifers, i.e.
+% layers as contrasted with the two CBD's (confining beds)
+
+%% Generate a grid object,
+gr=gridObj(xGr,yGr,zGr,LAYCBD);
+
+%% Cells with fixed heads area specified through the IBOUND array.
+% The IBOUND array is useful to define zones and to define which cells are inactive (IBOUND<0),
+% which which cells will be computed (IBOUND>0) and which cells have a fixed head (IBOUND<0).
+
+%% Generate the 3D boundary array (zoneArray) IBOUND using method const of the gridObj
+% IBOUND is used as zone array. Use a convenient value for instance 99 to easily discern
+% user-defined zones from background.
+IBOUND=gr.const(99);
+
+%%
+% Fix the heads in the upper two aquifers at the rigth edge of the model:
+IBOUND(:,1,1:2)=-1;
+
+%%
+% Choose starting heads. Here they are all made zero.
+STRTHD=gr.const(0);
+
+%% Because we use a free water table in the uppermost aquifer, Modflow requires a separate conductivity for the top-most model
+HY =20*ones(gr.Ny,gr.Nx);
+
+%%
+% Hydraulic conductivity vector
+kh =[5; 8; 10];  % m/d
+
+HK   = gr.const(kh);        %  use HY for setWells (if wells are in layer 1) else N
+
+%% Vertical conductivity for the confinging beds
+vkcb=[0.1; 0.1]; % m/d
+
+VKCB = gr.const(vkcb);
+
+%% Vertical conductivity
+VK=HK/2;
+
+%% Effective porosity
+peff = 0.35;
+
+PEFF = gr.const(peff);  % we need porosity for particle tracking
+%% Recharge 3 mm/d
+
+RECH={0.003*ones(gr.Ny,gr.Nx,1)};
+
+%% Boundary conditions, DRAINS etc:
+% Drains are generated here in real world coordinates with a leakance value
+% expressed per m length of drain.
+% x,y,Elev,Leakance values are specified for concrete points and are then
+% interpolated linaerly by mfLab to add to nodes of the model
+
+%% Specify the drains
+drn=[ 50 375   -10 1/5000;...
+     500 375   -10 1/5000];  % [x y Elev Leakance] assumeing layer 1
+
+%% Use the mehtod bcnLine of the grid object to put this drain in the model.
+
+% The grid object method gr.bcnLine(data,'type') generates a list
+% requried by Modflow, one line per drain cell.
+DRN=gr.bcnLine(basename,'DRN',drn);
+
+%%
+% This list has the followign contents:
+% [iPer iz iy ix head Conductance]
+
+%%
+% mfLab requires the first item of each tuple to be the stres period
+% number. This is to allow sorting the lines so that they can be presented
+% to the goundwater code in the direct in the right order to be executed in
+% sequence.
+% The same method can be used for other boundary conditions such as CHD and RIV..
+
+%% Lastly we need to make sure the wells are put correctlty in the grid.
+% Pertinent data for undefined array of wells has been put in the worksheet
+% wells of workbook <<basename.xls>>, where basename is ex2 inthis case.
+% Pertinent data of the wells consist of at least the following list:
+% [nr x y z1 z2 rw ]
+% where z1 and z2 are the elevation of the top and the bottom of the screen
+% of the well.
+%
+% Well objects are generated from this list in the workbook by means of the
+% mehod well of the gridObj. To be able to succeed it needs the name of the
+% workbook (basename) and the worksheet with the pertinent well
+% data,'wells' in this case. It further requires the horizonal conductivity
+% array to allow distributing the well extraction over the layers penetrated
+% by the screen. This distribution is weighed by the relative
+% transmissivity of each screen cell.
+% The wells will look for their dynamic flow data in the columsn of the
+% worksheet PER where stress period parameters are defined.The headers of
+% the columns must therefore be sufficiently large.
+% Generate both the well objects and the file WEL necesary for MODFLOW.
+[well,WEL]=gr.well(basename,HK,'wells');
+
+%% Starting points for particle tracking using MODPATH
+%%
+% Show the grid
+gr.plotgrid;
+%%
+% Choose some zone Numbers
+iZ1 = 66;
+iZ2 = 67;
+
+%%
+% Select a contour (done by clicking on the screen with ginput)
+xpond = [ 522   483   393   370   310   271   344   453   575   603   699   734   699 522];
+ypond = [ 317   382   370   317   346   490   654   694   692   545   466   358   268 317];
+
+%%
+% Plot this contour on the grid
+plot(xpond,ypond,'g');
+
+%%
+% Find cells that are in the contour (with their center in the contour)
+Inpond = inpolygon(gr.Xm,gr.Ym,xpond,ypond);
+
+%%
+% Add zone iZ1 to top layer of zoneArray IBOUND
+IB1=IBOUND(:,:,  1); IB1(Inpond)=iZ1; IBOUND(:,:,  1)=IB1;
+%%
+% Add zone iZ2 to bottom layer of zoneArray IBOUND
+IB2=IBOUND(:,:,end); IB2(Inpond)=iZ2; IBOUND(:,:,end)=IB2;
+
+%% Specify the number of points and iFace for these zones
+zoneVals = {iZ1, 5 6; ...   % second arg is n, third is iFace
+            iZ2, 1, 0};     % same for second zone
+
+LOCATIONS = gr.startLoc(IBOUND,zoneVals);
+
+figure; hold on; view(3); xlabel('x [m]'); ylabel('y [m]'); zlabel('z [m]');
+gr.mesh;
+xyz  = gr.relloc2model(LOCATIONS);
+for i=1:length(LOCATIONS)
+    plot3(xyz{i}(:,1),xyz{i}(:,2),xyz{i}(:,3),[mf_color(i),'o']);
+end
+
+%%
+% Anything not specifically necessary for the MDOFLOW model and, therefore,
+% not automatically saved, can be saved in underneath.mat to be retrieved in mf_analyze
+% after the models have finished.
+
+save underneath gr drn well xpond ypond xyz
+%%
+% Before pressing <ENTER> check that the parameters in the workbook
+% are correct:
+% *Check that the correct model and packages are selected in the NAM worksheet.
+% *Check that the stress periods are correct
+% *Check layer variables are correct
+% *Check that the boundary conditions are correct.
+% *Check whether the run or individal stress periods are transient or not
+% (parameter isTransient in the PER worksheet.
+% *Check the solver settings and so on.
+
+%% After the groundwater model finished, we can analyze the results by running
+% mf_analyze<enter>
+% Adapt mf_analyze to your requirements.
+
+
+
+##### SOURCE END #####
+--></body></html>

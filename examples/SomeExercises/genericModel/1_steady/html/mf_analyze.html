@@ -1,0 +1,360 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>mf_analyze, used to analyze and visualize the output of the model</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2013-06-15"><meta name="DC.source" content="mf_analyze.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>mf_analyze, used to analyze and visualize the output of the model</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#3">The options and steps will be outlined here</a></li><li><a href="#4">First step: retrieve the basename of this model</a></li><li><a href="#5">Get the heads and the budget info.</a></li><li><a href="#6">Ways to show the data</a></li><li><a href="#7">Show zoneBudget</a></li><li><a href="#8">Showing the conductivities in a meshplot</a></li><li><a href="#9">Show the results usign gridObj/plotMesh</a></li><li><a href="#10">Plotting conductivities in a cross section along x-axis</a></li><li><a href="#11">Plotting conductivities in a cross section along y-axis</a></li><li><a href="#12">Plotting stream function</a></li><li><a href="#13">Plotting head contours of all layers</a></li><li><a href="#15">TO 130614</a></li></ul></div><p>To run it type</p><pre class="codeinput"><span class="comment">% mf_analyze</span>
+</pre><p>in Matlab's command window.</p><h2>The options and steps will be outlined here<a name="3"></a></h2><p>Notice that there are many more visualization options. One of them are animations and video's that are generally used in combation with transient flow and with mass transport simulations. Here we only have a steady-steate model.</p><h2>First step: retrieve the basename of this model<a name="4"></a></h2><pre class="codeinput">load <span class="string">name</span>       <span class="comment">% retrieve basename stored in file name.mat</span>
+load(basename)  <span class="comment">% get model arrays that were saved by mf_setup</span>
+</pre><h2>Get the heads and the budget info.<a name="5"></a></h2><pre class="codeinput">H = readDat([basename <span class="string">'.HDS'</span>]);  <span class="comment">% read computed heads</span>
+B = readBud([basename <span class="string">'.BGT'</span>]);  <span class="comment">% read ceomputed budgets</span>
+</pre><pre class="codeoutput">Reading MODFLOW binary output file &lt;&lt;generic_steady.HDS&gt;&gt; verbose= 0
+Scanning headers
+finished, 3 records scanned
+File contains the following:
+Number of records in file  :          3
+Number of stress userPeriods:          1
+Number of time steps       :          1
+Number of layers           :          3
+Number of rows             :         15
+Number of columns          :         15
+Maximum time in file       "          1
+Reading requested data ...
+     3 records read.
+.     1 records in output struct.
+
+
+Trying to read generic_steady.BGT as BINARY file...it works!
+Scanning 7 headers
+finished, 7 records scanned
+File contains the following:
+Number of records in file:          7
+Number of stress periods :          1
+Number of time steps     :          1
+Number of layers         :          3
+Number of Rows           :         15
+Number of columns        :         15
+Number of unique labels  :          7
+CONSTANTHEAD
+DRAINS
+FLOWFRONTFACE
+FLOWLOWERFACE
+FLOWRIGHTFACE
+RECHARGE
+WELLS
+
+Reading the requested data ...
+Please wait while I'm getting the requested data ...
+.......     1 records in output struct.
+
+</pre><h2>Ways to show the data<a name="6"></a></h2><h2>Show zoneBudget<a name="7"></a></h2><p>generate a 3D zone array with zones 1, 2 and 3 corresponding to layers 1, 2, and 3. Then request the zoneBudget</p><pre class="codeinput">zoneArray = gr.const([1 2 3]);   <span class="comment">% generate the zoneArray</span>
+zonebudget(B,zoneArray,1);       <span class="comment">% request zonebudget for layer 1</span>
+zonebudget(B,zoneArray,2);       <span class="comment">% same for layer 2</span>
+zonebudget(B,zoneArray,3);       <span class="comment">% same for layer 3</span>
+zonebudget(B,zoneArray,[1 2 3]); <span class="comment">% same for all layers combined</span>
+
+<span class="comment">% Notice: If B constains data more than one time, specify which time like this</span>
+<span class="comment">% zonebudget(B     ,zoneArray,[1 2 3]);  % works if only one time contained in B</span>
+<span class="comment">% zonebudget(B(  1),zoneArray,[1,2,3]);  % same if only one time</span>
+<span class="comment">% zonebudget(B(end),zoneArray,[1 2 3]);  % same if only one time</span>
+<span class="comment">% zonebudget(B(it) ,zoneArray,[1 2 3]);  % general, select time it</span>
+</pre><pre class="codeoutput">
+============================================
+zoneBudget will be computed for zones:  1
+
+Budget [consistent model units] for period=1, itsp=1:
+
+BUDGET FOR ZONE  1               -----IN-----  ----OUT-----
+total for         CONSTANTHEAD =         0.00    2963132.48
+total for        FLOWRIGHTFACE =         0.00         -0.00
+total for        FLOWFRONTFACE =         0.00         -0.00
+total for        FLOWLOWERFACE =      7759.30    1538739.99
+total for                WELLS =         0.00    6000000.00
+total for               DRAINS =         0.00       5886.82
+total for             RECHARGE =  10500000.00         -0.00
+                                 ------------  ------------
+total for              ZONE  1 =  10507759.30   10507759.29
+total net              ZONE  1 =         0.01  
+
+============================================
+zoneBudget will be computed for zones:  2
+
+Budget [consistent model units] for period=1, itsp=1:
+
+BUDGET FOR ZONE  2               -----IN-----  ----OUT-----
+total for         CONSTANTHEAD =         0.00      30980.70
+total for        FLOWRIGHTFACE =         0.00         -0.00
+total for        FLOWFRONTFACE =         0.00         -0.00
+total for        FLOWLOWERFACE =   1611285.29     580304.60
+total for                WELLS =         0.00    1000000.00
+total for               DRAINS =         0.00         -0.00
+total for             RECHARGE =         0.00         -0.00
+                                 ------------  ------------
+total for              ZONE  2 =   1611285.29    1611285.30
+total net              ZONE  2 =        -0.01  
+
+============================================
+zoneBudget will be computed for zones:  3
+
+Budget [consistent model units] for period=1, itsp=1:
+
+BUDGET FOR ZONE  3               -----IN-----  ----OUT-----
+total for         CONSTANTHEAD =         0.00         -0.00
+total for        FLOWRIGHTFACE =         0.00         -0.00
+total for        FLOWFRONTFACE =         0.00         -0.00
+total for        FLOWLOWERFACE =    572545.30      72545.30
+total for                WELLS =         0.00     500000.00
+total for               DRAINS =         0.00         -0.00
+total for             RECHARGE =         0.00         -0.00
+                                 ------------  ------------
+total for              ZONE  3 =    572545.30     572545.30
+total net              ZONE  3 =        -0.00  
+
+============================================
+zoneBudget will be computed for zones:  1 2 3
+
+Budget [consistent model units] for period=1, itsp=1:
+
+BUDGET FOR ZONE  1 2 3           -----IN-----  ----OUT-----
+total for         CONSTANTHEAD =         0.00    2994113.18
+total for        FLOWRIGHTFACE =         0.00         -0.00
+total for        FLOWFRONTFACE =         0.00         -0.00
+total for        FLOWLOWERFACE =         0.00         -0.00
+total for                WELLS =         0.00    7500000.00
+total for               DRAINS =         0.00       5886.82
+total for             RECHARGE =  10500000.00         -0.00
+                                 ------------  ------------
+total for          ZONE  1 2 3 =  10500000.00   10500000.00
+total net          ZONE  1 2 3 =        -0.00  
+</pre><h2>Showing the conductivities in a meshplot<a name="8"></a></h2><p>gr.plotMesh  (method plotMesh of gridObj gr) can be used to show in 3D properties such as the hydraulic conducvitiy.</p><p>In this case we have a 3Layer model with layers 1 and 2 having a confining bed at their belly/bottom. The conductivities of the 3 cell layers are in the 3D array HK and the vertical conductivities of the confining beds are in the 3D array VKCB. We can show only the HK layers or the VKCB layers but them some layers will be left open. We can also merge them to get conductivity values for all the layers and show this combination.</p><pre class="codeinput">var = NaN(gr.Ny,gr.Nx,gr.Nz);  <span class="comment">% generate a 3D array with sufficient layers to</span>
+                               <span class="comment">% to hold layers and confining beds</span>
+var(:,:,gr.ITlay) = HK;        <span class="comment">% Put the horizontal k in the right layers</span>
+var(:,:,gr.ITcbd) = VKCB;      <span class="comment">% Put the vertial k of the confining beds at their place</span>
+</pre><h2>Show the results usign gridObj/plotMesh<a name="9"></a></h2><pre class="codeinput">figure;  ax(1) = axes(<span class="string">'nextplot'</span>,<span class="string">'add'</span>);  <span class="comment">% generate a figure and an axis</span>
+h = gr.plotMesh(ax(1),var,<span class="string">'title'</span>,<span class="string">'conductivities'</span>,<span class="string">'fontsize'</span>,14); view(3); <span class="comment">% show mesh</span>
+
+<span class="comment">% add a colorbar to link colors to conductivity values</span>
+hb = colorbar; set(get(hb,<span class="string">'title'</span>),<span class="string">'string'</span>,<span class="string">'conductivity'</span>);
+</pre><img vspace="5" hspace="5" src="mf_analyze_01.png" alt=""> <h2>Plotting conductivities in a cross section along x-axis<a name="10"></a></h2><p>This is done using the method plotXSec of the gridObj</p><pre class="codeinput">gr.plotXSec(1,<span class="string">'figure'</span>,<span class="string">'xsec'</span>,<span class="string">'title'</span>,<span class="string">'Conductivities along y-axis'</span>,<span class="string">'fontsize'</span>,14,<span class="string">'all'</span>,<span class="string">'lay'</span>,HK,<span class="string">'cbd'</span>,VKCB);
+hb = colorbar; set(get(hb,<span class="string">'title'</span>),<span class="string">'string'</span>,<span class="string">'conductivity'</span>);
+
+<span class="comment">% Plot the heads along row iy onto this XSection</span>
+iy = 8;
+h(1) = plot(gr.xm,XS(H(end).values(iy,:,1)),<span class="string">'b'</span>,<span class="string">'linewidth'</span>,2); <span class="comment">% head in layer 1</span>
+h(2) = plot(gr.xm,XS(H(end).values(iy,:,2)),<span class="string">'r'</span>,<span class="string">'linewidth'</span>,2); <span class="comment">% head in layer 2</span>
+h(3) = plot(gr.xm,XS(H(end).values(iy,:,3)),<span class="string">'k'</span>,<span class="string">'linewidth'</span>,2); <span class="comment">% head in layer 3</span>
+legend(h,<span class="string">'Layer 1'</span>,<span class="string">'Layer 2'</span>,<span class="string">'Layer 3'</span>); <span class="comment">% legend, using the handles to the 3 lines</span>
+</pre><pre class="codeoutput">Conductivities along y-axis ,section along x-axis: ym =  72500, row=1
+</pre><img vspace="5" hspace="5" src="mf_analyze_02.png" alt=""> <h2>Plotting conductivities in a cross section along y-axis<a name="11"></a></h2><p>This is done using method plotYsec instead of plotXsec of the gridObj</p><pre class="codeinput">gr.plotYSec(1,<span class="string">'figure'</span>,<span class="string">'ysec'</span>,<span class="string">'title'</span>,<span class="string">'Conductivities along x-axis'</span>,<span class="string">'fontsize'</span>,14,<span class="string">'all'</span>,<span class="string">'lay'</span>,HK,<span class="string">'cbd'</span>,VKCB);
+hb = colorbar;  set(get(hb,<span class="string">'title'</span>),<span class="string">'string'</span>,<span class="string">'conductivity'</span>);
+
+<span class="comment">% plot the heads onto this XSec along column ix</span>
+ix = 8;
+h(1) = plot(gr.ym,YS(H(end).values(:,ix,1)),<span class="string">'b'</span>,<span class="string">'linewidth'</span>,2);  <span class="comment">% layer 1</span>
+h(2) = plot(gr.ym,YS(H(end).values(:,ix,2)),<span class="string">'ro'</span>,<span class="string">'linewidth'</span>,2); <span class="comment">% layer 2</span>
+h(3) = plot(gr.ym,YS(H(end).values(:,ix,3)),<span class="string">'k'</span>,<span class="string">'linewidth'</span>,2);  <span class="comment">% layer 3</span>
+legend(h,<span class="string">'Layer 1'</span>,<span class="string">'Layer 2'</span>,<span class="string">'Layer 3'</span>); <span class="comment">% legend using the handles to the 3 lines</span>
+</pre><pre class="codeoutput">Conductivities along x-axis ,section along y-axis: xm =  72500, column=15
+fontsize ,section along y-axis: xm =     14, column=</pre><img vspace="5" hspace="5" src="mf_analyze_03.png" alt=""> <h2>Plotting stream function<a name="12"></a></h2><p>The figure is 3D so the stream function cannot be shown</p><h2>Plotting head contours of all layers<a name="13"></a></h2><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'contours of heads'</span>,<span class="string">'position'</span>,screenPos(0.6)); <span class="comment">% fig = 60% of screen</span>
+ax(1) = subplot(2,2,1,<span class="string">'nextplot'</span>,<span class="string">'add'</span>);  <span class="comment">% axis to plot layer 1</span>
+ax(2) = subplot(2,2,2,<span class="string">'nextplot'</span>,<span class="string">'add'</span>);  <span class="comment">% axis to plot layer 2</span>
+ax(3) = subplot(2,2,3,<span class="string">'nextplot'</span>,<span class="string">'add'</span>);  <span class="comment">% axis tt plot layer 3</span>
+
+hrange = ContourRange(H,50); <span class="comment">% get a useful set of contour elevations</span>
+</pre><img vspace="5" hspace="5" src="mf_analyze_04.png" alt=""> <p>Plot the contours for the three layers</p><pre class="codeinput"><span class="keyword">for</span> ia=1:3
+    xlabel(ax(ia),<span class="string">'x [m]'</span>); ylabel(ax(ia),<span class="string">'y [m]'</span>);  <span class="comment">% axis labels</span>
+    title(ax(ia),sprintf(<span class="string">'Heads layer %d'</span>,ia));      <span class="comment">% title</span>
+    h = colorbar(<span class="string">'peer'</span>,ax(ia)); title(h,<span class="string">'head'</span>);    <span class="comment">% colorbar for heads</span>
+
+    contourf(ax(ia),gr.xm,gr.ym,H(end).values(:,:,ia),hrange);    <span class="comment">% contours</span>
+
+    <span class="comment">% plot well locations of wells pertaining to each of the layers</span>
+    <span class="comment">% plotting is done using method plotXY of wellObj</span>
+    <span class="comment">% selection of wells is done using [well.iLay]==ia</span>
+    well([well.iLay]==ia).plotXY(ax(ia),<span class="string">'marker'</span>,<span class="string">'o'</span>,<span class="string">'markerEdgeColor'</span>,<span class="string">'r'</span>);
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="mf_analyze_05.png" alt=""> <h2>TO 130614<a name="15"></a></h2><p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+%% mf_analyze, used to analyze and visualize the output of the model
+
+%%
+% To run it type
+
+% mf_analyze
+
+%%
+% in Matlab's command window.
+
+%% The options and steps will be outlined here
+% Notice that there are many more visualization options. One of them are
+% animations and video's that are generally used in combation with
+% transient flow and with mass transport simulations. Here we only have a
+% steady-steate model.
+
+%% First step: retrieve the basename of this model
+load name       % retrieve basename stored in file name.mat
+load(basename)  % get model arrays that were saved by mf_setup
+
+%% Get the heads and the budget info.
+H = readDat([basename '.HDS']);  % read computed heads
+B = readBud([basename '.BGT']);  % read ceomputed budgets
+
+%% Ways to show the data
+
+%% Show zoneBudget
+%
+% generate a 3D zone array with zones 1, 2 and 3 corresponding
+% to layers 1, 2, and 3. Then request the zoneBudget
+zoneArray = gr.const([1 2 3]);   % generate the zoneArray
+zonebudget(B,zoneArray,1);       % request zonebudget for layer 1
+zonebudget(B,zoneArray,2);       % same for layer 2
+zonebudget(B,zoneArray,3);       % same for layer 3
+zonebudget(B,zoneArray,[1 2 3]); % same for all layers combined
+
+% Notice: If B constains data more than one time, specify which time like this
+% zonebudget(B     ,zoneArray,[1 2 3]);  % works if only one time contained in B
+% zonebudget(B(  1),zoneArray,[1,2,3]);  % same if only one time
+% zonebudget(B(end),zoneArray,[1 2 3]);  % same if only one time
+% zonebudget(B(it) ,zoneArray,[1 2 3]);  % general, select time it
+
+%% Showing the conductivities in a meshplot
+%
+% gr.plotMesh  (method plotMesh of gridObj gr) can be used to show in 3D
+% properties such as the hydraulic conducvitiy.
+%
+% In this case we have a 3Layer model with layers 1 and 2 having a
+% confining bed at their belly/bottom. The conductivities of the 3 cell
+% layers are in the 3D array HK and the vertical conductivities of the
+% confining beds are in the 3D array VKCB. We can show only the HK layers
+% or the VKCB layers but them some layers will be left open. We can also merge
+% them to get conductivity values for all the layers and show this
+% combination.
+
+var = NaN(gr.Ny,gr.Nx,gr.Nz);  % generate a 3D array with sufficient layers to
+                               % to hold layers and confining beds
+var(:,:,gr.ITlay) = HK;        % Put the horizontal k in the right layers
+var(:,:,gr.ITcbd) = VKCB;      % Put the vertial k of the confining beds at their place
+
+%% Show the results usign gridObj/plotMesh
+
+figure;  ax(1) = axes('nextplot','add');  % generate a figure and an axis
+h = gr.plotMesh(ax(1),var,'title','conductivities','fontsize',14); view(3); % show mesh
+
+% add a colorbar to link colors to conductivity values
+hb = colorbar; set(get(hb,'title'),'string','conductivity');
+
+%% Plotting conductivities in a cross section along x-axis
+% This is done using the method plotXSec of the gridObj
+
+gr.plotXSec(1,'figure','xsec','title','Conductivities along y-axis','fontsize',14,'all','lay',HK,'cbd',VKCB);
+hb = colorbar; set(get(hb,'title'),'string','conductivity');
+
+% Plot the heads along row iy onto this XSection
+iy = 8;
+h(1) = plot(gr.xm,XS(H(end).values(iy,:,1)),'b','linewidth',2); % head in layer 1
+h(2) = plot(gr.xm,XS(H(end).values(iy,:,2)),'r','linewidth',2); % head in layer 2
+h(3) = plot(gr.xm,XS(H(end).values(iy,:,3)),'k','linewidth',2); % head in layer 3
+legend(h,'Layer 1','Layer 2','Layer 3'); % legend, using the handles to the 3 lines
+
+%% Plotting conductivities in a cross section along y-axis
+% This is done using method plotYsec instead of plotXsec of the gridObj
+gr.plotYSec(1,'figure','ysec','title','Conductivities along x-axis','fontsize',14,'all','lay',HK,'cbd',VKCB);
+hb = colorbar;  set(get(hb,'title'),'string','conductivity');
+
+% plot the heads onto this XSec along column ix
+ix = 8;
+h(1) = plot(gr.ym,YS(H(end).values(:,ix,1)),'b','linewidth',2);  % layer 1
+h(2) = plot(gr.ym,YS(H(end).values(:,ix,2)),'ro','linewidth',2); % layer 2
+h(3) = plot(gr.ym,YS(H(end).values(:,ix,3)),'k','linewidth',2);  % layer 3
+legend(h,'Layer 1','Layer 2','Layer 3'); % legend using the handles to the 3 lines
+
+%% Plotting stream function
+% The figure is 3D so the stream function cannot be shown
+
+%% Plotting head contours of all layers
+
+figure('name','contours of heads','position',screenPos(0.6)); % fig = 60% of screen
+ax(1) = subplot(2,2,1,'nextplot','add');  % axis to plot layer 1
+ax(2) = subplot(2,2,2,'nextplot','add');  % axis to plot layer 2 
+ax(3) = subplot(2,2,3,'nextplot','add');  % axis tt plot layer 3
+
+hrange = ContourRange(H,50); % get a useful set of contour elevations
+
+%%
+% Plot the contours for the three layers
+for ia=1:3
+    xlabel(ax(ia),'x [m]'); ylabel(ax(ia),'y [m]');  % axis labels
+    title(ax(ia),sprintf('Heads layer %d',ia));      % title
+    h = colorbar('peer',ax(ia)); title(h,'head');    % colorbar for heads
+
+    contourf(ax(ia),gr.xm,gr.ym,H(end).values(:,:,ia),hrange);    % contours
+    
+    % plot well locations of wells pertaining to each of the layers
+    % plotting is done using method plotXY of wellObj
+    % selection of wells is done using [well.iLay]==ia
+    well([well.iLay]==ia).plotXY(ax(ia),'marker','o','markerEdgeColor','r');
+end
+
+%% TO 130614
+##### SOURCE END #####
+--></body></html>

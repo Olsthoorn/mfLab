@@ -1,0 +1,357 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Visualization of the generic transient flow model</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2013-06-15"><meta name="DC.source" content="mf_analyze.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>Visualization of the generic transient flow model</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">mf_analyze is used to show the results of the model</a></li><li><a href="#2">Retrieve the basename of this model</a></li><li><a href="#3">Plot conductivities in a cross section along x-axis</a></li><li><a href="#4">Plot conductivities in a cross section along y-axis</a></li><li><a href="#5">Plot stream function</a></li><li><a href="#6">Contour heads and generate video</a></li><li><a href="#7">Setup video</a></li><li><a href="#8">Conclusion</a></li><li><a href="#9">TO 130614</a></li></ul></div><h2>mf_analyze is used to show the results of the model<a name="1"></a></h2><h2>Retrieve the basename of this model<a name="2"></a></h2><pre class="codeinput">load <span class="string">name</span>       <span class="comment">% retrieve basename stored in file name.mat</span>
+load(basename)  <span class="comment">% get saved model arrays</span>
+load <span class="string">underneath</span> <span class="comment">% retrieve line</span>
+
+H = readDat([basename <span class="string">'.HDS'</span>]);  <span class="comment">% read computed heads</span>
+B = readBud([basename <span class="string">'.BGT'</span>]);  <span class="comment">% read ceomputed budgets</span>
+
+time = [H.time]; <span class="comment">% time saved in H (heads struct)</span>
+</pre><pre class="codeoutput">Reading MODFLOW binary output file &lt;&lt;generic_transient.HDS&gt;&gt; verbose= 0
+Scanning headers
+.finished, 180 records scanned
+File contains the following:
+Number of records in file  :        180
+Number of stress userPeriods:          1
+Number of time steps       :         60
+Number of layers           :          3
+Number of rows             :         15
+Number of columns          :         15
+Maximum time in file       "       3650
+Reading requested data ...
+.   180 records read.
+.    60 records in output struct.
+
+
+Trying to read generic_transient.BGT as BINARY file...it works!
+Scanning 480 headers
+....finished, 480 records scanned
+File contains the following:
+Number of records in file:        480
+Number of stress periods :          1
+Number of time steps     :         60
+Number of layers         :          3
+Number of Rows           :         15
+Number of columns        :         15
+Number of unique labels  :          8
+CONSTANTHEAD
+DRAINS
+FLOWFRONTFACE
+FLOWLOWERFACE
+FLOWRIGHTFACE
+RECHARGE
+STORAGE
+WELLS
+
+Reading the requested data ...
+Please wait while I'm getting the requested data ...
+..................................................7
+..................................................13
+..................................................19
+..................................................25
+..................................................32
+..................................................38
+..................................................44
+..................................................50
+..................................................57
+..............................    60 records in output struct.
+
+</pre><h2>Plot conductivities in a cross section along x-axis<a name="3"></a></h2><pre class="codeinput">gr.plotXSec(1,<span class="string">'figure'</span>,<span class="string">'xsec'</span>,<span class="string">'title'</span>,<span class="string">'Conductivities along x-axis'</span>,<span class="string">'fontsize'</span>,14,<span class="string">'all'</span>,<span class="string">'lay'</span>,HK,<span class="string">'cbd'</span>,VKCB);
+ht = get(gca,<span class="string">'title'</span>); s = get(ht,<span class="string">'string'</span>);
+hb = colorbar; set(get(hb,<span class="string">'title'</span>),<span class="string">'string'</span>,<span class="string">'conductivity'</span>);
+
+<span class="comment">% plot the heads onto this XSection along row iy</span>
+iy = hit(gr.yGr,line(1,2));
+<span class="keyword">for</span> it=1:length(H)
+    <span class="keyword">if</span> it==1
+        h(1) = plot(gr.xm,XS(H(it).values(iy,:,1)),<span class="string">'b'</span>,<span class="string">'linewidth'</span>,2);
+        h(2) = plot(gr.xm,XS(H(it).values(iy,:,2)),<span class="string">'r'</span>,<span class="string">'linewidth'</span>,2);
+        h(3) = plot(gr.xm,XS(H(it).values(iy,:,3)),<span class="string">'k'</span>,<span class="string">'linewidth'</span>,2);
+    <span class="keyword">else</span>
+        <span class="keyword">for</span> ia=1:3
+            set(h(ia),<span class="string">'ydata'</span>,H(it).values(iy,:,ia));
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    set(ht,<span class="string">'string'</span>,sprintf(<span class="string">'%s, t=%.4g d'</span>,s,time(it)));
+    drawnow();
+<span class="keyword">end</span>
+legend(h,<span class="string">'Layer 1'</span>,<span class="string">'Layer 2'</span>,<span class="string">'Layer 3'</span>);
+</pre><img vspace="5" hspace="5" src="mf_analyze_01.png" alt=""> <h2>Plot conductivities in a cross section along y-axis<a name="4"></a></h2><pre class="codeinput">gr.plotYSec(1,<span class="string">'figure'</span>,<span class="string">'ysec'</span>,<span class="string">'title'</span>,<span class="string">'Conductivities along y-axis'</span>,<span class="string">'fontsize'</span>,14,<span class="string">'all'</span>,<span class="string">'lay'</span>,HK,<span class="string">'cbd'</span>,VKCB);
+ht = get(gca,<span class="string">'title'</span>); s = get(ht,<span class="string">'string'</span>);
+hb = colorbar;  set(get(hb,<span class="string">'title'</span>),<span class="string">'string'</span>,<span class="string">'conductivity'</span>);
+
+<span class="comment">% plot the heads onto this YSection along column ix</span>
+ix = 8;
+<span class="keyword">for</span> it=1:length(H)
+    <span class="keyword">if</span> it==1
+        h(1) = plot(gr.ym,YS(H(it).values(:,ix,1)),<span class="string">'b'</span>,<span class="string">'linewidth'</span>,2);
+        h(2) = plot(gr.ym,YS(H(it).values(:,ix,2)),<span class="string">'ro'</span>,<span class="string">'linewidth'</span>,2);
+        h(3) = plot(gr.ym,YS(H(it).values(:,ix,3)),<span class="string">'k'</span>,<span class="string">'linewidth'</span>,2);
+    <span class="keyword">else</span>
+        <span class="keyword">for</span> ia=1:3
+            set(h(ia),<span class="string">'ydata'</span>,H(it).values(:,ix,ia));
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    set(ht,<span class="string">'string'</span>,sprintf(<span class="string">'%s, t=%.4g d'</span>,s,time(it)));
+    drawnow();
+<span class="keyword">end</span>
+legend(h,<span class="string">'Layer 1'</span>,<span class="string">'Layer 2'</span>,<span class="string">'Layer 3'</span>);
+</pre><img vspace="5" hspace="5" src="mf_analyze_02.png" alt=""> <h2>Plot stream function<a name="5"></a></h2><p>The figure is 3D so the stream function cannot be shown</p><h2>Contour heads and generate video<a name="6"></a></h2><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'contours of heads'</span>,<span class="string">'position'</span>,screenPos(0.6));
+
+hrange = ContourRange(H,50); <span class="comment">% suitable set of head contour elevations</span>
+
+ax(1) = subplot(2,2,1,<span class="string">'nextplot'</span>,<span class="string">'add'</span>,<span class="string">'clim'</span>,hrange([1 end]));
+ax(2) = subplot(2,2,2,<span class="string">'nextplot'</span>,<span class="string">'add'</span>,<span class="string">'clim'</span>,hrange([1 end]));
+ax(3) = subplot(2,2,3,<span class="string">'nextplot'</span>,<span class="string">'add'</span>,<span class="string">'clim'</span>,hrange([1 end]));
+ax(4) = subplot(2,2,4,<span class="string">'nextplot'</span>,<span class="string">'add'</span>,<span class="string">'ylim'</span>,hrange([1 end]));
+</pre><img vspace="5" hspace="5" src="mf_analyze_03.png" alt=""> <h2>Setup video<a name="7"></a></h2><pre class="codeinput">vidObj = VideoWriter(basename);
+vidObj.open();
+
+<span class="keyword">for</span> it=1:numel(time)
+
+    <span class="keyword">for</span> ia=3:-1:1 <span class="comment">% generate title string for this time</span>
+        sttl{ia} = sprintf(<span class="string">'Heads layer %%d t=%.4g d'</span>,time(it));
+    <span class="keyword">end</span>
+
+    <span class="keyword">if</span> it==1 <span class="comment">% special, initialized plots and attributes</span>
+        <span class="keyword">for</span> ia=3:-1:1  <span class="comment">% for all layers</span>
+            xlabel(ax(ia),<span class="string">'x [m]'</span>); ylabel(ax(ia),<span class="string">'y [m]'</span>);
+            ht(ia)=  title(ax(ia),sprintf(sttl{ia},ia));
+            hb = colorbar(<span class="string">'peer'</span>,ax(ia)); title(hb,<span class="string">'head'</span>);
+
+            <span class="comment">% Contouring</span>
+            [~,hc{ia}] = contourf(ax(ia),gr.xm,gr.ym,H(it).values(:,:,ia),hrange);
+
+            <span class="comment">% Well locations</span>
+            well([well.iLay]==ia).plotXY(ax(ia),<span class="string">'marker'</span>,<span class="string">'o'</span>,<span class="string">'markerEdgeColor'</span>,<span class="string">'r'</span>);
+
+            <span class="comment">% Plot drain</span>
+            <span class="keyword">if</span> ia==1, plot(ax(1),line(:,1),line(:,2),<span class="string">'b'</span>,<span class="string">'linewidth'</span>,2); <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+        <span class="comment">% setup picture 4</span>
+        xlabel(ax(4),<span class="string">'x [m]'</span>); ylabel(ax(4),<span class="string">'head [m]'</span>);
+        ht(4) = title(sprintf(<span class="string">'head t=%.4g d'</span>,time(it)));
+        h(1) = plot(ax(4),gr.xm,H(it).values(iy,:,1),<span class="string">'b'</span>);
+        h(2) = plot(ax(4),gr.xm,H(it).values(iy,:,2),<span class="string">'r'</span>);
+        h(3) = plot(ax(4),gr.xm,H(it).values(iy,:,3),<span class="string">'k'</span>);
+        plot(ax(4),line(:,1),line(:,3),<span class="string">'b'</span>,<span class="string">'linewidth'</span>,2);
+
+    <span class="keyword">else</span> <span class="comment">% update data in plots</span>
+
+        <span class="comment">% update the head contours (picture 1, 2, 3)</span>
+        <span class="keyword">for</span> ia=1:3
+            set(ht(ia),<span class="string">'string'</span>,sprintf(sttl{ia},ia));
+            set(hc{ia},<span class="string">'zData'</span>,H(it).values(:,:,ia));
+        <span class="keyword">end</span>
+
+        <span class="comment">% update 4th picture</span>
+        <span class="keyword">for</span> ia=1:3
+            set(ht(4),<span class="string">'string'</span>,sprintf(<span class="string">'heads, t=%.4g d'</span>,time(it)));
+            set(h(ia),<span class="string">'ydata'</span>,H(it).values(iy,:,ia));
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    vidObj.writeVideo(getframe(gca));
+<span class="keyword">end</span>
+vidObj.close();
+</pre><img vspace="5" hspace="5" src="mf_analyze_04.png" alt=""> <h2>Conclusion<a name="8"></a></h2><p>To incorporate and show transient behavior in a model requires minor changes of an already existing steady-state model</p><h2>TO 130614<a name="9"></a></h2><p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+%% Visualization of the generic transient flow model
+
+%% mf_analyze is used to show the results of the model
+
+%% Retrieve the basename of this model
+load name       % retrieve basename stored in file name.mat
+load(basename)  % get saved model arrays
+load underneath % retrieve line
+
+H = readDat([basename '.HDS']);  % read computed heads
+B = readBud([basename '.BGT']);  % read ceomputed budgets
+
+time = [H.time]; % time saved in H (heads struct)
+
+%% Plot conductivities in a cross section along x-axis
+gr.plotXSec(1,'figure','xsec','title','Conductivities along x-axis','fontsize',14,'all','lay',HK,'cbd',VKCB);
+ht = get(gca,'title'); s = get(ht,'string');
+hb = colorbar; set(get(hb,'title'),'string','conductivity');
+
+% plot the heads onto this XSection along row iy
+iy = hit(gr.yGr,line(1,2));
+for it=1:length(H)
+    if it==1
+        h(1) = plot(gr.xm,XS(H(it).values(iy,:,1)),'b','linewidth',2);
+        h(2) = plot(gr.xm,XS(H(it).values(iy,:,2)),'r','linewidth',2);
+        h(3) = plot(gr.xm,XS(H(it).values(iy,:,3)),'k','linewidth',2);
+    else
+        for ia=1:3
+            set(h(ia),'ydata',H(it).values(iy,:,ia));
+        end
+    end
+    set(ht,'string',sprintf('%s, t=%.4g d',s,time(it)));
+    drawnow();
+end
+legend(h,'Layer 1','Layer 2','Layer 3');
+
+%% Plot conductivities in a cross section along y-axis
+gr.plotYSec(1,'figure','ysec','title','Conductivities along y-axis','fontsize',14,'all','lay',HK,'cbd',VKCB);
+ht = get(gca,'title'); s = get(ht,'string');
+hb = colorbar;  set(get(hb,'title'),'string','conductivity');
+
+% plot the heads onto this YSection along column ix
+ix = 8;
+for it=1:length(H)
+    if it==1
+        h(1) = plot(gr.ym,YS(H(it).values(:,ix,1)),'b','linewidth',2);
+        h(2) = plot(gr.ym,YS(H(it).values(:,ix,2)),'ro','linewidth',2);
+        h(3) = plot(gr.ym,YS(H(it).values(:,ix,3)),'k','linewidth',2);
+    else
+        for ia=1:3
+            set(h(ia),'ydata',H(it).values(:,ix,ia));
+        end
+    end
+    set(ht,'string',sprintf('%s, t=%.4g d',s,time(it)));
+    drawnow();
+end
+legend(h,'Layer 1','Layer 2','Layer 3');
+
+%% Plot stream function
+% The figure is 3D so the stream function cannot be shown
+
+%% Contour heads and generate video
+
+figure('name','contours of heads','position',screenPos(0.6));
+
+hrange = ContourRange(H,50); % suitable set of head contour elevations
+
+ax(1) = subplot(2,2,1,'nextplot','add','clim',hrange([1 end]));
+ax(2) = subplot(2,2,2,'nextplot','add','clim',hrange([1 end]));
+ax(3) = subplot(2,2,3,'nextplot','add','clim',hrange([1 end]));
+ax(4) = subplot(2,2,4,'nextplot','add','ylim',hrange([1 end]));
+
+%% Setup video
+
+vidObj = VideoWriter(basename);
+vidObj.open();
+
+for it=1:numel(time)
+
+    for ia=3:-1:1 % generate title string for this time
+        sttl{ia} = sprintf('Heads layer %%d t=%.4g d',time(it));
+    end
+    
+    if it==1 % special, initialized plots and attributes
+        for ia=3:-1:1  % for all layers
+            xlabel(ax(ia),'x [m]'); ylabel(ax(ia),'y [m]');
+            ht(ia)=  title(ax(ia),sprintf(sttl{ia},ia));
+            hb = colorbar('peer',ax(ia)); title(hb,'head');
+            
+            % Contouring
+            [~,hc{ia}] = contourf(ax(ia),gr.xm,gr.ym,H(it).values(:,:,ia),hrange);
+            
+            % Well locations
+            well([well.iLay]==ia).plotXY(ax(ia),'marker','o','markerEdgeColor','r');                        
+            
+            % Plot drain
+            if ia==1, plot(ax(1),line(:,1),line(:,2),'b','linewidth',2); end
+        end
+        
+        % setup picture 4
+        xlabel(ax(4),'x [m]'); ylabel(ax(4),'head [m]');
+        ht(4) = title(sprintf('head t=%.4g d',time(it)));
+        h(1) = plot(ax(4),gr.xm,H(it).values(iy,:,1),'b');
+        h(2) = plot(ax(4),gr.xm,H(it).values(iy,:,2),'r');
+        h(3) = plot(ax(4),gr.xm,H(it).values(iy,:,3),'k');
+        plot(ax(4),line(:,1),line(:,3),'b','linewidth',2);
+        
+    else % update data in plots
+        
+        % update the head contours (picture 1, 2, 3)
+        for ia=1:3
+            set(ht(ia),'string',sprintf(sttl{ia},ia));
+            set(hc{ia},'zData',H(it).values(:,:,ia));
+        end
+        
+        % update 4th picture
+        for ia=1:3
+            set(ht(4),'string',sprintf('heads, t=%.4g d',time(it)));
+            set(h(ia),'ydata',H(it).values(iy,:,ia));
+        end
+    end
+    vidObj.writeVideo(getframe(gca));
+end
+vidObj.close();
+
+%% Conclusion
+% To incorporate and show transient behavior in a model requires minor
+% changes of an already existing steady-state model
+
+%% TO 130614
+
+
+
+##### SOURCE END #####
+--></body></html>

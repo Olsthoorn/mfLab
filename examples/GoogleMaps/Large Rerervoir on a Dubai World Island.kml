@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>Large Rerervoir on a Dubai World Island.kml</name>
+	<StyleMap id="msn_ylw-pushpin">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_ylw-pushpin</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_ylw-pushpin</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sh_ylw-pushpin">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Style id="sn_ylw-pushpin">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Placemark>
+		<name>Large Rerervoir Small Dubai World Island</name>
+		<styleUrl>#msn_ylw-pushpin</styleUrl>
+		<LineString>
+			<tessellate>1</tessellate>
+			<coordinates>
+				55.17784572669382,25.25354281405922,0 55.17731358463988,25.25341861380786,0 55.17698743081983,25.25290627937471,0 55.17739940705641,25.25239394878697,0 55.17808603515563,25.25237841633714,0 55.17903015802945,25.25295283902067,0 55.17978547274856,25.25334095732812,0 55.18040347971287,25.25389985891078,0 55.18035199812583,25.25438114658778,0 55.17968251282434,25.25452088636723,0 55.1790473527176,25.25428801257983,0 55.17851520179138,25.25400856349208,0 55.17784572669382,25.25354281405922,0 
+			</coordinates>
+		</LineString>
+	</Placemark>
+</Document>
+</kml>

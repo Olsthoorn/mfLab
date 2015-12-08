@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>demContour.kml</name>
+	<Style id="inline29">
+		<LineStyle>
+			<color>ff00ffff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline52">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline29</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline231</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline231">
+		<LineStyle>
+			<color>ff00ffff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Placemark>
+		<name>demContour</name>
+		<styleUrl>#inline52</styleUrl>
+		<LineString>
+			<tessellate>1</tessellate>
+			<coordinates>
+                -4.64881051070643,31.3720498094088,0,-4.2976302518643,31.3760841639987,0,-4.30076343219667,31.6027266695329,0,-4.65279079022456,31.5986565210267,0,-4.64881051070643,31.3720498094088,0
+			</coordinates>
+		</LineString>
+	</Placemark>
+</Document>
+</kml>

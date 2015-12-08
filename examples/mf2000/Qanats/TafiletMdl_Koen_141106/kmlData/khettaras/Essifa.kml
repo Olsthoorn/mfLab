@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>Essifa.kml</name>
+	<StyleMap id="inline">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline24</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline16</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline0">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline1">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline5</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline7</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline2">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline3">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline4">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline18</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline6</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline5">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline6">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline7">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline8">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline9">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline20</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline10</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline10">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline11">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline12">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline13">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline14">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline11</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline0</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="inline15">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline19</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline12</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline16">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline17">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline22</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline13</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline18">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline19">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline20">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline21">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline2</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline8</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline22">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline23">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline24">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline25">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline3</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline23</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Folder>
+		<name>Essifa</name>
+		<open>1</open>
+		<Placemark>
+			<name>Essifa1</name>
+			<styleUrl>#inline4</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.315223700868341,31.37270961577155,0 -4.315447222656699,31.37577634840519,0 -4.31660105212317,31.37931446527367,0 -4.317509526335398,31.38269066188263,0 -4.32283851971413,31.39225557207622,0 -4.329680820783413,31.39946207213734,0 -4.347183529670592,31.4087565872802,0 -4.353261932291077,31.41532634680355,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Essifa2</name>
+			<styleUrl>#inline14</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.328099975764074,31.34874955507309,0 -4.330295292660203,31.36106216253379,0 -4.332849560173912,31.36591684415917,0 -4.335895223786793,31.37103967589852,0 -4.338481987601162,31.3734827696249,0 -4.339478424655042,31.37569596778426,0 -4.340000863575266,31.37713270189718,0 -4.344568969938395,31.38790664169066,0 -4.346091337156112,31.39226205446047,0 -4.349080688147867,31.39753991844047,0 -4.350385091563139,31.39893015741333,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Essifa3</name>
+			<styleUrl>#inline1</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.328148943309452,31.34851070780624,0 -4.334456570025952,31.36735537277695,0 -4.33871480286559,31.3729089534101,0 -4.340404311573217,31.37585109097412,0 -4.345420863362159,31.38686977459725,0 -4.347887408543619,31.39272766232645,0 -4.350271242572823,31.3971950503289,0 -4.35135973536933,31.39808128829368,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Essifa4</name>
+			<styleUrl>#inline15</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.333584335453104,31.35330914192457,0 -4.335530035253649,31.36137983487161,0 -4.338411539835931,31.36827727099005,0 -4.34262341433861,31.37556259970074,0 -4.349957047103281,31.38810743827265,0 -4.350476713219161,31.38918820003241,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Essifa5</name>
+			<styleUrl>#inline</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.335912347505157,31.35463192916887,0 -4.337443297296955,31.35846270277864,0 -4.338457788531005,31.36554364301434,0 -4.342746361541678,31.3733116321403,0 -4.344072627023956,31.37559267101392,0 -4.344721027947469,31.37671200814652,0 -4.34881615116269,31.38379628703484,0 -4.350529478999835,31.38700884387607,0 -4.351345325698923,31.38803240988045,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Essifa6</name>
+			<styleUrl>#inline21</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.338781542571642,31.35518855252525,0 -4.339261862435504,31.3599664616297,0 -4.341389076730076,31.36566714448212,0 -4.341563540121509,31.36813478667355,0 -4.343403831010716,31.37332540795325,0 -4.344823971619446,31.37577390532957,0 -4.352106108766996,31.38740593855913,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Essifa7</name>
+			<styleUrl>#inline9</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.340865700589389,31.35412307191493,0 -4.342873777554779,31.35827759602708,0 -4.342816525355078,31.35822865523698,0 -4.346592055856036,31.37154716763235,0 -4.348235012750198,31.37578839636651,0 -4.34956519344475,31.37827330703317,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Essifa8</name>
+			<styleUrl>#inline17</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.339135496432093,31.35512505391961,0 -4.343214059798961,31.36748538550755,0 -4.343978197780002,31.37155180184694,0 -4.346238640817052,31.37563270704104,0 -4.347712744346314,31.37806607385907,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Essifa9</name>
+			<styleUrl>#inline25</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.343806572338603,31.35118943427032,0 -4.347163927250724,31.35548798693188,0 -4.349350173182335,31.35971072665634,0 -4.349791717203661,31.36213519027617,0 -4.349040965761347,31.36597801837124,0 -4.34983426609644,31.3688930577299,0 -4.349868839415877,31.3705191442043,0 -4.351296468662387,31.37165062850905,0 -4.353534813927045,31.37574241440494,0 -4.354098794387827,31.37709486816123,0 -4.354352934061064,31.37983674702595,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+	</Folder>
+</Document>
+</kml>

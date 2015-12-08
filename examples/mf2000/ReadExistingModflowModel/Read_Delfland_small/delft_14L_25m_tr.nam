@@ -1,0 +1,26 @@
+LIST                8 delft_14L_25m_tr.lst
+BAS6                1 delft_14L_25m_tr.ba6
+BCF6               11 delft_14L_25m_tr.bc6
+DIS                10 delft_14L_25m_tr.dis
+WEL                12 delft_14L_25m_tr.wel
+DRN                13 delft_14L_25m_tr.drn
+RCH                18 delft_14L_25m_tr.rch
+RIV                14 delft_14L_25m_tr.riv
+PCG                19 delft_14L_25m_tr.pcg
+OC                 20 delft_14L_25m_tr.oc
+#SWT                17 delft_14L_25m_tr.swt
+#SUB                17 delft_14L_25m_tr.sub
+HFB6               15 delft_14L_25m_tr.hfb
+CHD                16 delft_14L_25m_tr.chd
+DATA(BINARY)       21 delft_14L_25m_tr.hed REPLACE
+DATA(BINARY)       22 delft_14L_25m_tr.ddn REPLACE
+DATA(BINARY)       23 tr2k_s3.bdg REPLACE
+#DATA(BINARY)       41 tr2k_s3.sbs REPLACE
+#DATA(BINARY)       42 tr2k_s3.cmp REPLACE
+#DATA(BINARY)       71 delft_14L_25m_tr.cmp REPLACE
+#DATA(BINARY)       72 delft_14L_25m_tr.srs REPLACE
+#DATA(BINARY)       76 delft_14L_25m_tr.gst REPLACE
+#DATA(BINARY)       70 delft_14L_25m_tr.sb  REPLACE
+#DATA(BINARY)       74 delft_14L_25m_tr.gs  REPLACE
+#DATA(BINARY)       78 delft_14L_25m_tr.eff REPLACE
+

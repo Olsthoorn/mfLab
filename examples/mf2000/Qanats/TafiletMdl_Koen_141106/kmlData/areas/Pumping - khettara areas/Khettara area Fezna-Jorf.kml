@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>Khettara area Fezna-Jorf.kml</name>
+	<Style id="s_ylw-pushpin_hl">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Style id="s_ylw-pushpin">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<StyleMap id="m_ylw-pushpin0">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin_hl</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Placemark>
+		<name>Khettara area Fezna-Jorf</name>
+		<styleUrl>#m_ylw-pushpin0</styleUrl>
+		<LineString>
+			<tessellate>1</tessellate>
+			<coordinates>
+				-4.3929949417419,31.46313469298024,0 -4.388064605153446,31.45904901682069,0 -4.380030513557208,31.46072654575725,0 -4.375941441850721,31.46372888430237,0 -4.385954859976917,31.47395086454284,0 -4.389898822735995,31.47647384026593,0 -4.386379215187418,31.47923705995147,0 -4.379047350917737,31.47623139545831,0 -4.375083089951904,31.48064976919086,0 -4.39876649785904,31.50559469429752,0 -4.427969883165556,31.51792725896524,0 -4.435616442063642,31.51403723351697,0 -4.426530290534893,31.50772745752706,0 -4.427605728400633,31.50568650148662,0 -4.435500159577902,31.50863995164838,0 -4.437408556356138,31.50496587767669,0 -4.425210779693002,31.49864981576068,0 -4.41671760834465,31.49671418571959,0 -4.4101349881524,31.49518571151134,0 -4.40966049572623,31.48498784246331,0 -4.401299258948697,31.47989718957554,0 -4.397810409808839,31.47702609917934,0 -4.394924231210952,31.47354506445506,0 -4.394439512450584,31.46731163084102,0 -4.3929949417419,31.46313469298024,0 
+			</coordinates>
+		</LineString>
+	</Placemark>
+</Document>
+</kml>

@@ -1,0 +1,241 @@
+%function mf_psi2
+close all;
+%clear variables;
+
+% compute psi including internal sources
+% internal sources are areas in the cross section with diverging flow.
+% These islands cause branch cuts in the stream function. These branchcuts
+% should be concentrated at one line extending from the boundary of the
+% island or else the streamline pattern will be incorrect. Do do this we
+% have to integrate the stream in- or outflow of each island by means of a
+% circumference integral around it and choose the location of the branch
+% cut. The choice will be on the right-most and lower most cell of the
+% island.
+% A cross section will generally have more than one island, some of which
+% may intersect the edge of the cross section. Special care must be taken
+% to make sure that such islands will also be correctly computed.
+% The idea is to compute the boundary integral for the points of the
+% circumference of each island starting and ending at the extreme
+% lower-rght point of it.
+%
+% What is an island?
+% An island is a sub-area in the cross section with sources and or sinks.
+% This way, fixed head boundaries can also be considered islands. To
+% include those islands, We can enhance FRF by prepending a column of zeros
+% before taking the diff. Then Left and Right boundaries will be inclued.
+% Then fixed head boundaries will always be islands. And an all around
+% fixed-head island will form a donut. This does not seem useful.
+% So do not enhance with an extra column.
+% This means that the first column is never included with the island. It is
+% always a boundary condtion, either some fixed head or some well. This
+% seems ok as we can always compute the stream function of the first column
+% by integrating from the bottom of the model upward.
+% We ignore fixed head bottoms for the moement.
+% We have to handle cut-off islands separately.
+if 0
+    island = [
+        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        0 0 0 1 0 0 0 0 0 0 0 0 0 0 0
+        0 0 0 0 1 1 0 0 0 0 0 1 0 0 0
+        0 0 0 0 1 1 1 0 0 0 1 0 0 0 0
+        0 0 0 0 1 1 1 1 1 1 0 0 0 0 0
+        0 0 0 0 1 1 1 1 1 1 0 0 0 0 0
+        0 0 0 0 1 1 1 1 1 0 0 0 0 0 0
+        0 0 0 1 1 1 1 0 0 0 0 0 0 0 0
+        0 0 0 0 0 0 1 1 0 0 0 0 0 0 0
+        0 0 0 0 0 0 1 0 1 0 0 0 0 0 0
+        0 0 0 0 0 0 1 0 0 1 0 0 0 0 0
+        0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        ];
+else
+    island = [
+        0 0 0 0 0 0 0 0 0 0 0 0 0
+        0 0 0 0 0 0 0 0 0 0 0 0 0
+        0 0 0 0 0 0 0 0 0 0 0 0 0
+        0 0 1 1 1 1 1 0 0 0 0 0 0
+        0 0 1 1 1 1 1 0 0 0 0 0 0
+        0 0 1 1 1 1 1 0 0 0 0 0 0
+        0 0 1 1 1 1 1 0 0 0 0 0 0
+        0 0 1 1 1 1 1 0 0 0 0 0 0
+        0 0 0 0 0 0 0 0 0 0 0 0 0
+        0 0 0 0 0 0 0 0 0 0 0 0 0
+    ];
+end
+
+
+%Nx=B(1).NCOL;
+%Ny=B(1).NLAY;
+island=zeros(Nz,Nx);
+for iL=1:length(B(1).label)
+    j= strmatchi(B(1).label{iL},{'FLOWRIGHTFACE','FLOWFRONTFACE','FLOWLOWERFACE','STORAGE'});
+    if j==0
+        island=island | (XS(B(1).term{iL})~=0);
+    end
+end
+
+spy(island);
+
+%xGr=1:Nx+1;
+%yGr=Ny+1:-1:1;
+[xGr,yGr,zGr,xm,ym,zm,Dx,Dy,Dz,Nx,Ny,Nz]=modelsize3(xGr,yGr,zGr);
+
+% diff(island,1,2) geeft de cellen met -1 van de linker zijdes van de
+% eilanden en diff(island,1,2)==1 die van de rechterzijde.
+% als we met de klok meedraaien om een eiland geldt dat de -1 cellen upward
+% zijn en de +1 cellen downward.
+% als we de FRF vermenigvuldigen met de -1 resp +1 van de cellen krijgen we
+% de stroming die het eiland uit gaat. Dus de som hiervan levert direct
+% de totale uitstroom op (even kijken of het met de FFF ook zo werkt).
+
+% diff(island,1,1) geeft ook uitwaartse stroming als we de FFF
+% vermenigvuldigen met het teken -1 of +1. Dus het bovenstaande statement
+% is waar en is dus gemakkeijk te controleren aan de hand van de budget
+% file. Sum alle sources en sinks binnen een eiland is gelijk aan de netto
+% instroming, die geijk moet zijn aan de netto uitstroming over de rand van
+% het eiland.
+
+% Nu achter elkaar plaatsen van alle stukjes.
+% Alle stukjes met dezelfde ix horen bij elkaar met consecutive iy voor de FRF
+% alle stukjes met dezelfde iy horen bij elkaar met cosecutive  ix voor de FLF
+
+% maak dus een database van stukjes, structuur ?
+% Vertaal bovenstaande trajecten in loopjes die compatibel zijn en zo aan
+% elkaar kunnen worden geregen. Een loopje bestaat daarbij uit ene begin en
+% een eind knoop en een stel lijn stukjes in volgorde gegeven door
+% beginknoop, endknoop en Flow (Outward flow over lijnstuk).
+% Deze zijn aan elkaar te rijgen op basis van begin en eindknoop, te
+% beginnen met links en omhoog en te eindigen met rechts en omlaag.
+
+% Het resultaat is een ring van knopen met bijbehorende flow.
+% Verschuif zodat met de goede knoop wordt begonnen. Integreer dan van de
+% een naar de ander tot bij de laatste aangekomen. Een verticale lijst
+% langs de linkerkant krijgt automatisch de juiste waarden, so don't worry.
+% Ten slotte interpoleer verticaal naar de tussen gelegen knooppunten. 
+% Geen zorgen over randpunten. De branchcut komt vanzelf op de goede plek.
+% Neem de diff en ken die toe aan de FRF.
+% Tenslotte kan PSI worden berekend op de gewone manier.
+
+% Given an island array with ones in the cells with divergence and zeros
+% elsewhere and the FRF and FFF arrays from the budget files both in cross
+% section format.
+% Upward boundary cells
+%%
+UD = diff(island,1,2);
+LR = diff(island,1,1);
+
+figure
+subplot(2,1,1); spy(UD==-1);
+subplot(2,1,2); spy(UD==+1);
+
+%%
+IU=find(UD== 1); % IU is number in array with Nx-1 cols
+ID=find(UD==-1); % ID is number in array with Nx-1 cols
+IL=find(LR==-1); % IL is number in array with Ny-1 rows
+IR=find(LR==+1); % IR is number in array with Ny-1 rows
+
+RCu=cellindices(IU,size(island(:,1:end-1)),'RC'); %RCu(:,2)=RCu(:,2)+1;
+RCd=cellindices(ID,size(island(:,1:end-1)),'RC'); %RCd(:,2)=RCd(:,2)+1;
+RCl=cellindices(IL,size(island(1:end-1,:)),'RC'); %RCl(:,1)=RCl(:,1)+1;
+RCr=cellindices(IR,size(island(1:end-1,:)),'RC'); %RCr(:,1)=RCr(:,1)+1;
+
+figure; hold on;
+plotgrid(xGr,XS(zGr),'c')
+for i=1:size(RCu,1)
+    plot(xm(RCu(:,2)),XS(zm(RCu(:,1))),'r^');
+end
+for i=1:size(RCd,1)
+    plot(xm(RCd(:,2)),XS(zm(RCd(:,1))),'bv');
+end
+for i=1:size(RCl,1)
+    plot(xm(RCl(:,2)),XS(zm(RCl(:,1))),'g<');
+end
+for i=1:size(RCr,1)
+    plot(xm(RCr(:,2)),XS(zm(RCr(:,1))),'c>');
+end
+
+%% for testing only
+FRF=island;
+FFF=island;
+
+%%
+frf=FRF(:,1:end-1);
+fff=FFF(1:end-1,:);
+
+%%
+
+L = [frf(IU), RCu(:,1), RCu(:,2), (RCu(:,2)*(Nz+1)+RCu(:,1))*[1 1]+ones(size(IU))*[1 0]; ...
+     frf(ID), RCd(:,1), RCd(:,2), (RCd(:,2)*(Nz+1)+RCd(:,1))*[1 1]+ones(size(ID))*[0 1]; ...
+     fff(IL), RCl(:,1), RCl(:,2), (RCl(:,2)*(Nz+1)+RCl(:,1)+1)*[1 1]-ones(size(IL))*[0 Nz+1]; ...
+     fff(IR), RCr(:,1), RCr(:,2), (RCr(:,2)*(Nz+1)+RCr(:,1)+1)*[1 1]-ones(size(IR))*[Nz+1 0]];
+
+LR1=cellindices(L(:,end-1),[Nz+1,Nx+1],'RC');
+LR2=cellindices(L(:,end  ),[Nz+1,Nx+1],'RC');
+
+figure;hold on
+plotgrid(xGr,XS(zGr,'c'));
+Nodes=zeros(Nx+1,Nx+1);
+for i=1:size(L,1)
+    plot(xGr([LR1(i,2) LR2(i,2)]),XS(zGr([LR1(i,1) LR2(i,1)])),'r');
+end
+
+I=find(island>0);
+RC=cellindices(I,[Nz,Nx],'RC');
+plot(xm(RC(:,2)),XS(zm(RC(:,1))),'o');
+
+%%
+figure
+spy(Nodes);
+%%
+
+[runs,L]=getruns([],L);
+
+PsiIsland{size(runs,1),1}=[];
+for i=1:length(runs):-1:1
+    if isempty(runs{i})
+        runs(i)=[];
+        continue
+    end
+    M=max(runs{i}(:,end-1)); % hights from node
+    j=find(runs{i}(:,end)==M); % always exists
+    runs{i}=[runs{i}(j:end,:); runs{i}(1:j-1,:)];
+    runs{i}=runs{i}(end:-1:1,:);
+    PsiIsland{i}=[[runs{i}(1,end-1); runs{i}(:,end)] [0; cumsum(runs{i}(:,1))]];
+end
+
+
+PSI=NaN(Nz+1,Nx+1);
+for i=1:length(PsiIsland)
+    PSI(PsiIsland{i}(:,1))=PsiIsland{i}(:,2);
+end
+
+for ix=1:size(PSI,2)
+    y=XS(zGr(~isnan(PSI(:,ix))));
+    if ~isempty(y)
+        p=PSI(~isnan(PSI(:,ix)),ix);
+        PSI(:,ix)=interp1(y,p,XS(zGr));
+    end
+end
+dPSI=diff(PSI(:,1:end-1),1,1);
+FRF(island~=0)=dPSI(island~=0);
+
+% now we can compute our psi in the ordinary fashion.
+Psi=[flipud(cumsum(flipud(FRF))); zeros(size(FRF(1,:)))];
+
+%%
+% We have to integrate around each island to get the stream function
+% relative to a circumference point. From this we have the difference along
+% vertical lines, which can be divided or attributed in an arbitrary way
+% over the FRF of the cells in between.
+% Once this is done, Psi can be computed by integration from the bottom of
+% the model as always. It is, therefore, a matter of putting the correct
+% FRF in cells within the islands.
+
+% Integration along the circumference.
+% We take all the UCells and the LCells and make trips. We do the same with
+% the DCells and the RCells. Afterwords, we may join the series to a full
+% circumference.
+
+% UCells can be sorted reversely, they will then be ordered.
+% LCells can 

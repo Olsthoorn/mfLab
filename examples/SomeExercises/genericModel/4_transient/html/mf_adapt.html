@@ -1,0 +1,149 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Generic transient model</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2013-06-15"><meta name="DC.source" content="mf_adapt.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>Generic transient model</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Explanation</a></li><li><a href="#2">Steps</a></li><li><a href="#3">Conclusion</a></li><li><a href="#4">TO 130614</a></li></ul></div><h2>Explanation<a name="1"></a></h2><p>This is the same model as 1_Steady, with only a minor change to make it transient. The change to be made is in setting the value(s) in the column transient in the worksheet PER of the accompanying workbook to 1 instead of 0. mf_lay2mdl will then automatically retrieve SS and SY from the workbook LAY and geneate the 3D model arrays. The model can then be run from the initial STRTHD value to see its evaluation over time. The visualization is adapted accordingly in mf_analyze. Because the steps have been explained in detail in 1_steady, we only give the required steps without comments here. The obtain a somewhat nicer looking output picture, the well extraction was reduced by a factor 5 to -1e5 m3/d (see worksheet PER column with header Q) and the cDrn was increased from 1 to 100 m/d (see below, line 36)</p><h2>Steps<a name="2"></a></h2><pre class="codeinput">basename = <span class="string">'generic_transient'</span>;  <span class="comment">% set basename</span>
+save(<span class="string">'name'</span>,<span class="string">'basename'</span>);         <span class="comment">% save it for later retrieval</span>
+
+xGr = 0:5000:75000;  <span class="comment">% grid line x-coordinates</span>
+yGr = 75000:-5000:0; <span class="comment">% gird line y-coordinates</span>
+
+mf_lay2mdl(basename,xGr,yGr); <span class="comment">% generate the 3D arrays and gridObj from worksheet LAY</span>
+
+gr = gridObj(xGr,yGr,gr.zGr+200,gr.LAYCBD); <span class="comment">% change default top of gr.zGr to +200</span>
+
+well = wellObj(basename,<span class="string">'wells'</span>,gr,HK,{<span class="string">'PER'</span>,<span class="string">'Q'</span>}); <span class="comment">% get wells and their flows</span>
+
+IBOUND(:,1,[1 2]) = -1;  <span class="comment">% specify fixed-head cells</span>
+
+line = [ 7500 37500   0 ;
+        47500 37500 100];  <span class="comment">% the position of the drain (polyline)</span>
+
+cDrn = 100.0; <span class="comment">% [m/d]</span>
+
+DRN = gr.bcnLine(basename,<span class="string">'DRN'</span>,line,cDrn); <span class="comment">% generate DRN input</span>
+
+save <span class="string">underneath</span> <span class="string">line</span>
+</pre><pre class="codeoutput">mf_lay2mdl: The following arrays and variables are saved to the Matlab workspace:
+                name	size	    class	bytes
+                  HK	15 15 3	    double	5400
+              IBOUND	15 15 3	    double	5400
+                PEFF	15 15 3	    double	5400
+               PORCB	15 15 2	    double	3600
+                  SS	15 15 3	    double	5400
+              STRTHD	15 15 3	    double	5400
+                  SY	15 15 3	    double	5400
+                  VK	15 15 3	    double	5400
+                VKCB	15 15 2	    double	3600
+                  gr	1 1 	   gridObj	506
+</pre><h2>Conclusion<a name="3"></a></h2><p>In fact, nothing changes with respect to the 1_steady generic model. The only difference is the value in the column transient in worksheet PER.</p><h2>TO 130614<a name="4"></a></h2><p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+%% Generic transient model
+
+%% Explanation
+% This is the same model as 1_Steady, with only a minor change to make it
+% transient. The change to be made is in setting the value(s) in the column
+% transient in the worksheet PER of the accompanying workbook to 1 instead
+% of 0. mf_lay2mdl will then automatically retrieve SS and SY from the
+% workbook LAY and geneate the 3D model arrays. The model can then be run
+% from the initial STRTHD value to see its evaluation over time.
+% The visualization is adapted accordingly in mf_analyze.
+% Because the steps have been explained in detail in 1_steady, we only give
+% the required steps without comments here.
+% The obtain a somewhat nicer looking output picture, the well extraction was
+% reduced by a factor 5 to -1e5 m3/d (see worksheet PER column with header Q)
+% and the cDrn was increased from 1 to 100 m/d (see below, line 36)
+
+%% Steps
+
+basename = 'generic_transient';  % set basename
+save('name','basename');         % save it for later retrieval
+
+xGr = 0:5000:75000;  % grid line x-coordinates
+yGr = 75000:-5000:0; % gird line y-coordinates
+
+mf_lay2mdl(basename,xGr,yGr); % generate the 3D arrays and gridObj from worksheet LAY
+
+gr = gridObj(xGr,yGr,gr.zGr+200,gr.LAYCBD); % change default top of gr.zGr to +200
+
+well = wellObj(basename,'wells',gr,HK,{'PER','Q'}); % get wells and their flows
+
+IBOUND(:,1,[1 2]) = -1;  % specify fixed-head cells
+
+line = [ 7500 37500   0 ;
+        47500 37500 100];  % the position of the drain (polyline)
+
+cDrn = 100.0; % [m/d]
+
+DRN = gr.bcnLine(basename,'DRN',line,cDrn); % generate DRN input
+
+save underneath line
+%% Conclusion
+% In fact, nothing changes with respect to the 1_steady generic model. The only
+% difference is the value in the column transient in worksheet PER.
+
+%% TO 130614
+
+##### SOURCE END #####
+--></body></html>

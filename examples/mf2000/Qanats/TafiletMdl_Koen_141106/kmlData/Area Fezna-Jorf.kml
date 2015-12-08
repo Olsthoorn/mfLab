@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>Area Fezna-Jorf.kml</name>
+	<Style id="sn_ylw-pushpin">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<LineStyle>
+			<color>ff00aaff</color>
+		</LineStyle>
+		<PolyStyle>
+			<color>6600ff55</color>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="msn_ylw-pushpin">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_ylw-pushpin</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_ylw-pushpin0</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sh_ylw-pushpin0">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<LineStyle>
+			<color>ff00aaff</color>
+		</LineStyle>
+		<PolyStyle>
+			<color>6600ff55</color>
+		</PolyStyle>
+	</Style>
+	<Placemark>
+		<name>Fezna-Jorf</name>
+		<open>1</open>
+		<styleUrl>#msn_ylw-pushpin</styleUrl>
+		<Polygon>
+			<tessellate>1</tessellate>
+			<altitudeMode>relativeToGround</altitudeMode>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-4.454292362093767,31.53404638437756,1 -4.463950766870354,31.53583461637674,1 -4.470042062552269,31.53476142775746,1 -4.462887177464378,31.51704363923964,1 -4.454503834172265,31.51364942926274,1 -4.445473366336922,31.51669052785739,1 -4.440231453117972,31.52116753297895,1 -4.428091821261116,31.51701152736614,1 -4.434920525438026,31.51394225300624,1 -4.426426752484539,31.50719670566482,1 -4.427071071091858,31.50592697323375,1 -4.435581992618216,31.508131241152,1 -4.436232023230003,31.50540845733906,1 -4.425185658384258,31.49829151243464,1 -4.409439177772915,31.49388255433161,1 -4.409479496326162,31.48461469559029,1 -4.400554715597584,31.47894984296456,1 -4.395253015100916,31.47293218813268,1 -4.395486073323967,31.46838825409015,1 -4.392311937667862,31.46310242023917,1 -4.38742341243108,31.45962529678314,1 -4.380384053028736,31.46014145993512,1 -4.376742157615794,31.46394768841941,1 -4.388204085082533,31.47617802459308,1 -4.386274726747028,31.47853430658477,1 -4.379462818686077,31.47578086164205,1 -4.375390624343575,31.48012962648338,1 -4.373464166034539,31.47889456932,1 -4.368626959326424,31.48175730430597,1 -4.373033546041556,31.5007524479521,1 -4.383747555457883,31.51508311878744,1 -4.395090923358058,31.52134888419013,1 -4.419031351563019,31.52475337573758,1 -4.428269539105797,31.52833230456663,1 -4.447790593601212,31.52939964980279,1 -4.454292362093767,31.53404638437756,1 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+</Document>
+</kml>

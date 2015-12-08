@@ -1,0 +1,43 @@
+# MATLAB writeRCH, 15-Jun-2013 18:08:10
+PARAMETER     0
+         3        53  NRCHOP IRCHCB
+         1         1  INRECH(1)  INIRCH(1)
+         0     0.002  (1e12.3)                  -1      RECH{1}
+         1         1  INRECH(2)  INIRCH(2)
+         0     0.002  (1e12.3)                  -1      RECH{2}
+         1         1  INRECH(3)  INIRCH(3)
+         0     0.002  (1e12.3)                  -1      RECH{3}
+         1         1  INRECH(4)  INIRCH(4)
+         0     0.002  (1e12.3)                  -1      RECH{4}
+         1         1  INRECH(5)  INIRCH(5)
+         0     0.002  (1e12.3)                  -1      RECH{5}
+         1         1  INRECH(6)  INIRCH(6)
+         0     0.002  (1e12.3)                  -1      RECH{6}
+         1         1  INRECH(7)  INIRCH(7)
+         0     0.002  (1e12.3)                  -1      RECH{7}
+         1         1  INRECH(8)  INIRCH(8)
+         0     0.002  (1e12.3)                  -1      RECH{8}
+         1         1  INRECH(9)  INIRCH(9)
+         0     0.002  (1e12.3)                  -1      RECH{9}
+         1         1  INRECH(10)  INIRCH(10)
+         0     0.002  (1e12.3)                  -1      RECH{10}
+         1         1  INRECH(11)  INIRCH(11)
+         0     0.002  (1e12.3)                  -1      RECH{11}
+         1         1  INRECH(12)  INIRCH(12)
+         0     0.002  (1e12.3)                  -1      RECH{12}
+         1         1  INRECH(13)  INIRCH(13)
+         0     0.002  (1e12.3)                  -1      RECH{13}
+         1         1  INRECH(14)  INIRCH(14)
+         0     0.002  (1e12.3)                  -1      RECH{14}
+         1         1  INRECH(15)  INIRCH(15)
+         0     0.002  (1e12.3)                  -1      RECH{15}
+         1         1  INRECH(16)  INIRCH(16)
+         0     0.002  (1e12.3)                  -1      RECH{16}
+         1         1  INRECH(17)  INIRCH(17)
+         0     0.002  (1e12.3)                  -1      RECH{17}
+         1         1  INRECH(18)  INIRCH(18)
+         0     0.002  (1e12.3)                  -1      RECH{18}
+         1         1  INRECH(19)  INIRCH(19)
+         0     0.002  (1e12.3)                  -1      RECH{19}
+         1         1  INRECH(20)  INIRCH(20)
+         0     0.002  (1e12.3)                  -1      RECH{20}

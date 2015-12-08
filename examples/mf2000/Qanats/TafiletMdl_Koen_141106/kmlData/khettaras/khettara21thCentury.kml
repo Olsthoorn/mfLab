@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>khettara21thCentury.kml</name>
+	<Style id="inline">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline0">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline1</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline1">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Placemark>
+		<name>khettara21thCentury</name>
+		<styleUrl>#inline0</styleUrl>
+		<LineString>
+			<tessellate>1</tessellate>
+			<coordinates>
+				-4.571837936908659,31.55083329714,0 -4.460172673918295,31.54000057191514,0 -4.42887572084596,31.52273241009921,0 
+			</coordinates>
+		</LineString>
+	</Placemark>
+</Document>
+</kml>

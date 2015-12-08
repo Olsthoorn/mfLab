@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>AWD-WE.kml</name>
+	<Style id="sn_ylw-pushpin37">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Style id="sh_ylw-pushpin223">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<StyleMap id="msn_ylw-pushpin100">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_ylw-pushpin37</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_ylw-pushpin223</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Placemark>
+		<name>AWD-WE</name>
+		<styleUrl>#msn_ylw-pushpin100</styleUrl>
+		<LineString>
+			<tessellate>1</tessellate>
+			<coordinates>
+				4.453697852821545,52.36549799089818,0 4.622932815585539,52.32479110412498,0 4.693743338298524,52.30974937790999,0 4.849114496185464,52.27758194224661,0 
+			</coordinates>
+		</LineString>
+	</Placemark>
+</Document>
+</kml>

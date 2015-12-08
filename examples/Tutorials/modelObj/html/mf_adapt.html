@@ -1,0 +1,1255 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Tutorial of modelObj</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2012-08-30"><meta name="DC.source" content="mf_adapt.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>Tutorial of modelObj</h1><!--introduction--><p>This file teaches and verifies the modelObj for use in manipulating models TO 120829</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Introduction</a></li><li><a href="#2">Initialize</a></li><li><a href="#3">Set name of this model</a></li><li><a href="#4">what is a modelOb and what ia Model in this context?</a></li><li><a href="#6">How to create modelObj's?</a></li><li><a href="#9">Demo</a></li><li><a href="#12">Generate HK and VK</a></li><li><a href="#13">Generate a Model consisting of 3 empty model array objects</a></li><li><a href="#14">Fill this model</a></li><li><a href="#26">verify what happend to the variables</a></li><li><a href="#29">using methods</a></li><li><a href="#36">Convert CBD to LAY</a></li><li><a href="#38">Further grid manipulation</a></li><li><a href="#45">Fix right-hand boundary of model using CHD (environmental head) and STCONC</a></li><li><a href="#49">get wells</a></li><li><a href="#53">Grid resampling</a></li><li><a href="#56">Join rows in y-direction</a></li><li><a href="#57">Show the wells in this box, rotate the box (by hand) to see them</a></li><li><a href="#58">Show the wells</a></li><li><a href="#61">Set min thickness for somelayers</a></li><li><a href="#62">Set min thickness for somelayers</a></li><li><a href="#63">Start working in the workspace</a></li><li><a href="#64">Show all actions done to generate the Model</a></li></ul></div><h2>Introduction<a name="1"></a></h2><p>We will generate a Model consisting of an array of modelObj each containing a variable such as HK, VK, PEF, STRTHD, STCONC, IBOUND, RIV, GHB, grid, well etc, and will manipulate it by changing minimum layer thickness, joining and merging of layers and resampling the entire model to a completely new grid. We do this to demonstrate the various methods and to verify them where possible.</p><h2>Initialize<a name="2"></a></h2><pre class="codeinput">clear <span class="string">variables</span>; close <span class="string">all</span>;
+</pre><h2>Set name of this model<a name="3"></a></h2><pre class="codeinput">basename=<span class="string">'modelObjTutor'</span>;
+save <span class="string">name</span> <span class="string">basename</span>
+</pre><h2>what is a modelOb and what ia Model in this context?<a name="4"></a></h2><p>a modelObj is a class whose instantionation (actual model) is as struct with three fields: * name  % the name of the variable like 'HK', 'gr', 'RIV' etc * var   % the actual variable, i.e.HK, gr, RIV etc * type  % the mflab type of the variable like '3Dlay', 'gridObj', 'stress'</p><p>A Model is then just an array of modelObj instantiations.</p><p>The class has members, i.e. a set of functions shared by all modelObj's and it has properties that have different values between the individual modelObj's.</p><p>show what is in class modelObj</p><pre class="codeinput">modelObj
+</pre><pre class="codeoutput">
+ans = 
+
+  modelObj
+
+  Properties:
+           data: []
+    description: []
+           name: []
+            var: []
+           type: []
+       UserData: []
+
+
+</pre><h2>How to create modelObj's?<a name="6"></a></h2><p>See    help modelObj Call the modelObj constructor</p><p>Model(10) = modelObj(); %yields an Model consisting of 10 empty modelObj</p><p>in general call with arguments and limits: Model = modelObj(data,xlim,ylim,Ilay);</p><p>where data is * the directory holding the arrays constituting the model in matfiles   such that the name of the mat file is the name of the varariable it   contains (say HK in HK.mat), and that the contents of the matfile is   the variable itself with this name, so HK, plus a second variable with   the name and the word type attached to it, so here 'HKtype' having as   content a string with the mfLab type of the variable, i.e. here '3Dlay'   meaning a 3D array with a layer for each model layer. Other types are   '3Dcbd' (3D array with a later for each confining bed), '3Dtime' for RECH, with   one layer for each stress period, 'stress' for RIV,GHB,DRN,CHD, 'zlist'   for variables like HANI with one value for each layer, 'gridObj' for   grid objects, 'wellObj' for an array of well objects and possibly more. * an array of modelObj, i.e. another model, which may have been saved   for instance by      save MyModel.mat Model   earlier and is now retrieved by      load MyModel   and passed to the modelObj.  Ix,Iy,Iz are the indices along the rows, columns and layers which are to   be extracted, in case a submodel is desired. These fields are optional,   if omitted the entire model is used.</p><h2>Demo<a name="9"></a></h2><p>Generate a grid</p><pre class="codeinput">xGr = -750:250:750; xm=0.5*(xGr(1:end-1)+xGr(2:end));
+yGr = -750:250:750; ym=0.5*(yGr(1:end-1)+yGr(2:end));
+
+z = [0   -25 -50 -75 -100 -125 -150 -175 -200]';
+zm= [-20 -25 -30 -45  -50  -55  -60  -65 -100]';
+
+Z = repmat(permute(interp1([xGr(1) mean(xGr) xGr(end)],[z zm z]',xm)',[3,2,1]),[length(ym),1,1]);
+
+<span class="comment">% These parameters are optional</span>
+MINDZ=0.1;
+AXIAL=0;
+LAYCBD=0;
+</pre><p>the grid</p><pre class="codeinput">gr = gridObj(xGr,yGr,Z,LAYCBD,MINDZ,AXIAL);
+</pre><p>size of grid</p><pre class="codeinput">gr.size
+</pre><pre class="codeoutput">
+ans =
+
+     6     6     8
+
+</pre><h2>Generate HK and VK<a name="12"></a></h2><pre class="codeinput">hk= (1:gr.Nlay)'; <span class="comment">%hk(3)=25/1000;</span>
+vk= hk;
+HK = gr.const(hk);
+VK = gr.const(vk);
+</pre><h2>Generate a Model consisting of 3 empty model array objects<a name="13"></a></h2><pre class="codeinput">Model(3) = modelObj();
+</pre><h2>Fill this model<a name="14"></a></h2><pre class="codeinput">Model(1).name = <span class="string">'HK'</span>;
+Model(1).var  =  HK;
+Model(1).type = <span class="string">'3Dlay'</span>;
+
+Model(2).name =<span class="string">'VK'</span>;
+Model(2).var  = VK;
+Model(2).type = <span class="string">'3Dlay'</span>;
+
+Model(3).name = <span class="string">'gr'</span>;
+Model(3).var  = gr;
+Model(3).type = <span class="string">'gridObj'</span>;
+</pre><p>Now model is an array of 3 modelObj with some properties filled, see</p><pre class="codeinput">Model(1)
+Model(2)
+Model(3)
+</pre><pre class="codeoutput">
+ans = 
+
+  modelObj
+
+  Properties:
+           data: []
+    description: []
+           name: 'HK'
+            var: [6x6x8 double]
+           type: '3Dlay'
+       UserData: []
+
+
+
+ans = 
+
+  modelObj
+
+  Properties:
+           data: []
+    description: []
+           name: 'VK'
+            var: [6x6x8 double]
+           type: '3Dlay'
+       UserData: []
+
+
+
+ans = 
+
+  modelObj
+
+  Properties:
+           data: []
+    description: []
+           name: 'gr'
+            var: [1x1 gridObj]
+           type: 'gridObj'
+       UserData: []
+
+
+</pre><p>to see the names of the variables</p><pre class="codeinput">{Model.name} <span class="comment">%#ok</span>
+</pre><pre class="codeoutput">
+ans = 
+
+    'HK'    'VK'    'gr'
+
+</pre><p>and their mfLab types</p><pre class="codeinput">{Model.type} <span class="comment">%#ok</span>
+</pre><pre class="codeoutput">
+ans = 
+
+    '3Dlay'    '3Dlay'    'gridObj'
+
+</pre><p>or use display</p><pre class="codeinput">display({Model.type});
+</pre><pre class="codeoutput">    '3Dlay'    '3Dlay'    'gridObj'
+
+</pre><p>save this model</p><pre class="codeinput">save <span class="string">Model</span> <span class="string">Model</span>;
+
+whos
+</pre><pre class="codeoutput">  Name          Size             Bytes  Class       Attributes
+
+  AXIAL         1x1                  8  double                
+  HK            6x6x8             2304  double                
+  LAYCBD        1x1                  8  double                
+  MINDZ         1x1                  8  double                
+  Model         1x3               7759  modelObj              
+  VK            6x6x8             2304  double                
+  Z             6x6x9             2592  double                
+  ans           1x3                370  cell                  
+  basename      1x13                26  char                  
+  gr            1x1               3001  gridObj               
+  hk            8x1                 64  double                
+  vk            8x1                 64  double                
+  xGr           1x7                 56  double                
+  xm            1x6                 48  double                
+  yGr           1x7                 56  double                
+  ym            1x6                 48  double                
+  z             9x1                 72  double                
+  zm            9x1                 72  double                
+
+</pre><p>clear the workspace</p><pre class="codeinput">clear;
+whos
+</pre><p>load the model</p><pre class="codeinput">load <span class="string">Model</span>
+whos
+
+gr = Model.grid();
+</pre><pre class="codeoutput">  Name       Size            Bytes  Class       Attributes
+
+  Model      1x3              7759  modelObj              
+
+</pre><p>to cutout a submodel</p><pre class="codeinput">xlim = gr.xGr([2 end-1]); ylim=gr.yGr([2 end-1]);
+subModel = modelObj(Model,xlim,ylim);
+</pre><p>size of the new submodel</p><pre class="codeinput">grSub = subModel.grid();
+</pre><p>size of old grid</p><pre class="codeinput">gr.size
+</pre><pre class="codeoutput">
+ans =
+
+     6     6     8
+
+</pre><p>size of new grid</p><pre class="codeinput">grSub.size
+</pre><pre class="codeoutput">
+ans =
+
+     4     4     8
+
+</pre><h2>verify what happend to the variables<a name="26"></a></h2><pre class="codeinput">fprintf(<span class="string">'Model(1):\n'</span>);
+Model(1)
+</pre><pre class="codeoutput">Model(1):
+
+ans = 
+
+  modelObj
+
+  Properties:
+           data: []
+    description: []
+           name: 'HK'
+            var: [6x6x8 double]
+           type: '3Dlay'
+       UserData: []
+
+
+</pre><pre class="codeinput">fprintf(<span class="string">'subModel(1):\n'</span>);
+subModel(1)
+</pre><pre class="codeoutput">subModel(1):
+
+ans = 
+
+  modelObj
+
+  Properties:
+           data: []
+    description: []
+           name: 'HK'
+            var: [4x4x8 double]
+           type: '3Dlay'
+       UserData: []
+
+
+</pre><pre class="codeinput">clear <span class="string">subModel</span> <span class="string">grSub</span>;
+</pre><h2>using methods<a name="29"></a></h2><p>Note that most methods work on all objects of the modelObj array, so even though Model is just an array of modelObj, the modelObj methods are generally called like this Model= Model.descr('another string'); To obtain a new Model array (overwriting the old) with changed properties. The methods (in this case descr) is applied to all objects in the object array Model.</p><p>compute transmissivity and HK at specified cell indices or every where if omited</p><pre class="codeinput">Ix = 3; Iy= 2;
+[kD,Hk] = Model.transm(Ix,Iy);
+</pre><p>same for vertical hydraulic resistance and VK</p><pre class="codeinput">[c ,Vk] = Model.resistance(Ix,Iy);
+</pre><p>these methods have been combined in the script verify to display these variables for all layers together for a selected Ix and Iy</p><pre class="codeinput">Model = Model.descr(<span class="string">'Initialized: Model with HK VK'</span>);
+verify <span class="comment">% see verify by typing:    edit verify</span>
+</pre><pre class="codeoutput">
+
+Initialized: Model with HK VK
+     layer         DZ         kD         HK          c         VK
+         1    8.33333    8.33333          1    8.33333          1
+         2    8.33333    16.6667          2    4.16667          2
+         3    16.6667         50          3    5.55556          3
+         4    8.33333    33.3333          4    2.08333          4
+         5    8.33333    41.6667          5    1.66667          5
+         6    8.33333         50          6    1.38889          6
+         7    8.33333    58.3333          7    1.19048          7
+         8    33.3333    266.667          8    4.16667          8
+
+    total:        100        525               28.5516           
+
+</pre><p>append a string to Model.description proper</p><pre class="codeinput">Model  = Model.descr(<span class="string">'Loaded: Full model Model.mat from disk'</span>);
+</pre><p>Show the model and use the last description line in the title</p><pre class="codeinput">Model.showBox(Model(1).description{1});
+</pre><img vspace="5" hspace="5" src="mf_adapt_01.png" alt=""> <p>if you like you may save the model so far save Model00 Model</p><h2>Convert CBD to LAY<a name="36"></a></h2><p>If the model was essentially made for the BCF package it can be changed to the LPF package by Model = Model.CBF2LPF();</p><p>for transport models it is strongly advised to remove confining beds and to change them into regular model layers:</p><pre class="codeinput">Model = Model.removeCBD();
+Model=  Model.descr(<span class="string">'Removed: confining beds'</span>);
+Model.showBox(Model(1).description{end});
+
+verify;
+</pre><pre class="codeoutput">
+
+Removed: confining beds
+     layer         DZ         kD         HK          c         VK
+         1    8.33333    8.33333          1    8.33333          1
+         2    8.33333    16.6667          2    4.16667          2
+         3    16.6667         50          3    5.55556          3
+         4    8.33333    33.3333          4    2.08333          4
+         5    8.33333    41.6667          5    1.66667          5
+         6    8.33333         50          6    1.38889          6
+         7    8.33333    58.3333          7    1.19048          7
+         8    33.3333    266.667          8    4.16667          8
+
+    total:        100        525               28.5516           
+
+</pre><img vspace="5" hspace="5" src="mf_adapt_02.png" alt=""> <h2>Further grid manipulation<a name="38"></a></h2><p>to adapt the mininum thickness of layers:</p><pre class="codeinput">MINDZ = 5; layers = [1 5 6];
+<span class="comment">% given layers at least 1 MINDZ thick</span>
+Model = Model.mindz(MINDZ,layers);
+Model=  Model.descr(sprintf(<span class="string">'Enforced: layers [1 5 6] set ot %f'</span>,MINDZ));
+Model.showBox(Model(1).description{end});
+
+verify;
+</pre><pre class="codeoutput">mindz:
+Previous minimum layer thickness and new ones per layer, changed layers: layer        start          end
+    1      8.33333      8.33333
+    2      8.33333      8.33333
+    3      16.6667      16.6667
+    4      8.33333      8.33333
+    5      8.33333      8.33333
+    6      8.33333      8.33333
+    7      8.33333      8.33333
+    8      26.6667      26.6667
+
+
+
+Enforced: layers [1 5 6] set ot 5.000000
+     layer         DZ         kD         HK          c         VK
+         1    8.33333    8.33333          1    8.33333          1
+         2    8.33333    16.6667          2    4.16667          2
+         3    16.6667         50          3    5.55556          3
+         4    8.33333    33.3333          4    2.08333          4
+         5    8.33333    41.6667          5    1.66667          5
+         6    8.33333         50          6    1.38889          6
+         7    8.33333    58.3333          7    1.19048          7
+         8    33.3333    266.667          8    4.16667          8
+
+    total:        100        525               28.5516           
+
+</pre><img vspace="5" hspace="5" src="mf_adapt_03.png" alt=""> <p>update grid in workspace</p><pre class="codeinput">gr = Model.grid();
+</pre><p>Generate a STRTHD array</p><pre class="codeinput">dhdx= 1/500;  <span class="comment">% head gradient in x-direction</span>
+strthd = 0 + dhdx*(gr.xm - gr.xm(1));
+STRTHD = repmat(strthd,[gr.Ny,1,gr.Nz]);
+</pre><p>add to Model</p><pre class="codeinput">Model(end+1) = modelObj();
+Model(end).name = <span class="string">'STRTHD'</span>;
+Model(end).var  =  STRTHD;
+Model(end).type = <span class="string">'3Dlay'</span>;
+
+Model = Model.descr(<span class="string">'Added: STRTHD'</span>);
+</pre><p>Generate the IBOUND array</p><pre class="codeinput">IBOUND = gr.const(1);
+</pre><p>add to Model</p><pre class="codeinput">Model(end+1) = modelObj();
+Model(end).name = <span class="string">'IBOUND'</span>;
+Model(end).var  =  IBOUND;
+Model(end).type = <span class="string">'3Dlay'</span>;
+
+Model = Model.descr(<span class="string">'Added: IBOUND'</span>);
+</pre><h2>Fix right-hand boundary of model using CHD (environmental head) and STCONC<a name="45"></a></h2><pre class="codeinput">iWest = 2;  <span class="comment">% arbitrary zone number not equal to 0 or 1</span>
+iEast = 3;  <span class="comment">% arbitrary zone number not equal to 0 or 1</span>
+CHDOPT= 2;  <span class="comment">% option to intepret specified heads as environmental heads in SEAWAT</span>
+</pre><p>use IBOUND as zone array (optional)</p><pre class="codeinput">IBOUND(:,end,:)=iEast; <span class="comment">% put zone number at right hand cells</span>
+IBOUND(:,  1,:)=iWest; <span class="comment">% put zone number at left  hand cells</span>
+hE = STRTHD(IBOUND==iEast);
+hW = STRTHD(IBOUND==iWest);
+
+zoneVals = {iEast hE hE CHDOPT;  <span class="comment">% one line per zone</span>
+            iWest hW hW CHDOPT};
+</pre><p>Generate CHD list</p><pre class="codeinput">basename = <span class="string">'modelObjTutor'</span>;
+CHD = gr.bcnZone(basename,<span class="string">'CHD'</span>,IBOUND,zoneVals);
+</pre><p>Add to the Model</p><pre class="codeinput">Model(end+1) = modelObj();
+Model(end).name = <span class="string">'CHD'</span>;
+Model(end).var  =  CHD;
+Model(end).type = <span class="string">'stress'</span>;
+
+Model = Model.descr(<span class="string">'Added: CHD stress list'</span>);
+</pre><h2>get wells<a name="49"></a></h2><pre class="codeinput">[~,HK] = Model.transm();
+well=gr.well(basename,HK,<span class="string">'wells'</span>);
+
+Model(end+1) = modelObj();
+Model(end).name = <span class="string">'well'</span>;
+Model(end).var  =  well;
+Model(end).type = <span class="string">'wellObj'</span>;
+
+Model = Model.descr(<span class="string">'Added: wells'</span>);
+</pre><p>Join some layers of the original model, while keeping total transmisivity and vertical hydraulic resistance.</p><p>joinArray tells which of the old layers are merged in each new layer:</p><pre class="codeinput">joinArray=[1 2 3 4 5 6 7 8;   <span class="comment">% Old Layer Nrs</span>
+           1 2 2 3 3 3 4 4] ;  <span class="comment">% New Layer Nrs</span>
+
+Model = Model.merge(<span class="string">'join'</span>,joinArray,<span class="string">'z'</span>); <span class="comment">% coarsen grid in z-direction</span>
+Model = Model.descr(<span class="string">'Joined: layers [1 2 3] and [4 5] too thin or irrelevant for the density problem.'</span>);
+verify;
+</pre><pre class="codeoutput">Processing wells ...Elapsed time is 0.022268 seconds.
+done
+
+
+
+Joined: layers [1 2 3] and [4 5] too thin or irrelevant for the density problem.
+     layer         DZ         kD         HK          c         VK
+         1    8.33333    8.33333          1    8.33333          1
+         2         25    66.6667    2.66667      9.375    2.66667
+         3         25        125          5          5          5
+         4    41.6667        325        7.8    5.34188        7.8
+
+    total:        100        525               28.0502           
+
+</pre><p>split ome layers to get more vertical detail</p><pre class="codeinput">splitArray = [1 2 3 4;  <span class="comment">% old layer numbers</span>
+              3 5 2 3]; <span class="comment">% each split in this number of new layers</span>
+
+display(splitArray);
+</pre><pre class="codeoutput">
+splitArray =
+
+     1     2     3     4
+     3     5     2     3
+
+</pre><p>split it</p><pre class="codeinput">Model = Model.merge(<span class="string">'split'</span>,splitArray,<span class="string">'z'</span>);
+Model = Model.descr(<span class="string">'Split: layers 1--&gt;3,3--&gt;5'</span>);
+verify;
+</pre><pre class="codeoutput">Processing wells ...Elapsed time is 0.021148 seconds.
+done
+
+
+
+Split: layers 1--&gt;3,3--&gt;5
+     layer         DZ         kD         HK          c         VK
+         1    2.77778    2.77778          1    2.77778          1
+         2    2.77778    2.77778          1    2.77778          1
+         3    2.77778    2.77778          1    2.77778          1
+         4          5    13.3333    2.66667      1.875    2.66667
+         5          5    13.3333    2.66667      1.875    2.66667
+         6          5    13.3333    2.66667      1.875    2.66667
+         7          5    13.3333    2.66667      1.875    2.66667
+         8          5    13.3333    2.66667      1.875    2.66667
+         9       12.5       62.5          5        2.5          5
+        10       12.5       62.5          5        2.5          5
+        11    13.8889    108.333        7.8    1.78063        7.8
+        12    13.8889    108.333        7.8    1.78063        7.8
+        13    13.8889    108.333        7.8    1.78063        7.8
+
+    total:        100        525               28.0502           
+
+</pre><h2>Grid resampling<a name="53"></a></h2><p>completely resample the grid using planes to keep in gr.Z and the number of subdivisions between each pair of kept planes. A plane is a layer surface, a model has one plane more than the number of layers and confining beds combined. Plane 1 is omitted, the last plane is implied but obliged if used. The number of planes equals the number of subdivisions specified.</p><p>Adapt the grid by a complete resampling</p><pre class="codeinput">gr = Model.grid();
+planesToKeep = [ 2  4 9 gr.Nz+1];
+subdivisions = [ 5 10 10     20];
+Model= Model.changeLayers( planesToKeep, subdivisions);
+
+Model = Model.descr(<span class="string">'Changed: layers using planes to keep and subdivisions'</span>);
+
+Model.showBox(Model(1).description{end});
+verify;
+</pre><pre class="codeoutput">changeLayers: converting variable         HK of type      3Dlay
+changeLayers: converting variable         VK of type      3Dlay
+changeLayers: converting variable         gr of type    gridObj
+changeLayers: converting variable     STRTHD of type      3Dlay
+changeLayers: converting variable     IBOUND of type      3Dlay
+changeLayers: converting variable        CHD of type     stress
+changeLayers: converting variable       well of type    wellObj
+
+
+Changed: layers using planes to keep and subdivisions
+     layer         DZ         kD         HK          c         VK
+         1   0.555556   0.555556          1   0.555556          1
+         2   0.555556   0.555556          1   0.555556          1
+         3   0.555556   0.555556          1   0.555556          1
+         4   0.555556   0.555556          1   0.555556          1
+         5   0.555556   0.555556          1   0.555556          1
+         6   0.555556   0.555556          1   0.555556          1
+         7   0.555556   0.555556          1   0.555556          1
+         8   0.555556   0.555556          1   0.555556          1
+         9   0.555556   0.555556          1   0.555556          1
+        10   0.555556   0.555556          1   0.555556          1
+        11   0.555556   0.555556          1   0.555556          1
+        12   0.555556   0.555556          1   0.555556          1
+        13   0.555556   0.555556          1   0.555556          1
+        14   0.555556   0.555556          1   0.555556          1
+        15   0.555556   0.555556          1   0.555556          1
+        16        2.5    6.66667    2.66667     0.9375    2.66667
+        17        2.5    6.66667    2.66667     0.9375    2.66667
+        18        2.5    6.66667    2.66667     0.9375    2.66667
+        19        2.5    6.66667    2.66667     0.9375    2.66667
+        20        2.5    6.66667    2.66667     0.9375    2.66667
+        21        2.5    6.66667    2.66667     0.9375    2.66667
+        22        2.5    6.66667    2.66667     0.9375    2.66667
+        23        2.5    6.66667    2.66667     0.9375    2.66667
+        24        2.5    6.66667    2.66667     0.9375    2.66667
+        25        2.5    6.66667    2.66667     0.9375    2.66667
+        26    3.33333    16.6667          5   0.666667          5
+        27    3.33333    16.6667          5   0.666667          5
+        28    3.33333    16.6667          5   0.666667          5
+        29    3.33333    16.6667          5   0.666667          5
+        30    3.33333    16.6667          5   0.666667          5
+        31    3.33333    16.6667          5   0.666667          5
+        32    3.33333    16.6667          5   0.666667          5
+        33    3.33333    21.3333        6.4   0.520833        6.4
+        34    3.33333         26        7.8    0.42735        7.8
+        35    3.33333         26        7.8    0.42735        7.8
+        36    3.33333         26        7.8    0.42735        7.8
+        37    3.33333         26        7.8    0.42735        7.8
+        38    3.33333         26        7.8    0.42735        7.8
+        39    3.33333         26        7.8    0.42735        7.8
+        40    3.33333         26        7.8    0.42735        7.8
+        41    3.33333         26        7.8    0.42735        7.8
+        42    3.33333         26        7.8    0.42735        7.8
+        43    3.33333         26        7.8    0.42735        7.8
+        44    3.33333         26        7.8    0.42735        7.8
+        45    3.33333         26        7.8    0.42735        7.8
+
+    total:        100        525                28.024           
+
+</pre><img vspace="5" hspace="5" src="mf_adapt_04.png" alt=""> <h2>Join rows in y-direction<a name="56"></a></h2><p>All rows in y direction are joined to obtain a cross section model in the x-direction. The join array is used to tell which of the old layers will be in each of the new layers. To join them all, the join array has numbers 1 through gr.Ny in the first rows (all rows) and all 1 in the seconde, meaning that all the top rows will become the first row of the new model.</p><pre class="codeinput">joinArray= [1:gr.Ny;               <span class="comment">% row numbers current grid</span>
+            ones(1,gr.Ny)];        <span class="comment">% row numbers new grid</span>
+
+Model = Model.merge(<span class="string">'join'</span>,joinArray,<span class="string">'y'</span>); <span class="comment">% join in y-direction</span>
+Model = Model.descr(<span class="string">'Joined: all rows (y direction) to get a cross section representative for a given width.'</span>);
+Model.showBox(Model(1).description{end});
+Ix = 1; Iy=1;
+verify;
+</pre><pre class="codeoutput">Processing wells ...Elapsed time is 0.021234 seconds.
+done
+
+
+
+Joined: all rows (y direction) to get a cross section representative for a given width.
+     layer         DZ         kD         HK          c         VK
+         1   0.555556   0.555556          1   0.555556          1
+         2   0.555556   0.555556          1   0.555556          1
+         3   0.555556   0.555556          1   0.555556          1
+         4   0.555556   0.555556          1   0.555556          1
+         5   0.555556   0.555556          1   0.555556          1
+         6   0.555556   0.555556          1   0.555556          1
+         7   0.555556   0.555556          1   0.555556          1
+         8   0.555556   0.555556          1   0.555556          1
+         9   0.555556   0.555556          1   0.555556          1
+        10   0.555556   0.555556          1   0.555556          1
+        11   0.555556   0.555556          1   0.555556          1
+        12   0.555556   0.555556          1   0.555556          1
+        13   0.555556   0.555556          1   0.555556          1
+        14   0.555556   0.555556          1   0.555556          1
+        15   0.555556   0.555556          1   0.555556          1
+        16        2.5    6.66667    2.66667     0.9375    2.66667
+        17        2.5    6.66667    2.66667     0.9375    2.66667
+        18        2.5    6.66667    2.66667     0.9375    2.66667
+        19        2.5    6.66667    2.66667     0.9375    2.66667
+        20        2.5    6.66667    2.66667     0.9375    2.66667
+        21        2.5    6.66667    2.66667     0.9375    2.66667
+        22        2.5    6.66667    2.66667     0.9375    2.66667
+        23        2.5    6.66667    2.66667     0.9375    2.66667
+        24        2.5    6.66667    2.66667     0.9375    2.66667
+        25        2.5    6.66667    2.66667     0.9375    2.66667
+        26    3.33333    16.6667          5   0.666667          5
+        27    3.33333    16.6667          5   0.666667          5
+        28    3.33333    16.6667          5   0.666667          5
+        29    3.33333    16.6667          5   0.666667          5
+        30    3.33333    16.6667          5   0.666667          5
+        31    3.33333    16.6667          5   0.666667          5
+        32    3.33333    16.6667          5   0.666667          5
+        33    3.33333    21.3333        6.4   0.520833        6.4
+        34    3.33333         26        7.8    0.42735        7.8
+        35    3.33333         26        7.8    0.42735        7.8
+        36    3.33333         26        7.8    0.42735        7.8
+        37    3.33333         26        7.8    0.42735        7.8
+        38    3.33333         26        7.8    0.42735        7.8
+        39    3.33333         26        7.8    0.42735        7.8
+        40    3.33333         26        7.8    0.42735        7.8
+        41    3.33333         26        7.8    0.42735        7.8
+        42    3.33333         26        7.8    0.42735        7.8
+        43    3.33333         26        7.8    0.42735        7.8
+        44    3.33333         26        7.8    0.42735        7.8
+        45    3.33333         26        7.8    0.42735        7.8
+
+    total:        100        525                28.024           
+
+</pre><img vspace="5" hspace="5" src="mf_adapt_05.png" alt=""> <h2>Show the wells in this box, rotate the box (by hand) to see them<a name="57"></a></h2><p>The wells are plotted in 3D and are visible in the model by rotating the model in the figure by hand (use 3D rotation tool in top of figure window).</p><pre class="codeinput">gr.plotWells(gca,Model(strmatchi(<span class="string">'wellObj'</span>,{Model.type})).var); <span class="comment">% plot 3D in existing figure</span>
+</pre><img vspace="5" hspace="5" src="mf_adapt_06.png" alt=""> <h2>Show the wells<a name="58"></a></h2><p>Turn the model to better show the wells (by hand using the 3D rotation tool in the tool bar at the top of the figure screen</p><p>Get start concentration distribution using function</p><pre class="codeinput">cFresh = 0;
+cSea   = 1;
+SigmaX = 0;
+SigmaZ = 50;
+zc     = -120;
+xc     = 0;
+STCONC = getInitialSalinity(gr,cFresh,cSea,xc,zc,SigmaX,SigmaZ);
+</pre><p>Add STCONC to model arrays by appending a modelObj to Model. This way any new information can be added to the current Model, like even its computed heads and concentrations.</p><pre class="codeinput">Model(end+1) = modelObj(); <span class="comment">% append anempty modelObj</span>
+Model(end).name   = <span class="string">'STCONC'</span>;  <span class="comment">% with name of the new variable</span>
+Model(end).var    =  STCONC;    <span class="comment">% the variable itself</span>
+Model(end).type   = <span class="string">'3Dlay'</span>;   <span class="comment">% and the variable type</span>
+Model = Model.descr(<span class="string">'Added: Initial salinity distribution (STCONC).'</span>);
+</pre><h2>Set min thickness for somelayers<a name="61"></a></h2><pre class="codeinput">MINDZ = 3; layers = [4 8 12];
+Model = Model.mindz(MINDZ,layers);
+Model = Model.descr(sprintf(<span class="string">'Changed: Minimum layer thickness for layers [4 8 12] to %g m'</span>,MINDZ));
+
+Model.showBox(Model(1).description{end});
+verify;
+
+done;
+</pre><pre class="codeoutput">mindz:
+Previous minimum layer thickness and new ones per layer, changed layers: layer        start          end
+    1     0.555556     0.555556
+    2     0.555556     0.555556
+    3     0.555556     0.555556
+    4     0.555556     0.555556
+    5     0.555556            3
+    6     0.555556          0.1
+    7     0.555556          0.1
+    8     0.555556          0.1
+    9     0.555556          2.7
+   10     0.555556          0.1
+   11     0.555556          0.1
+   12     0.555556          0.1
+   13     0.555556          2.9
+   14     0.555556          0.1
+   15     0.555556          0.1
+   16          2.5      1.85556
+   17          2.5     0.444444
+   18          2.5      1.55556
+   19          2.5          2.5
+   20          2.5          2.5
+   21          2.5          2.5
+   22          2.5          2.5
+   23          2.5          2.5
+   24          2.5          2.5
+   25          2.5          2.5
+   26      3.33333      3.33333
+   27      3.33333      3.33333
+   28      3.33333      3.33333
+   29      3.33333      3.33333
+   30      3.33333      3.33333
+   31      3.33333      3.33333
+   32      3.33333      3.33333
+   33      3.33333      3.33333
+   34      3.33333      3.33333
+   35      3.33333      3.33333
+   36      3.33333      3.33333
+   37      3.33333      3.33333
+   38      3.33333      3.33333
+   39      3.33333      3.33333
+   40      3.33333      3.33333
+   41      3.33333      3.33333
+   42      3.33333      3.33333
+   43      3.33333      3.33333
+   44      3.33333      3.33333
+   45      3.33333      3.33333
+
+
+
+Changed: Minimum layer thickness for layers [4 8 12] to 3 m
+     layer         DZ         kD         HK          c         VK
+         1   0.555556   0.555556          1   0.555556          1
+         2   0.555556   0.555556          1   0.555556          1
+         3   0.555556   0.555556          1   0.555556          1
+         4   0.555556   0.555556          1   0.555556          1
+         5          3          3          1          3          1
+         6        0.1        0.1          1        0.1          1
+         7        0.1        0.1          1        0.1          1
+         8        0.1        0.1          1        0.1          1
+         9        2.7    3.25676    1.20621    2.23842    1.20621
+        10   0.333333   0.402299     1.2069    0.27619     1.2069
+        11   0.222222   0.273308    1.22989   0.180685    1.22989
+        12        0.1   0.127778    1.27778  0.0782609    1.27778
+        13        2.9    7.70036     2.6553    1.09216     2.6553
+        14        0.1   0.265965    2.65965   0.037599    2.65965
+        15        0.1   0.266359    2.66359  0.0375433    2.66359
+        16    1.85556    4.94815    2.66667   0.695833    2.66667
+        17   0.444444    1.18519    2.66667   0.166667    2.66667
+        18    1.55556    4.14815    2.66667   0.583333    2.66667
+        19        2.5    6.66667    2.66667     0.9375    2.66667
+        20        2.5    6.66667    2.66667     0.9375    2.66667
+        21        2.5    6.66667    2.66667     0.9375    2.66667
+        22        2.5    6.66667    2.66667     0.9375    2.66667
+        23        2.5    6.66667    2.66667     0.9375    2.66667
+        24        2.5    6.66667    2.66667     0.9375    2.66667
+        25        2.5    6.66667    2.66667     0.9375    2.66667
+        26    3.33333    16.6667          5   0.666667          5
+        27    3.33333    16.6667          5   0.666667          5
+        28    3.33333    16.6667          5   0.666667          5
+        29    3.33333    16.6667          5   0.666667          5
+        30    3.33333    16.6667          5   0.666667          5
+        31    3.33333    16.6667          5   0.666667          5
+        32    3.33333    16.6667          5   0.666667          5
+        33    3.33333    21.3333        6.4   0.520833        6.4
+        34    3.33333         26        7.8    0.42735        7.8
+        35    3.33333         26        7.8    0.42735        7.8
+        36    3.33333         26        7.8    0.42735        7.8
+        37    3.33333         26        7.8    0.42735        7.8
+        38    3.33333         26        7.8    0.42735        7.8
+        39    3.33333         26        7.8    0.42735        7.8
+        40    3.33333         26        7.8    0.42735        7.8
+        41    3.33333         26        7.8    0.42735        7.8
+        42    3.33333         26        7.8    0.42735        7.8
+        43    3.33333         26        7.8    0.42735        7.8
+        44    3.33333         26        7.8    0.42735        7.8
+        45    3.33333         26        7.8    0.42735        7.8
+
+    total:        100    524.763               27.7871           
+
+done
+</pre><img vspace="5" hspace="5" src="mf_adapt_07.png" alt=""> <h2>Set min thickness for somelayers<a name="62"></a></h2><p>a more extreme change of  minimum layer thickness. Note that underlying layers will be compressed and end up having minimum layer thickness equal to gr.MINDZ. This small correction may cause the total transmissivity and resistance to change a small amount.</p><pre class="codeinput">MINDZ = 15; layers = [25 30 40];
+Model = Model.mindz(MINDZ,layers);
+Model = Model.descr(sprintf(<span class="string">'Changed: Minimum layer thickness for layers [4 8 12] to %g m'</span>,MINDZ));
+
+Model.showBox(Model(1).description{end});
+verify;
+
+done;
+</pre><pre class="codeoutput">mindz:
+Previous minimum layer thickness and new ones per layer, changed layers: layer        start          end
+    1     0.555556     0.555556
+    2     0.555556     0.555556
+    3     0.555556     0.555556
+    4     0.555556     0.555556
+    5            3            3
+    6          0.1          0.1
+    7          0.1          0.1
+    8          0.1          0.1
+    9          2.7          2.7
+   10          0.1          0.1
+   11          0.1          0.1
+   12          0.1          0.1
+   13          2.9          2.9
+   14          0.1          0.1
+   15          0.1          0.1
+   16      1.85556      1.85556
+   17     0.444444     0.444444
+   18      1.55556      1.55556
+   19          2.5          2.5
+   20          2.5          2.5
+   21          2.5          2.5
+   22          2.5          2.5
+   23          2.5          2.5
+   24          2.5          2.5
+   25          2.5          2.5
+   26      3.33333      15.8333
+   27      3.33333          0.1
+   28      3.33333          0.1
+   29      3.33333          0.1
+   30      3.33333     0.533333
+   31      3.33333           15
+   32      3.33333          0.1
+   33      3.33333          0.1
+   34      3.33333          0.1
+   35      3.33333          0.1
+   36      3.33333          2.1
+   37      3.33333      3.33333
+   38      3.33333      3.33333
+   39      3.33333      3.33333
+   40      3.33333      3.33333
+   41      3.33333           15
+   42      3.33333          0.1
+   43      3.33333          0.1
+   44      3.33333          0.1
+   45      3.33333      1.36667
+
+
+
+Changed: Minimum layer thickness for layers [4 8 12] to 15 m
+     layer         DZ         kD         HK          c         VK
+         1   0.555556   0.555556          1   0.555556          1
+         2   0.555556   0.555556          1   0.555556          1
+         3   0.555556   0.555556          1   0.555556          1
+         4   0.555556   0.555556          1   0.555556          1
+         5          3          3          1          3          1
+         6        0.1        0.1          1        0.1          1
+         7        0.1        0.1          1        0.1          1
+         8        0.1        0.1          1        0.1          1
+         9        2.7    3.25676    1.20621    2.23842    1.20621
+        10   0.333333   0.402299     1.2069    0.27619     1.2069
+        11   0.222222   0.273308    1.22989   0.180685    1.22989
+        12        0.1   0.127778    1.27778  0.0782609    1.27778
+        13        2.9    7.70036     2.6553    1.09216     2.6553
+        14        0.1   0.265965    2.65965   0.037599    2.65965
+        15        0.1   0.266359    2.66359  0.0375433    2.66359
+        16    1.85556    4.94815    2.66667   0.695833    2.66667
+        17   0.444444    1.18519    2.66667   0.166667    2.66667
+        18    1.55556    4.14815    2.66667   0.583333    2.66667
+        19        2.5    6.66667    2.66667     0.9375    2.66667
+        20        2.5    6.66667    2.66667     0.9375    2.66667
+        21        2.5    6.66667    2.66667     0.9375    2.66667
+        22        2.5    6.66667    2.66667     0.9375    2.66667
+        23        2.5    6.66667    2.66667     0.9375    2.66667
+        24        2.5    6.66667    2.66667     0.9375    2.66667
+        25        2.5    6.66667    2.66667     0.9375    2.66667
+        26    15.8333    79.1667          5    3.16667          5
+        27        0.1        0.5          5       0.02          5
+        28        0.1        0.5          5       0.02          5
+        29        0.1        0.5          5       0.02          5
+        30   0.533333    2.66667          5   0.106667          5
+        31       17.5    113.167    6.46667    2.70619    6.46667
+        32        0.1   0.681176    6.81176  0.0146805    6.81176
+        33        0.1   0.736923    7.36923  0.0135699    7.36923
+        34        0.1       0.78        7.8  0.0128205        7.8
+        35        0.1       0.78        7.8  0.0128205        7.8
+        36        2.1      16.38        7.8   0.269231        7.8
+        37    3.33333         26        7.8    0.42735        7.8
+        38    3.33333         26        7.8    0.42735        7.8
+        39    3.33333         26        7.8    0.42735        7.8
+        40    3.33333         26        7.8    0.42735        7.8
+        41         15        117        7.8    1.92308        7.8
+        42        0.1       0.78        7.8  0.0128205        7.8
+        43        0.1       0.78        7.8  0.0128205        7.8
+        44        0.1       0.78        7.8  0.0128205        7.8
+        45    1.36667      10.66        7.8   0.175214        7.8
+
+    total:        100    524.621               27.6802           
+
+done
+</pre><img vspace="5" hspace="5" src="mf_adapt_08.png" alt=""> <h2>Start working in the workspace<a name="63"></a></h2><p>Put all model arrays into workspace</p><pre class="codeinput">unpack;
+</pre><pre class="codeoutput">Putting    HK                    of mfLab type     3Dlay             in the workspace
+Putting    VK                    of mfLab type     3Dlay             in the workspace
+Putting    gr                    of mfLab type     gridObj           in the workspace
+Putting    STRTHD                of mfLab type     3Dlay             in the workspace
+Putting    IBOUND                of mfLab type     3Dlay             in the workspace
+Putting    CHD                   of mfLab type     stress            in the workspace
+Putting    well                  of mfLab type     wellObj           in the workspace
+Putting    STCONC                of mfLab type     3Dlay             in the workspace
+</pre><h2>Show all actions done to generate the Model<a name="64"></a></h2><p>Note that all saved models can be retrieved via load Modelxx where xx the number used when saved. By calling Model.descr a print will be made of all actions taken to genereate the particular model:</p><pre class="codeinput">Model.descr;
+</pre><pre class="codeoutput">Actions taken to generate this model:
+ 1: Initialized: Model with HK VK
+ 2: Loaded: Full model Model.mat from disk
+ 3: Removed: confining beds
+ 4: Enforced: layers [1 5 6] set ot 5.000000
+ 5: Added: STRTHD
+ 6: Added: IBOUND
+ 7: Added: CHD stress list
+ 8: Added: wells
+ 9: Joined: layers [1 2 3] and [4 5] too thin or irrelevant for the density problem.
+10: Split: layers 1--&gt;3,3--&gt;5
+11: Changed: layers using planes to keep and subdivisions
+12: Joined: all rows (y direction) to get a cross section representative for a given width.
+13: Added: Initial salinity distribution (STCONC).
+14: Changed: Minimum layer thickness for layers [4 8 12] to 3 m
+15: Changed: Minimum layer thickness for layers [4 8 12] to 15 m
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+%% Tutorial of modelObj
+%
+% This file teaches and verifies the modelObj for use in manipulating models
+% TO 120829
+
+%% Introduction
+% We will generate a Model consisting of an array of modelObj each containing
+% a variable such as HK, VK, PEF, STRTHD, STCONC, IBOUND, RIV, GHB, grid,
+% well etc, and will manipulate it by changing minimum layer thickness,
+% joining and merging of layers and resampling the entire model to a
+% completely new grid. We do this to demonstrate the various methods and to
+% verify them where possible.
+
+%% Initialize
+clear variables; close all;
+
+
+%% Set name of this model
+basename='modelObjTutor';
+save name basename
+
+%% what is a modelOb and what ia Model in this context?
+% a modelObj is a class whose instantionation (actual model) is as struct
+% with three fields:
+% * name  % the name of the variable like 'HK', 'gr', 'RIV' etc
+% * var   % the actual variable, i.e.HK, gr, RIV etc
+% * type  % the mflab type of the variable like '3Dlay', 'gridObj', 'stress'
+%
+% A Model is then just an array of modelObj instantiations.
+%
+% The class has members, i.e. a set of functions shared by all modelObj's
+% and it has properties that have different values between the individual
+% modelObj's.
+
+%%
+% show what is in class modelObj
+modelObj
+
+%% How to create modelObj's?
+% See    help modelObj
+% Call the modelObj constructor
+%%
+% Model(10) = modelObj(); %yields an Model consisting of 10 empty modelObj
+%%
+% in general call with arguments and limits:
+% Model = modelObj(data,xlim,ylim,Ilay);
+%
+% where data is
+% * the directory holding the arrays constituting the model in matfiles
+%   such that the name of the mat file is the name of the varariable it
+%   contains (say HK in HK.mat), and that the contents of the matfile is
+%   the variable itself with this name, so HK, plus a second variable with
+%   the name and the word type attached to it, so here 'HKtype' having as
+%   content a string with the mfLab type of the variable, i.e. here '3Dlay'
+%   meaning a 3D array with a layer for each model layer. Other types are
+%   '3Dcbd' (3D array with a later for each confining bed), '3Dtime' for RECH, with
+%   one layer for each stress period, 'stress' for RIV,GHB,DRN,CHD, 'zlist'
+%   for variables like HANI with one value for each layer, 'gridObj' for
+%   grid objects, 'wellObj' for an array of well objects and possibly more.
+% * an array of modelObj, i.e. another model, which may have been saved
+%   for instance by
+%      save MyModel.mat Model
+%   earlier and is now retrieved by
+%      load MyModel
+%   and passed to the modelObj.
+%  Ix,Iy,Iz are the indices along the rows, columns and layers which are to
+%   be extracted, in case a submodel is desired. These fields are optional,
+%   if omitted the entire model is used.
+
+%% Demo
+% Generate a grid
+xGr = -750:250:750; xm=0.5*(xGr(1:end-1)+xGr(2:end));
+yGr = -750:250:750; ym=0.5*(yGr(1:end-1)+yGr(2:end));
+
+z = [0   -25 -50 -75 -100 -125 -150 -175 -200]';
+zm= [-20 -25 -30 -45  -50  -55  -60  -65 -100]';
+
+Z = repmat(permute(interp1([xGr(1) mean(xGr) xGr(end)],[z zm z]',xm)',[3,2,1]),[length(ym),1,1]);
+
+% These parameters are optional
+MINDZ=0.1;
+AXIAL=0;
+LAYCBD=0;
+%%
+% the grid
+gr = gridObj(xGr,yGr,Z,LAYCBD,MINDZ,AXIAL);
+%%
+% size of grid
+gr.size
+
+%% Generate HK and VK
+hk= (1:gr.Nlay)'; %hk(3)=25/1000;
+vk= hk;
+HK = gr.const(hk);
+VK = gr.const(vk);
+
+
+%% Generate a Model consisting of 3 empty model array objects
+Model(3) = modelObj();
+
+%% Fill this model
+Model(1).name = 'HK';
+Model(1).var  =  HK;
+Model(1).type = '3Dlay';
+
+Model(2).name ='VK';
+Model(2).var  = VK;
+Model(2).type = '3Dlay';
+
+Model(3).name = 'gr';
+Model(3).var  = gr;
+Model(3).type = 'gridObj';
+
+%%
+% Now model is an array of 3 modelObj with some properties filled, see
+Model(1)
+Model(2)
+Model(3)
+
+%%
+% to see the names of the variables
+{Model.name} %#ok
+%%
+% and their mfLab types
+{Model.type} %#ok
+%%
+% or use display
+display({Model.type});
+
+%%
+% save this model
+save Model Model;
+
+whos
+%%
+% clear the workspace
+clear;
+whos
+%%
+% load the model
+load Model
+whos
+
+gr = Model.grid();
+%%
+% to cutout a submodel
+xlim = gr.xGr([2 end-1]); ylim=gr.yGr([2 end-1]);
+subModel = modelObj(Model,xlim,ylim);
+%%
+% size of the new submodel
+grSub = subModel.grid();
+%%
+% size of old grid
+gr.size
+%%
+% size of new grid
+grSub.size
+
+%% verify what happend to the variables
+fprintf('Model(1):\n');
+Model(1)
+%%
+fprintf('subModel(1):\n');
+subModel(1)
+
+%%
+clear subModel grSub;
+
+%% using methods
+% Note that most methods work on all objects of the modelObj array, so even
+% though Model is just an array of modelObj, the modelObj methods are
+% generally called like this
+% Model= Model.descr('another string');
+% To obtain a new Model array (overwriting the old) with changed
+% properties. The methods (in this case descr) is applied to all objects in
+% the object array Model.
+
+%%
+% compute transmissivity and HK at specified cell indices or every where if omited
+Ix = 3; Iy= 2;
+[kD,Hk] = Model.transm(Ix,Iy);
+%%
+% same for vertical hydraulic resistance and VK
+[c ,Vk] = Model.resistance(Ix,Iy);
+%%
+% these methods have been combined in the script verify to display these
+% variables for all layers together for a selected Ix and Iy
+Model = Model.descr('Initialized: Model with HK VK');
+verify % see verify by typing:    edit verify
+
+%%
+% append a string to Model.description proper
+Model  = Model.descr('Loaded: Full model Model.mat from disk');
+
+%%
+% Show the model and use the last description line in the title
+Model.showBox(Model(1).description{1});
+
+%%
+% if you like you may save the model so far
+% save Model00 Model
+
+%% Convert CBD to LAY
+% If the model was essentially made for the BCF package it can be changed
+% to the LPF package by
+% Model = Model.CBF2LPF();
+%%
+% for transport models it is strongly advised to remove confining beds and
+% to change them into regular model layers:
+Model = Model.removeCBD();
+Model=  Model.descr('Removed: confining beds');
+Model.showBox(Model(1).description{end});
+
+verify;
+ 
+%% Further grid manipulation
+%%
+% to adapt the mininum thickness of layers:
+MINDZ = 5; layers = [1 5 6];
+% given layers at least 1 MINDZ thick
+Model = Model.mindz(MINDZ,layers);
+Model=  Model.descr(sprintf('Enforced: layers [1 5 6] set ot %f',MINDZ));
+Model.showBox(Model(1).description{end});
+
+verify;
+%%
+% update grid in workspace
+gr = Model.grid();
+
+%%
+% Generate a STRTHD array
+dhdx= 1/500;  % head gradient in x-direction
+strthd = 0 + dhdx*(gr.xm - gr.xm(1));
+STRTHD = repmat(strthd,[gr.Ny,1,gr.Nz]);
+
+%%
+% add to Model
+Model(end+1) = modelObj();
+Model(end).name = 'STRTHD';
+Model(end).var  =  STRTHD;
+Model(end).type = '3Dlay';
+
+Model = Model.descr('Added: STRTHD');
+
+%%
+% Generate the IBOUND array
+IBOUND = gr.const(1);
+%%
+% add to Model
+Model(end+1) = modelObj();
+Model(end).name = 'IBOUND';
+Model(end).var  =  IBOUND;
+Model(end).type = '3Dlay';
+
+Model = Model.descr('Added: IBOUND');
+
+%% Fix right-hand boundary of model using CHD (environmental head) and STCONC
+
+iWest = 2;  % arbitrary zone number not equal to 0 or 1
+iEast = 3;  % arbitrary zone number not equal to 0 or 1
+CHDOPT= 2;  % option to intepret specified heads as environmental heads in SEAWAT
+
+%%
+% use IBOUND as zone array (optional)
+IBOUND(:,end,:)=iEast; % put zone number at right hand cells
+IBOUND(:,  1,:)=iWest; % put zone number at left  hand cells 
+hE = STRTHD(IBOUND==iEast);
+hW = STRTHD(IBOUND==iWest);
+
+zoneVals = {iEast hE hE CHDOPT;  % one line per zone
+            iWest hW hW CHDOPT};
+
+%%
+% Generate CHD list
+basename = 'modelObjTutor';
+CHD = gr.bcnZone(basename,'CHD',IBOUND,zoneVals);
+
+%%
+% Add to the Model
+Model(end+1) = modelObj();
+Model(end).name = 'CHD';
+Model(end).var  =  CHD;
+Model(end).type = 'stress';
+
+Model = Model.descr('Added: CHD stress list');
+
+%% get wells
+%
+[~,HK] = Model.transm();
+well=gr.well(basename,HK,'wells');
+
+Model(end+1) = modelObj();
+Model(end).name = 'well';
+Model(end).var  =  well;
+Model(end).type = 'wellObj';
+
+Model = Model.descr('Added: wells');
+
+%%
+% Join some layers of the original model, while keeping total transmisivity
+% and vertical hydraulic resistance.
+%
+% joinArray tells which of the old layers are merged in each new layer:
+joinArray=[1 2 3 4 5 6 7 8;   % Old Layer Nrs
+           1 2 2 3 3 3 4 4] ;  % New Layer Nrs
+
+Model = Model.merge('join',joinArray,'z'); % coarsen grid in z-direction
+Model = Model.descr('Joined: layers [1 2 3] and [4 5] too thin or irrelevant for the density problem.');
+verify;
+%%
+% split ome layers to get more vertical detail
+splitArray = [1 2 3 4;  % old layer numbers
+              3 5 2 3]; % each split in this number of new layers
+
+display(splitArray);
+%%
+% split it
+Model = Model.merge('split',splitArray,'z');
+Model = Model.descr('Split: layers 1REPLACE_WITH_DASH_DASH>3,3REPLACE_WITH_DASH_DASH>5');
+verify;
+
+%% Grid resampling
+%%
+% completely resample the grid using planes to keep in gr.Z and the number
+% of subdivisions between each pair of kept planes. A plane is a layer
+% surface, a model has one plane more than the number of layers and
+% confining beds combined. Plane 1 is omitted, the last plane is implied
+% but obliged if used. The number of planes equals the number of
+% subdivisions specified.
+
+%%
+% Adapt the grid by a complete resampling
+gr = Model.grid();
+planesToKeep = [ 2  4 9 gr.Nz+1];
+subdivisions = [ 5 10 10     20];
+Model= Model.changeLayers( planesToKeep, subdivisions);
+
+Model = Model.descr('Changed: layers using planes to keep and subdivisions');
+
+Model.showBox(Model(1).description{end});
+verify;
+    
+%% Join rows in y-direction
+% All rows in y direction are joined to obtain a cross section model in the
+% x-direction. The join array is used to tell which of the old layers will
+% be in each of the new layers. To join them all, the join array has numbers
+% 1 through gr.Ny in the first rows (all rows) and all 1 in the seconde,
+% meaning that all the top rows will become the first row of the new model.
+joinArray= [1:gr.Ny;               % row numbers current grid
+            ones(1,gr.Ny)];        % row numbers new grid
+
+Model = Model.merge('join',joinArray,'y'); % join in y-direction
+Model = Model.descr('Joined: all rows (y direction) to get a cross section representative for a given width.');
+Model.showBox(Model(1).description{end});
+Ix = 1; Iy=1;
+verify;
+
+%% Show the wells in this box, rotate the box (by hand) to see them
+% The wells are plotted in 3D and are visible in the model by rotating the
+% model in the figure by hand (use 3D rotation tool in top of figure
+% window).
+
+gr.plotWells(gca,Model(strmatchi('wellObj',{Model.type})).var); % plot 3D in existing figure
+
+%% Show the wells
+% Turn the model to better show the wells (by hand using the 3D rotation
+% tool in the tool bar at the top of the figure screen
+
+%%
+% Get start concentration distribution using function
+cFresh = 0;
+cSea   = 1;
+SigmaX = 0;
+SigmaZ = 50;
+zc     = -120;
+xc     = 0;
+STCONC = getInitialSalinity(gr,cFresh,cSea,xc,zc,SigmaX,SigmaZ);
+%%
+% Add STCONC to model arrays by appending a modelObj to Model.
+% This way any new information can be added to the current Model, like even
+% its computed heads and concentrations.
+
+Model(end+1) = modelObj(); % append anempty modelObj
+Model(end).name   = 'STCONC';  % with name of the new variable
+Model(end).var    =  STCONC;    % the variable itself
+Model(end).type   = '3Dlay';   % and the variable type
+Model = Model.descr('Added: Initial salinity distribution (STCONC).');
+
+%% Set min thickness for somelayers
+
+MINDZ = 3; layers = [4 8 12];
+Model = Model.mindz(MINDZ,layers);
+Model = Model.descr(sprintf('Changed: Minimum layer thickness for layers [4 8 12] to %g m',MINDZ));
+
+Model.showBox(Model(1).description{end});
+verify;
+
+done;
+
+
+%% Set min thickness for somelayers
+% a more extreme change of  minimum layer thickness.
+% Note that underlying layers will be compressed and end up having
+% minimum layer thickness equal to gr.MINDZ.
+% This small correction may cause the total transmissivity and resistance
+% to change a small amount.
+MINDZ = 15; layers = [25 30 40];
+Model = Model.mindz(MINDZ,layers);
+Model = Model.descr(sprintf('Changed: Minimum layer thickness for layers [4 8 12] to %g m',MINDZ));
+
+Model.showBox(Model(1).description{end});
+verify;
+
+done;
+
+%% Start working in the workspace
+% Put all model arrays into workspace
+unpack;
+
+%% Show all actions done to generate the Model
+% Note that all saved models can be retrieved via load Modelxx where xx the
+% number used when saved. By calling Model.descr a print will be made of
+% all actions taken to genereate the particular model:
+Model.descr;
+
+
+##### SOURCE END #####
+--></body></html>

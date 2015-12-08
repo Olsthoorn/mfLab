@@ -1,0 +1,12 @@
+# MATLAB       11-Sep-2014 23:53:06 writeNAM --> nam file for model MFSWI
+LIST              11 swiex1.MFSWI.LST
+BAS6              12 swiex1.BAS
+DIS               13 swiex1.DIS
+LPF               14 swiex1.LPF
+WEL               23 swiex1.WEL
+OC                91 swiex1.OC
+PCG               28 swiex1.PCG
+DATA(BINARY)      51 swiex1.HDS
+DATA(BINARY)      53 swiex1.BGT
+DATA(BINARY)      56 swiex1.ZTA
+SWI               42 swiex1.SWI

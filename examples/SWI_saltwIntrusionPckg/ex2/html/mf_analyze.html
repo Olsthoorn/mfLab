@@ -1,0 +1,222 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <!--
+This HTML is auto-generated from an M-file.
+To make changes, update the M-file and republish this document.
+      -->
+      <title>mf_analyze</title>
+      <meta name="generator" content="MATLAB 7.7">
+      <meta name="date" content="2009-12-25">
+      <meta name="m-file" content="mf_analyze"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head>
+   <body>
+      <div class="content">
+         <h2>Contents</h2>
+         <div>
+            <ul>
+               <li><a href="#2">Figure of rotating interface</a></li>
+            </ul>
+         </div><pre class="codeinput"><span class="comment">% Showing the results (positon of the interface) of example 1</span>
+<span class="comment">% TO 091224</span>
+
+load <span class="string">name</span>            <span class="comment">% get basename of this model</span>
+load(basename);      <span class="comment">% load data for this model (generaged in mf_adapt</span>
+
+[xGr,yGr,zGr,xm]=modelsize3(xGr,yGr,zGr); <span class="comment">% get xm</span>
+
+[NROW,NCOL,NLAY]=size(IBOUND);  <span class="comment">% get size of model</span>
+
+H  =readDat([basename,<span class="string">'.HDS'</span>]);  <span class="comment">% use only H.totim</span>
+ZTA=readBud([basename,<span class="string">'.ZTA'</span>]);  <span class="comment">% get interface positions</span>
+
+NT   =length(ZTA);      <span class="comment">% total number of time steps in ZTA file</span>
+NSURF=length(ZTA(1).label);
+
+[MFnams,MFvals]=getExcelData([basename,<span class="string">'.xls'</span>],<span class="string">'MFLOW'</span>,<span class="string">'Vertical'</span>);
+ISTRAT=MFvals(index(<span class="string">'ISTRAT'</span>,MFnams),1);
+</pre><pre class="codeoutput">Reading dat file swiex2.HDS, which contains the following information:
+Number of stress periods:          1
+Number of time steps    :       1000
+Number of layers        :          1
+Number of rows          :          1
+Number of columns       :         60
+iRec=  1 iR=  1 iPer=  1, iStp250, pertim=         500, totim=         500 Layers=  11
+iRec=  2 iR=  2 iPer=  1, iStp500, pertim=        1000, totim=        1000 Layers=  11
+iRec=  3 iR=  3 iPer=  1, iStp750, pertim=        1500, totim=        1500 Layers=  11
+iRec=  4 iR=  4 iPer=  1, iStp1000, pertim=        2000, totim=        2000 Layers=  11
+Trying to read swiex2.ZTA as BINARY      file...worked!
+Reading budget file swiex2.ZTA, which contains the following information:
+The following 2 budget term labels were in the file:
+ZETAPLANE1
+ZETAPLANE2
+Stress periods     :   1
+Time steps         :  250 500 750 1000
+Number of layers   :          1
+Number of rows     :          1
+Number of columns  :         60
+Label(iPer=  1,iTstp=250) =ZETAPLANE1
+Label(iPer=  1,iTstp=250) =ZETAPLANE2
+Label(iPer=  1,iTstp=500) =ZETAPLANE1
+Label(iPer=  1,iTstp=500) =ZETAPLANE2
+Label(iPer=  1,iTstp=750) =ZETAPLANE1
+Label(iPer=  1,iTstp=750) =ZETAPLANE2
+Label(iPer=  1,iTstp=1000) =ZETAPLANE1
+Label(iPer=  1,iTstp=1000) =ZETAPLANE2
+</pre><h2>Figure of rotating interface<a name="2"></a></h2><pre class="codeinput"><span class="comment">% setup figure</span>
+figure; hold <span class="string">on</span>
+xlabel(<span class="string">'x [m]'</span>); ylabel(<span class="string">'z [m]'</span>); grid <span class="string">on</span>;
+title(sprintf(<span class="string">'basename, rotation of brackish zone, ISTRAT=%d'</span>,ISTRAT));
+set(gca,<span class="string">'xlim'</span>,xGr([1 end]),<span class="string">'ylim'</span>,sort(zGr([1 end])));
+
+<span class="comment">% plot all interface positions</span>
+leg{NT}=<span class="string">' '</span>; <span class="comment">% allocate leg cell array</span>
+
+clr=<span class="string">'brgkcmy'</span>; clr=repmat(clr,1,ceil(NT/length(clr))); <span class="comment">% enough colors</span>
+stl=<span class="string">'-:;.'</span>;    stl=repmat(stl,1,ceil(NSURF/length(stl))); <span class="comment">% enough styles</span>
+
+k=1;
+<span class="comment">% use the stored interface in ZETA in mf_adapt to plot initial positions</span>
+<span class="keyword">for</span> iSurf=1:length(ZTA(1).label)
+    plot(ZETA(iSurf).x,ZETA(iSurf).z,[<span class="string">'k'</span> stl(iSurf)]);
+    leg{k}=sprintf(<span class="string">'IFACE(%d) T=0'</span>,iSurf);
+    k=k+1;
+<span class="keyword">end</span>
+
+<span class="comment">% plot computed positions</span>
+<span class="keyword">for</span> it=1:NT          <span class="comment">% for all recoreds in bud file (and H-file)</span>
+    <span class="keyword">for</span> iSurf=1:length(ZTA(1).label)
+        idx=strmatch(sprintf(<span class="string">'ZETAPLANE%d'</span>,iSurf'),ZTA(it).label);
+        <span class="keyword">for</span> iLay=1:NLAY  <span class="comment">% we only have one layer in this case</span>
+            plot(xm,squeeze(ZTA(it).term{idx}(1,:,iLay)),[clr(it) stl(iSurf)]);
+            leg{k}=sprintf(<span class="string">'IFACE(%d) T=%.0f d'</span>,iSurf,H(it).totim);
+            k=k+1;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+legend(leg);
+<span class="comment">% axis equal</span>
+<span class="comment">% axis tight</span>
+</pre><img vspace="5" hspace="5" src="mf_analyze_01.png" alt=""> <p class="footer"><br>
+            Published with MATLAB&reg; 7.7<br></p>
+      </div>
+      <!--
+##### SOURCE BEGIN #####
+% Showing the results (positon of the interface) of example 1
+% TO 091224
+
+load name            % get basename of this model
+load(basename);      % load data for this model (generaged in mf_adapt
+
+[xGr,yGr,zGr,xm]=modelsize3(xGr,yGr,zGr); % get xm
+
+[NROW,NCOL,NLAY]=size(IBOUND);  % get size of model
+
+H  =readDat([basename,'.HDS']);  % use only H.totim
+ZTA=readBud([basename,'.ZTA']);  % get interface positions
+
+NT   =length(ZTA);      % total number of time steps in ZTA file
+NSURF=length(ZTA(1).label);
+
+[MFnams,MFvals]=getExcelData([basename,'.xls'],'MFLOW','Vertical');
+ISTRAT=MFvals(index('ISTRAT',MFnams),1);
+
+%% Figure of rotating interface
+
+% setup figure
+figure; hold on
+xlabel('x [m]'); ylabel('z [m]'); grid on;
+title(sprintf('basename, rotation of brackish zone, ISTRAT=%d',ISTRAT));
+set(gca,'xlim',xGr([1 end]),'ylim',sort(zGr([1 end])));
+
+% plot all interface positions
+leg{NT}=' '; % allocate leg cell array
+
+clr='brgkcmy'; clr=repmat(clr,1,ceil(NT/length(clr))); % enough colors
+stl='-:;.';    stl=repmat(stl,1,ceil(NSURF/length(stl))); % enough styles 
+
+k=1;
+% use the stored interface in ZETA in mf_adapt to plot initial positions
+for iSurf=1:length(ZTA(1).label)
+    plot(ZETA(iSurf).x,ZETA(iSurf).z,['k' stl(iSurf)]);
+    leg{k}=sprintf('IFACE(%d) T=0',iSurf);
+    k=k+1;
+end
+
+% plot computed positions 
+for it=1:NT          % for all recoreds in bud file (and H-file)
+    for iSurf=1:length(ZTA(1).label)
+        idx=strmatch(sprintf('ZETAPLANE%d',iSurf'),ZTA(it).label);
+        for iLay=1:NLAY  % we only have one layer in this case
+            plot(xm,squeeze(ZTA(it).term{idx}(1,:,iLay)),[clr(it) stl(iSurf)]);
+            leg{k}=sprintf('IFACE(%d) T=%.0f d',iSurf,H(it).totim);
+            k=k+1;
+        end
+    end
+end
+legend(leg);
+% axis equal
+% axis tight
+##### SOURCE END #####
+-->
+   </body>
+</html>

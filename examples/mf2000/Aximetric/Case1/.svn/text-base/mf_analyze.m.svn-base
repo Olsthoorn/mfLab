@@ -1,0 +1,142 @@
+%% mf_analyze script for Check balance
+
+% NOTE THE BUG IN MNW1 PACKAGE. YOU MUST USE AT LEAST 2 MNW WELS OTHERWISW
+% THE PACKAGE CRASHES MODFLOW.
+
+% ALSO NOTICE THAT STREAMLINES MAKE NO SENCE ABOVE INCLINED WAVES, THIS IS
+% GENERALLY THE CASE IN FLORIDA
+
+% The balance will work for both the flat model and the axially symmetric
+% one if you make sure the injected fluid is not flushed over the rims of
+% the model and no fluids with different concentrations enter the model
+% from the outside.
+
+% TO 110822
+
+close all
+clear variables
+
+load underneath
+load name
+load(basename);
+
+%% Analyzing model output
+
+[xGr,yGr,zGr,xm,ym,zm,Dx,Dy,Dz,Nx,Ny,Nz]=modelsize3(xGr,yGr,zGr);
+
+ZM=0.5*(Z(:,:,1:end-1)+Z(:,:,2:end));
+
+%% % Reading simulation data
+
+B=readBud([basename,'.bgt']);
+B=mf_Psi(B);                  dPsi=0.2;   Prange=ContourRange(B,dPsi,[],'Psi');
+
+T=readMT3D('MT3D002.UCN');    dT = 0.05; Trange=ContourRange(T,dT);
+C=readMT3D('MT3D001.UCN');    dC = 0.05; Crange=ContourRange(C,dC);
+H=readDat([basename,'.hds']); dH=0.01; Hrange=ContourRange(H,dH);
+
+%% Plot everything on multiple data axes to manage colors
+
+t=[C.time]; NT=length(t);
+
+scrsz=get(0,'screensize');
+pos1=[scrsz(1)+0.025*scrsz(3) scrsz(2)+0.3*scrsz(4) 0.45*scrsz(3) 0.5*scrsz(4)];
+pos2=[scrsz(1)+0.525*scrsz(3) scrsz(2)+0.3*scrsz(4) 0.45*scrsz(3) 0.5*scrsz(4)];
+
+titlefmt=sprintf('Checking the Axially Symmetric Budget, t=%%.1f d, Psi=%.1f',dPsi);
+
+CR=mf_range(Crange);
+TR=mf_range(Trange);
+PR=mf_range(Prange);
+
+figure('position',pos1);
+ax(1)=clrObj(xm          ,XS(zm) , CR, Crange ,jet2);
+ax(2)=clrObj(xGr(2:end-1),XS(zGr), PR      , Prange ,jet2);
+ax(3)=clrObj(xm          ,XS(zm) , [ -5 5],  Hrange ,jet2);
+mf_setmulticolormap(ax([1 2 3]));  % generate combined colormap and set it
+
+figure('position',pos2);
+ax(4)=clrObj(xm          ,XS(zm) , TR, Trange ,jet2);
+ax(5)=clrObj(xGr(2:end-1),XS(zGr), PR      , Prange ,jet2);
+ax(6)=clrObj(xm          ,XS(zm) , [ -5 5],  Hrange ,jet2);
+mf_setmulticolormap(ax([4 5 6]));  % generate combined colormap and set it
+
+film=boolean(0);
+
+if film>0
+    aviobj=avifile(basename,'compression','none',...
+        'fps',5,'colormap',colormap);
+end
+
+for it=1:NT
+   ax(1).title(sprintf('AxiSymmetric Budget Verification (Choride)    ; t=%.0f d, dPsi=%.2f m^2/d',C(it).time,dPsi));
+   ax(4).title(sprintf('AxiSymmetric Budget Verification (Temperaure) ; t=%.0f d, dPsi=%.2f m^2/d',C(it).time,dPsi));
+
+   if it==1
+        ax(1)=ax(1).contour(@contourf,XS(C(it).values));
+        ax(2)=ax(2).contour(@contour ,B(it).Psi);
+        ax(3)=ax(3).contour(@contour, XS(H(it).values));
+        
+        ax(4)=ax(4).contour(@contourf,XS(T(it).values));
+        ax(5)=ax(5).contour(@contour ,B(it).Psi);
+        ax(6)=ax(6).contour(@contour, XS(H(it).values));
+        xlim=get(ax(1).ax,'xlim');
+        ylim=get(ax(2).ax,'ylim');
+        for i=1:length(ax), set(ax(i).ax,'xlim',xlim,'ylim',ylim); end
+
+        axes(ax(1).ax); for i=1:length(MNW), MNW(i).plot2d('w',2); end
+        axes(ax(4).ax); for i=1:length(MNW), MNW(i).plot2d('w',2); end
+ 
+        uistack(ax(1).ax,'bottom');
+        uistack(ax(4).ax,'bottom');
+     else
+        ax(1).update(XS(C(it).values));
+        ax(2).update(B(it).Psi);
+        ax(3).update(XS(H(it).values));
+        ax(4).update(XS(T(it).values));
+        ax(5).update(B(it).Psi);
+        ax(6).update(XS(H(it).values));
+
+        drawnow;
+        if film
+            F = getframe(fig);
+            aviobj = addframe(aviobj,F);
+        end
+  end
+end
+
+if film,
+    aviobj=close(aviobj);
+    if ismac, avi_compress(basename); end
+end
+
+
+%% Compute the total mass in hte model at the end of every stress period
+Mass=NaN(size(C));
+MQ  =NaN(size(C));
+dt=diff([0 C.time]);
+
+if AXIAL
+    POR=repmat(2*pi*xm,[Ny,1,Nz]).*PEFF;  %axiaal symmetrisch
+    ttl='Mass in model injected and integrated over the model: Axially symmetric';
+    dim='Mass [g]';
+else
+    POR=PEFF;  % bereken vlak
+    ttl='Mass in model injected and integrated over the model: Flat model';
+    dim='Mass [g/m3]';
+end
+
+[DX,DY,DZ]=meshgrid(Dx,Dy,Dz);
+DV=DX.*DY.*DZ.*POR;
+for it=1:length(C)
+    MQ  (it)=sum(MNW(1).Qdes(1:it)*dt(it).*MNW(1).Conc(1:it,1));
+%    MQT  (it)=sum(MNW(1).Qdes(1:it).*MNW(1).C(1:it,1));
+    Mass(it)=sum(sum(sum(C(it).values.*DV)));
+end
+
+figure; hold on
+plot([C.time],Mass,'b');
+plot([C.time],MQ,'r+');
+legend('Mass in Model','Mass injected');
+xlabel('time [d]'); ylabel(dim);
+title(ttl);

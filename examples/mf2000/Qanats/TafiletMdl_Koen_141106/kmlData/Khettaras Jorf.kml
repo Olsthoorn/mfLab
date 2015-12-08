@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>Khettaras Jorf.kml</name>
+	<Style id="inline78">
+		<LineStyle>
+			<color>ff0000ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline164">
+		<LineStyle>
+			<color>ff0000ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline75">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline1645</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline784</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline780">
+		<LineStyle>
+			<color>ff0000ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline750">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline1644</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline781</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline1640">
+		<LineStyle>
+			<color>ff0000ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline781">
+		<LineStyle>
+			<color>ff0000ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline1641">
+		<LineStyle>
+			<color>ff0000ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline782">
+		<LineStyle>
+			<color>ff0000ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline1642">
+		<LineStyle>
+			<color>ff0000ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline1643">
+		<LineStyle>
+			<color>ff0000ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline751">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline164</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline780</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline783">
+		<LineStyle>
+			<color>ff0000ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline752">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline1642</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline78</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="inline753">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline1647</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline783</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline784">
+		<LineStyle>
+			<color>ff0000ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline754">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline1640</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline782</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="inline755">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline1641</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline785</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline1644">
+		<LineStyle>
+			<color>ff0000ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline756">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline1646</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline786</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline1645">
+		<LineStyle>
+			<color>ff0000ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline1646">
+		<LineStyle>
+			<color>ff0000ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline785">
+		<LineStyle>
+			<color>ff0000ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline786">
+		<LineStyle>
+			<color>ff0000ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline787">
+		<LineStyle>
+			<color>ff0000ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline757">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline1643</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline787</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline1647">
+		<LineStyle>
+			<color>ff0000ff</color>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Folder>
+		<name>Jorf</name>
+		<open>1</open>
+		<Placemark>
+			<name>Mbarkia Monkara</name>
+			<styleUrl>#inline755</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.452182891844378,31.47648939723725,0 -4.446361396661067,31.47778982006684,0 -4.437864292750589,31.47868782246778,0 -4.435411784728213,31.48058235976601,0 -4.430715709406066,31.48151731118504,0 -4.410664515660082,31.48068218305591,0 -4.400114897671475,31.47908970880996,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Jorf1</name>
+			<styleUrl>#inline755</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.457011703334573,31.47757999658539,0 -4.453765134647227,31.47760583030761,0 -4.440315850634757,31.47985412259218,0 -4.433197523191538,31.48181720145407,0 -4.428636837815693,31.48215131675765,0 -4.422197336656598,31.48168306131836,0 -4.407154275983253,31.48200284601653,0 -4.40063517084384,31.48033957278217,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Jorf2</name>
+			<styleUrl>#inline755</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.447602630093813,31.47980324561684,0 -4.436317649175358,31.48174954743413,0 -4.428748966699252,31.48260342538934,0 -4.421927106101266,31.48207921907563,0 -4.418255622939512,31.4833686103533,0 -4.41353994065517,31.48409273298657,0 -4.401156168789915,31.48025149849564,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Jorf5</name>
+			<styleUrl>#inline754</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.466884358381447,31.49167538578345,0 -4.459789909890523,31.4938790677639,0 -4.453894779753557,31.49429196066694,0 -4.447292313186103,31.49427523753762,0 -4.444589176059457,31.49274901110641,0 -4.432482420099336,31.49232404036511,0 -4.428896209082448,31.49091884104037,0 -4.42395220347298,31.4930929585769,0 -4.413756856325087,31.49377041038356,0 -4.398605719821206,31.49391083357972,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Jorf7</name>
+			<styleUrl>#inline755</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.449811447525942,31.49568841967988,0 -4.434643396669033,31.49483691808351,0 -4.42543362098654,31.4935163669006,0 -4.410451410393089,31.49423307645403,0 -4.398118299619585,31.49465329116498,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Jorf8</name>
+			<styleUrl>#inline757</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.482643738119496,31.49674689982555,0 -4.479871905934139,31.49618219878348,0 -4.471546176024662,31.49716805543402,0 -4.46393286288534,31.49611931328972,0 -4.457547850232182,31.49678565381888,0 -4.441594263152195,31.49644902953433,0 -4.43121282731804,31.49649270883474,0 -4.424875072935089,31.49485621323651,0 -4.421240770496317,31.49582892878494,0 -4.40179600968813,31.4952362913582,0 -4.398942835242254,31.49488786756104,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Jorf9</name>
+			<styleUrl>#inline755</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.475873450933521,31.49857325638554,0 -4.467262693882605,31.49781336875022,0 -4.447285884744684,31.49855024237387,0 -4.441473052119274,31.49960298444239,0 -4.43387018313981,31.503483735396,0 -4.426396154382987,31.50507116525837,0 -4.418268640937601,31.50159529085575,0 -4.416062764435463,31.50060693391112,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Jorf10</name>
+			<styleUrl>#inline752</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.494371302771334,31.50319579542835,0 -4.491105016094256,31.50121900820618,0 -4.481651847623867,31.50077697346578,0 -4.465555461604527,31.49938836407486,0 -4.453104481341834,31.49973574041336,0 -4.440717378279471,31.50270213898504,0 -4.434274492370545,31.50434205143178,0 -4.425972326439566,31.50569125702797,0 -4.420311270578652,31.50496638511673,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Jorf13</name>
+			<styleUrl>#inline75</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.488705042079094,31.50514201059364,0 -4.486841555374738,31.50391493825254,0 -4.480305353289556,31.50345106830878,0 -4.477385960425803,31.5046853709531,0 -4.468977081286274,31.50468941365608,0 -4.460806283289975,31.50518284808359,0 -4.450628499797832,31.50666918848262,0 -4.441182884192258,31.50864238802107,0 -4.434911581391194,31.50943916877917,0 -4.429568676104795,31.50935440624089,0 -4.418322029968048,31.5091107795408,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Jorf15</name>
+			<styleUrl>#inline751</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.494613012893401,31.51346388555409,0 -4.484811046040277,31.51082704780672,0 -4.475347475357258,31.50770273366882,0 -4.456643541199815,31.51079415880916,0 -4.450214359216574,31.51105365052883,0 -4.446226161615775,31.51140007410414,0 -4.440239300968361,31.51306634553633,0 -4.432891117072301,31.51334993437241,0 -4.427046937869287,31.51122242315272,0 -4.410485031152716,31.50604256967859,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Jorf18</name>
+			<styleUrl>#inline755</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.481997804473395,31.50448396271635,0 -4.473104483566925,31.50320596202423,0 -4.463580812804493,31.5029920766325,0 -4.453054122270482,31.50364537186445,0 -4.441553315996228,31.50614727720885,0 -4.4386373787959,31.50512175481676,0 -4.435438350240993,31.50524269598364,0 -4.430068217789573,31.50642151329656,0 -4.426267019263579,31.50530159051316,0 -4.42563695795818,31.5053439011152,0 -4.423661830818339,31.50429104054623,0 -4.416334602558404,31.50285415270853,0 -4.413619521585906,31.50207823175442,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Jorf19</name>
+			<styleUrl>#inline755</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.471638577669078,31.50213515390428,0 -4.467280274591593,31.502334986671,0 -4.461250391638182,31.5020765545156,0 -4.455891773534596,31.50176697365304,0 -4.447706776647904,31.50232026914439,0 -4.440655472127656,31.50279344242062,0 -4.437850284504616,31.50271971979321,0 -4.434692394778113,31.50319032318031,0 -4.420707725041701,31.5020528143894,0 -4.394891843480895,31.49039726087572,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Jorf28</name>
+			<styleUrl>#inline753</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.473083787922677,31.50412206024834,0 -4.463456586976858,31.50412947265026,0 -4.447452747819881,31.50623313049202,0 -4.431106461918263,31.50848630636723,0 -4.426747030431502,31.50611681505903,0 -4.423400749198425,31.5076943010717,0 -4.420814262595849,31.50695233798689,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Jorf35</name>
+			<styleUrl>#inline755</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.445951495310665,31.49998097041006,0 -4.440011339680775,31.50061755961392,0 -4.436998827935145,31.50007714777781,0 -4.431811070393029,31.49927279878374,0 -4.427990441607404,31.50040693050818,0 -4.420340536963748,31.49967923779915,0 -4.415548087869686,31.49783844126775,0 -4.397904226356909,31.48981194653839,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Jorf4</name>
+			<styleUrl>#inline755</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.469545929793992,31.48956587798699,0 -4.466101808902399,31.48802249027106,0 -4.459269165539352,31.48776895953409,0 -4.447294276316212,31.48613300385192,0 -4.438774602930735,31.48818431538973,0 -4.425925220886957,31.48822533023325,0 -4.420602845345832,31.48853087085556,0 -4.414406305354081,31.48619516045505,0 -4.411130799305018,31.4859481186342,0 -4.396148541511193,31.48577511087787,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Jorf37</name>
+			<styleUrl>#inline750</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.484970458621453,31.5045004287535,0 -4.47939443662352,31.5053998015045,0 -4.468592065275661,31.50682971112948,0 -4.45249845948183,31.51001612329874,0 -4.444935417895659,31.50997278837162,0 -4.437256554952773,31.51253892185252,0 -4.435024973131631,31.5116621417118,0 -4.427768165263144,31.50953695089076,0 -4.417998443198888,31.50837700623292,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Jorf39</name>
+			<styleUrl>#inline756</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.498136668987568,31.50758209185522,0 -4.492857280146573,31.50687846026845,0 -4.489601829349867,31.50544316922402,0 -4.485079217458089,31.50549507337698,0 -4.475611338745146,31.50686928120996,0 -4.471891708951872,31.50716603734963,0 -4.468063543336966,31.50737538546534,0 -4.458299330232579,31.50960044074057,0 -4.451999328738783,31.51072560362827,0 -4.447986315128727,31.51042953178273,0 -4.439573643240483,31.51292263484993,0 -4.432133662896,31.51249652483286,0 -4.419034359602976,31.50911298481401,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+	</Folder>
+</Document>
+</kml>

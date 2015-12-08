@@ -1,0 +1,247 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Analyzing output of the model (Part of NHI)</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2012-08-16"><meta name="DC.source" content="mf_analyze.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>Analyzing output of the model (Part of NHI)</h1><!--introduction--><p>This file analyzes (or visualizes) the results of the flow model that was invoked by typing mf_setup at the command line. 3D visualization is applied to allow inspecting complex 3D models like the one here. The model in his example is a 40 by 40 km submodel of the National Hyrological Instrument for the center of the Netherlands, around Lexmond. The data used have been downloaded from the official site www.NHI.nu/bibliotheek. The model is steady state, uses the average HI-provided recharge and also uses NHI-provided year-averaged boundary conditions (stresses). Summer and winter stresses are also available but have not been used given the lack of transient recharge data.</p><p>TO 091011 120603 120816</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Loading the basename, model data and extra info if available</a></li><li><a href="#2">Print size and center coordinates of the model</a></li><li><a href="#3">Load and show the computed heads of the model</a></li><li><a href="#6">Contour any values of the layers (head, transmissivities whatever)</a></li><li><a href="#8">Show the specific vertical leakage downward in all layers</a></li><li><a href="#11">Boundary conditions (stresses)</a></li><li><a href="#12">Use zone budget to get budget overview</a></li></ul></div><h2>Loading the basename, model data and extra info if available<a name="1"></a></h2><pre class="codeinput">load(<span class="string">'name.mat'</span>) <span class="comment">% get basename stored in file name.mat</span>
+load(basename);  <span class="comment">% load the mat file with the model arrays stored in mf_adapt.m</span>
+load <span class="string">underneath</span>  <span class="comment">% load extra information if available</span>
+</pre><h2>Print size and center coordinates of the model<a name="2"></a></h2><pre class="codeinput">fprintf(<span class="string">'Size of model is %.0fkm in both directions\n'</span>,diff(gr.xGr([1 end])/1000));
+fprintf(<span class="string">'Center of model in Rijksdriehoek Coordinates (Dutch National system)\n'</span>);
+fprintf(<span class="string">' is x=%.0f y=%.0f km\n'</span>,mean(gr.xGr)/1000, mean(gr.yGr)/1000);
+
+[Lon,Lat]=rd2wgs(mean(gr.xGr),mean(gr.yGr)); <span class="comment">%% In WGS coordinates</span>
+fprintf(<span class="string">'In WGS (i.e. Google Earth):\nLon(Easting)=%g\nLat(Northing)=%g\n'</span>,Lon,Lat);
+</pre><pre class="codeoutput">Size of model is 40km in both directions
+Center of model in Rijksdriehoek Coordinates (Dutch National system)
+ is x=131 y=442 km
+In WGS (i.e. Google Earth):
+Lon(Easting)=5.03619
+Lat(Northing)=51.9625
+</pre><h2>Load and show the computed heads of the model<a name="3"></a></h2><pre class="codeinput">H=maskH(readDat([basename,<span class="string">'.HDS'</span>]));
+</pre><pre class="codeoutput">Reading MODFLOW binary output file &lt;&lt;Lexmond.HDS&gt;&gt; verbose= 0
+Scanning headers
+finished, 7 records scanned
+File contains the following:
+Number of records in file  :          7
+Number of stress userPeriods:          1
+Number of time steps       :          1
+Number of layers           :          7
+Number of rows             :        159
+Number of columns          :        159
+Maximum time in file       "          1
+Reading requested data ...
+     7 records read.
+.     1 records in output struct.
+
+</pre><p>This shows the model layers in 3D. The figure starts with the heads which are H(1).values or H.values because the model is steady state. The 7 NHI layers are shown with a wire mesh around the entire model. This The wire mesh is drawn for 3 sides (west, south and top), but other sides can be added with the buttons on the figure. Each side can be switched on and off at will. The elevation of the top mesh corresponds to the elevation of ground surface and that of the bottom mesh with the bottom of the system (layer 7 in the current NHI).</p><pre class="codeinput"><span class="comment">%h=showLayers(gr,'H.values',well,basename);</span>
+</pre><p>By clicking on the rotation tool in the toolbar, one can turn the model in 3D space.</p><p>To see the value of the colors, switch on the color bar in the toolbar.</p><p>If wells are not well visible, change their color using the switch box near the right bottom of the screen.</p><pre class="codeinput"><span class="comment">%h=showLayers(gr,'H.values',well,basename,'contours');</span>
+</pre><h2>Contour any values of the layers (head, transmissivities whatever)<a name="6"></a></h2><pre class="codeinput"><span class="keyword">if</span> exist(<span class="string">'H'</span>,<span class="string">'var'</span>),    gr.layerContours(<span class="string">'Heads [m]'</span>                   ,H(end).values,basename,<span class="string">'m'</span>); <span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="mf_analyze_01.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_02.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_03.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_04.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_05.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_06.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_07.png" alt=""> <p>for widely varying positive values like transmissivties, take the log10</p><pre class="codeinput"><span class="keyword">if</span> exist(<span class="string">'TRAN'</span>,<span class="string">'var'</span>), gr.layerContours(<span class="string">'log10(Transmissivity)'</span>          ,log10(TRAN          ),basename,<span class="string">'log10(m2/d)'</span>); <span class="keyword">end</span>
+<span class="keyword">if</span> exist(<span class="string">'HK'</span>,<span class="string">'var'</span>)  , gr.layerContours(<span class="string">'log10(Transmissivity)'</span>          ,log10(gr.DZlay.*HK  ),basename,<span class="string">'log10(m2/d)'</span>); <span class="keyword">end</span>
+<span class="keyword">if</span> exist(<span class="string">'VCONT'</span>,<span class="string">'var'</span>),gr.layerContours(<span class="string">'log10(Vertical hydr resistance)'</span>,log10(1./VCONT      ),basename,<span class="string">'log10(d)'</span>); <span class="keyword">end</span>
+<span class="keyword">if</span> exist(<span class="string">'VKCB'</span>,<span class="string">'var'</span>) ,gr.layerContours(<span class="string">'log10(Vertical hydr resistance)'</span>,log10(gr.DZcbd./VKCB),basename,<span class="string">'log10(d)'</span>); <span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="mf_analyze_08.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_09.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_10.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_11.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_12.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_13.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_14.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_15.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_16.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_17.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_18.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_19.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_20.png" alt=""> <h2>Show the specific vertical leakage downward in all layers<a name="8"></a></h2><pre class="codeinput">B= readBud([basename <span class="string">'.BGT'</span>]); <span class="comment">% read budget file with computed cell by cell flows</span>
+</pre><pre class="codeoutput">
+Trying to read Lexmond.BGT as BINARY file...it works!
+Scanning 9 headers
+finished, 9 records scanned
+File contains the following:
+Number of records in file:          9
+Number of stress periods :          1
+Number of time steps     :          1
+Number of layers         :          7
+Number of Rows           :        159
+Number of columns        :        159
+Number of unique labels  :          9
+CONSTANTHEAD
+DRAINS
+FLOWFRONTFACE
+FLOWLOWERFACE
+FLOWRIGHTFACE
+HEADDEPBOUNDS
+RECHARGE
+RIVERLEAKAGE
+WELLS
+
+Reading the requested data ...
+Please wait while I'm getting the requested data ...
+.........     1 records in output struct.
+
+</pre><p>Compute specific vertical lekage as flowlowerface/cell area</p><pre class="codeinput">VL = B(end).term{strmatchi(<span class="string">'FLOWLOWERFACE'</span>,B(end).label)}./gr.AREA3;
+</pre><p>show it in contours</p><pre class="codeinput">gr.layerContours(<span class="string">'Vert leakage [m/d]'</span>,VL(:,:,1:end-1),basename,<span class="string">'m/d'</span>);
+</pre><img vspace="5" hspace="5" src="mf_analyze_21.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_22.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_23.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_24.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_25.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_26.png" alt=""> <h2>Boundary conditions (stresses)<a name="11"></a></h2><p>Stresser are lists with one line per cell. To show then spatically they are put on a 3D cell grid and shown with one color in each cell. Taking column 5 of the lists implies the specified head or elevation of the stresses</p><pre class="codeinput"><span class="keyword">if</span> exist(<span class="string">'RIV'</span>,<span class="string">'var'</span>), gr.showStress(<span class="string">'RIV'</span>,RIV,basename,1,5,<span class="string">'head'</span>); <span class="keyword">end</span>
+<span class="keyword">if</span> exist(<span class="string">'GHB'</span>,<span class="string">'var'</span>), gr.showStress(<span class="string">'GHB'</span>,GHB,basename,1,5,<span class="string">'head'</span>); <span class="keyword">end</span>
+<span class="keyword">if</span> exist(<span class="string">'DRN'</span>,<span class="string">'var'</span>), gr.showStress(<span class="string">'DRN'</span>,DRN,basename,1,5,<span class="string">'head'</span>); <span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="mf_analyze_27.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_28.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_29.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_30.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_31.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_32.png" alt=""> <img vspace="5" hspace="5" src="mf_analyze_33.png" alt=""> <h2>Use zone budget to get budget overview<a name="12"></a></h2><p>- show the overall budget. - see help zonebudget for options to fine-tune</p><pre class="codeinput">zonebudget(B);
+</pre><pre class="codeoutput">
+============================================
+zoneBudget will be computed for entire model.
+Budget [consistent model units] for period=1, itsp=1:
+
+BUDGET FOR ZONE  1               -----IN-----  ----OUT-----
+total for         CONSTANTHEAD =         0.00         -0.00
+total for        FLOWRIGHTFACE =         0.00         -0.00
+total for        FLOWFRONTFACE =         0.00         -0.00
+total for        FLOWLOWERFACE =         0.00         -0.00
+total for                WELLS =         0.00     178143.41
+total for               DRAINS =         0.00    1282207.13
+total for         RIVERLEAKAGE =     89670.58         -0.00
+total for        HEADDEPBOUNDS =         1.75         -0.00
+total for             RECHARGE =   1370678.27         -0.00
+                                 ------------  ------------
+total for              ZONE  1 =   1460350.61    1460350.55
+total net              ZONE  1 =         0.06  
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+%% Analyzing output of the model (Part of NHI)
+% This file analyzes (or visualizes) the results of the flow model that was
+% invoked by typing mf_setup at the command line.
+% 3D visualization is applied to allow inspecting complex 3D models like
+% the one here.
+% The model in his example is a 40 by 40 km submodel of the National Hyrological
+% Instrument for the center of the Netherlands, around Lexmond.
+% The data used have been downloaded from the official site www.NHI.nu/bibliotheek.
+% The model is steady state, uses the average HI-provided recharge
+% and also uses NHI-provided year-averaged boundary conditions (stresses).
+% Summer and winter stresses are also available but have not been used
+% given the lack of transient recharge data.
+%
+% TO 091011 120603 120816
+
+%% Loading the basename, model data and extra info if available
+load('name.mat') % get basename stored in file name.mat
+load(basename);  % load the mat file with the model arrays stored in mf_adapt.m
+load underneath  % load extra information if available
+
+%% Print size and center coordinates of the model
+fprintf('Size of model is %.0fkm in both directions\n',diff(gr.xGr([1 end])/1000));
+fprintf('Center of model in Rijksdriehoek Coordinates (Dutch National system)\n');
+fprintf(' is x=%.0f y=%.0f km\n',mean(gr.xGr)/1000, mean(gr.yGr)/1000);
+
+[Lon,Lat]=rd2wgs(mean(gr.xGr),mean(gr.yGr)); %% In WGS coordinates
+fprintf('In WGS (i.e. Google Earth):\nLon(Easting)=%g\nLat(Northing)=%g\n',Lon,Lat);
+
+%% Load and show the computed heads of the model
+
+H=maskH(readDat([basename,'.HDS']));
+
+%%
+% This shows the model layers in 3D. The figure starts with the heads which
+% are H(1).values or H.values because the model is steady state.
+% The 7 NHI layers are shown with a wire mesh around the entire model. This
+% The wire mesh is drawn for 3 sides (west, south and top), but other sides
+% can be added with the buttons on the figure. Each side can be switched on
+% and off at will. The elevation of the top mesh corresponds to the
+% elevation of ground surface and that of the bottom mesh with the bottom
+% of the system (layer 7 in the current NHI).
+
+%h=showLayers(gr,'H.values',well,basename);
+
+%%
+% By clicking on the rotation tool in the toolbar, one can turn the model
+% in 3D space.
+%
+% To see the value of the colors, switch on the color bar in the toolbar.
+%
+% If wells are not well visible, change their color using the switch box
+% near the right bottom of the screen.
+
+%h=showLayers(gr,'H.values',well,basename,'contours');
+
+%% Contour any values of the layers (head, transmissivities whatever)
+if exist('H','var'),    gr.layerContours('Heads [m]'                   ,H(end).values,basename,'m'); end
+
+%%
+% for widely varying positive values like transmissivties, take the log10
+if exist('TRAN','var'), gr.layerContours('log10(Transmissivity)'          ,log10(TRAN          ),basename,'log10(m2/d)'); end
+if exist('HK','var')  , gr.layerContours('log10(Transmissivity)'          ,log10(gr.DZlay.*HK  ),basename,'log10(m2/d)'); end
+if exist('VCONT','var'),gr.layerContours('log10(Vertical hydr resistance)',log10(1./VCONT      ),basename,'log10(d)'); end
+if exist('VKCB','var') ,gr.layerContours('log10(Vertical hydr resistance)',log10(gr.DZcbd./VKCB),basename,'log10(d)'); end
+
+%% Show the specific vertical leakage downward in all layers
+
+B= readBud([basename '.BGT']); % read budget file with computed cell by cell flows
+
+%%
+% Compute specific vertical lekage as flowlowerface/cell area
+VL = B(end).term{strmatchi('FLOWLOWERFACE',B(end).label)}./gr.AREA3;
+%%
+% show it in contours
+gr.layerContours('Vert leakage [m/d]',VL(:,:,1:end-1),basename,'m/d');
+
+%% Boundary conditions (stresses)
+% Stresser are lists with one line per cell. To show then spatically they
+% are put on a 3D cell grid and shown with one color in each cell. Taking
+% column 5 of the lists implies the specified head or elevation of the stresses
+if exist('RIV','var'), gr.showStress('RIV',RIV,basename,1,5,'head'); end
+if exist('GHB','var'), gr.showStress('GHB',GHB,basename,1,5,'head'); end
+if exist('DRN','var'), gr.showStress('DRN',DRN,basename,1,5,'head'); end
+
+%% Use zone budget to get budget overview
+% - show the overall budget.
+% - see help zonebudget for options to fine-tune
+zonebudget(B);
+
+##### SOURCE END #####
+--></body></html>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>headBoundaries.kml</name>
+	<Style id="inline">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline0">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline1">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline2">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline3">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline1</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="inline4">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline0</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline2</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Folder>
+		<name>headBoundaries</name>
+		<Placemark>
+			<name>north</name>
+			<styleUrl>#inline3</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.608957410354568,31.58470850555805,0 -4.62704022107204,31.54529655746209,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>south</name>
+			<styleUrl>#inline4</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+					-4.355683093652535,31.36980802641975,0 -4.313019388425663,31.38004193874425,0 
+				</coordinates>
+			</LineString>
+		</Placemark>
+	</Folder>
+</Document>
+</kml>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>cTertiary Margat.kml</name>
+	<Style id="sh_ylw-pushpin">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<StyleMap id="msn_ylw-pushpin">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_ylw-pushpin</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_ylw-pushpin</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sn_ylw-pushpin">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Placemark>
+		<name>cTertiary Margat</name>
+		<open>1</open>
+		<styleUrl>#msn_ylw-pushpin</styleUrl>
+		<LineString>
+			<tessellate>1</tessellate>
+			<coordinates>
+				-4.474381629286606,31.51599445265502,0 -4.435981766342261,31.50146909699155,0 -4.414948992479559,31.4847456903562,0 -4.381720911110612,31.46042424741572,0 -4.350676394173572,31.4449070628063,0 -4.339516372705603,31.43819156458501,0 -4.354812791107236,31.42320345597057,0 -4.373377414384616,31.42917807986588,0 -4.39272861381261,31.43729530661152,0 -4.410238056890684,31.44763027967895,0 -4.438733381729463,31.45234831323391,0 -4.451917791470875,31.44402896669677,0 -4.456791325619307,31.4482952395615,0 -4.462464861234801,31.4706860249245,0 -4.473367184828789,31.48990995559705,0 -4.485105942068244,31.50022289087583,0 -4.493053969549548,31.50319558709536,0 -4.479073912339685,31.51855647135773,0 -4.474381629286606,31.51599445265502,0 
+			</coordinates>
+		</LineString>
+	</Placemark>
+</Document>
+</kml>

@@ -1,4 +1,4 @@
-MFLAB README  (Heemstede, Netherlands, 8 Dec 2015)
+# MFLAB README  (Heemstede, Netherlands, 8 Dec 2015)
 
 mfLab ("Modflow Laboratory") is a n open-source scripting envioronment in Matlab
 (not open source) to set up, run and analyze groundwater flow and transport models of
